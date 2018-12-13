@@ -1,0 +1,12 @@
+{
+  "version": "0.4.0",
+  "author": "Wim Klerkx",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "conventional-changelog-cli": "^2.0.11"
+  },
+  "scripts": {
+    "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
+  },
+  "private": true
+}

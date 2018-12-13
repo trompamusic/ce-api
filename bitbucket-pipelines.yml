@@ -1,0 +1,56 @@
+image:
+  name: 814317481179.dkr.ecr.eu-west-1.amazonaws.com/aws-cli:1.16.55
+  aws:
+    access-key: $AWS_ACCESS_KEY_ID
+    secret-key: $AWS_SECRET_ACCESS_KEY
+
+options:
+  max-time: 8
+  docker: true
+
+pipelines:
+  tags:
+    v*:
+      - step:
+          name: Build
+          script:
+            # aws login
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            # docker
+            - export BUILD_ID=$BITBUCKET_TAG
+            - export SSH_KEY=`cat /opt/atlassian/pipelines/agent/data/id_rsa`
+            - echo $BUILD_ID
+            - docker build -f api/Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
+            - docker push ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID
+      - step:
+          name: Deploy to test
+          image: videodock/ecs-deploy:1.5.0
+          deployment: test
+          trigger: manual
+          script:
+            - export BUILD_ID=$BITBUCKET_TAG
+            - echo $BUILD_ID
+            - ecs deploy trompa-ce-api-test trompa-ce-api-test-service --image ce-api-node ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID --access-key-id ${AWS_DEPLOY_ACCESS_KEY_ID} --secret-access-key ${AWS_DEPLOY_SECRET_ACCESS_KEY} --region ${AWS_DEPLOY_REGION}
+
+  custom:
+    build-branch:
+      - step:
+          name: Build
+          script:
+            # aws login
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            # docker
+            - export BUILD_ID=${BITBUCKET_BRANCH//\//\_}_${BITBUCKET_COMMIT}
+            - export SSH_KEY=`cat /opt/atlassian/pipelines/agent/data/id_rsa`
+            - echo $BUILD_ID
+            - docker build -f api/Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
+            - docker push ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID
+      - step:
+          name: Deploy to test
+          image: videodock/ecs-deploy:1.5.0
+          deployment: test
+          trigger: manual
+          script:
+            - export BUILD_ID=${BITBUCKET_BRANCH//\//\_}_${BITBUCKET_COMMIT}
+            - echo $BUILD_ID
+            - ecs deploy trompa-ce-api-test trompa-ce-api-test-service --image ce-api-node ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID --access-key-id ${AWS_DEPLOY_ACCESS_KEY_ID} --secret-access-key ${AWS_DEPLOY_SECRET_ACCESS_KEY} --region ${AWS_DEPLOY_REGION}
