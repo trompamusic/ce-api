@@ -1201,7 +1201,7 @@ type Intangible implements MetadataInterface & ThingInterface & ProvenanceInterf
 }
 
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Organization,https://www.w3.org/TR/prov-o/#Agent"
-type Organization implements MetadataInterface & ThingInterface & ProvenanceInterface & OrganizationInterface {
+type Organization implements MetadataInterface & ThingInterface & ProvenanceAgentInterface & OrganizationInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
@@ -1269,22 +1269,8 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceInte
   narrowMatch: [Organization]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
-  ######################################
-  ### ProvenanceInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#startedAtTime"
-  startedAtTime: _Neo4jDateTime
-  "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasInformedBy"
-  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#endedAtTime"
-  endedAtTime: _Neo4jDateTime
+  ###########################################
+  ### ProvenanceAgentInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
   wasAssociatedWith: [Organization] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
@@ -1372,7 +1358,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceInte
 }
 
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Person,https://www.w3.org/TR/prov-o/#Agent"
-type Person implements MetadataInterface & ThingInterface & ProvenanceInterface {
+type Person implements MetadataInterface & ThingInterface & ProvenanceAgentInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
@@ -1440,22 +1426,8 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceInterface 
   narrowMatch: [Person]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface] @relation(name: "RELATED_MATCH", direction: "OUT")
-  ######################################
-  ### ProvenanceInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#startedAtTime"
-  startedAtTime: _Neo4jDateTime
-  "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasInformedBy"
-  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#endedAtTime"
-  endedAtTime: _Neo4jDateTime
+  ###########################################
+  ### ProvenanceAgentInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
   wasAssociatedWith: [Organization] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
@@ -5031,7 +5003,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
 ### Organization extending types (Derivative Types) ###
 
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Organization,https://schema.org/MusicGroup,http://purl.org/ontology/mo/MusicGroup"
-type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceInterface & OrganizationInterface {
+type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceAgentInterface & OrganizationInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
@@ -5099,22 +5071,8 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceInterf
   narrowMatch: [MusicGroup] @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface] @relation(name: "RELATED_MATCH", direction: "OUT")
-  ######################################
-  ### ProvenanceInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#startedAtTime"
-  startedAtTime: _Neo4jDateTime
-  "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasInformedBy"
-  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#endedAtTime"
-  endedAtTime: _Neo4jDateTime
+  ###########################################
+  ### ProvenanceAgentInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
   wasAssociatedWith: [Organization] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
