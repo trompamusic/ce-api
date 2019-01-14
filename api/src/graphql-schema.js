@@ -1,4 +1,4 @@
-import { neo4jgraphql } from "neo4j-graphql-js";
+import { neo4jgraphql  } from "neo4j-graphql-js";
 import fs from "fs";
 import path from "path";
 
@@ -10,8 +10,21 @@ import path from "path";
 export const resolvers = {
   // query resolvers
   Query: {
-    thingsBySubstring: neo4jgraphql
+    LegalPerson (object, params, ctx, resolveInfo) {
+      // console.log(object);
+      // console.log(params);
+      // console.log(ctx);
+      console.log(resolveInfo.schema._possibleTypeMap.LegalPerson);
+      console.log(neo4jgraphql(object, params, ctx, resolveInfo));
+      let cypherQuery = neo4jgraphql.cypherQuery(params, resolveInfo, ctx);
+      console.log(cypherQuery);
+      let generatedQuery = neo4jgraphql(object, params, ctx, resolveInfo);
+      console.log(generatedQuery);
+
+      return generatedQuery;
+    }
   },
+
 
   // interface resolvers
   MetadataInterface: {

@@ -1,8 +1,9 @@
 
 ### Queries ###
-#type Query {
-  #personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-#}
+type Query {
+#  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
+  LegalPerson (identifier: String): LegalPerson
+}
 
 ###############
 ### Scalars ###
@@ -180,7 +181,7 @@ interface CreativeWorkInterface {
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "IN")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "IN")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -854,7 +855,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -1891,7 +1892,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2119,7 +2120,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2335,7 +2336,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2577,7 +2578,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2801,7 +2802,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3047,7 +3048,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3299,7 +3300,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3551,7 +3552,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3803,7 +3804,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4067,7 +4068,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4323,7 +4324,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4571,7 +4572,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4825,7 +4826,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [Person] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
