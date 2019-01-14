@@ -2,7 +2,7 @@
 ### Queries ###
 type Query {
 #  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  LegalPerson (identifier: String): LegalPerson
+  LegalPerson (identifier: String): Person
 }
 
 ###############
