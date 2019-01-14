@@ -5,4 +5,14 @@ import { unionResolvers } from "./resolvers/union";
 /*
  * Concatenate resolvers
  */
-export const resolvers = [queryResolvers, interfaceResolvers, unionResolvers];
+let aggregatedResolvers = queryResolvers;
+
+for (var key in interfaceResolvers) {
+  if (interfaceResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = interfaceResolvers[key];
+}
+
+for (var key in unionResolvers) {
+  if (unionResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = unionResolvers[key];
+}
+
+export const resolvers = aggregatedResolvers;
