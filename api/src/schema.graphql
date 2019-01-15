@@ -2,7 +2,7 @@
 ### Queries ###
 type Query {
 #  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  LegalPerson (identifier: String): Person
+  LegalPerson (identifier: String): Person #@cypher(statement:"MATCH (p:Person {identifier:$identifier}) RETURN distinct p { .name }")
 }
 
 ###############
@@ -181,7 +181,7 @@ interface CreativeWorkInterface {
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "IN")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -195,13 +195,13 @@ interface CreativeWorkInterface {
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -855,7 +855,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -869,13 +869,13 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -1892,7 +1892,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -1906,13 +1906,13 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -2120,7 +2120,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2134,13 +2134,13 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -2336,7 +2336,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2350,13 +2350,13 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -2578,7 +2578,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2592,13 +2592,13 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -2802,7 +2802,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -2816,13 +2816,13 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -3048,7 +3048,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3062,13 +3062,13 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -3300,7 +3300,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3314,13 +3314,13 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -3552,7 +3552,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3566,13 +3566,13 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -3804,7 +3804,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -3818,13 +3818,13 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -4068,7 +4068,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4082,13 +4082,13 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -4324,7 +4324,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4338,13 +4338,13 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -4572,7 +4572,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4586,13 +4586,13 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -4826,7 +4826,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
@@ -4840,13 +4840,13 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "IN")
+  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime

@@ -1,4 +1,4 @@
-import { makeAugmentedSchema, neo4jgraphql  } from "neo4j-graphql-js";
+import { makeAugmentedSchema  } from "neo4j-graphql-js";
 import { resolvers } from "./resolvers";
 import fs from "fs";
 import path from "path";

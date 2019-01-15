@@ -9,6 +9,7 @@ export const unionResolvers = {
   },
   LegalPerson: {
     __resolveType(obj, context, info){
+      console.log('LegalPerson __resolveType called');
       var typeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
       for (var key in typeUniqueProperties) {
         if(key in obj){

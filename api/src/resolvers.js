@@ -7,11 +7,11 @@ import { unionResolvers } from "./resolvers/union";
  */
 let aggregatedResolvers = queryResolvers;
 
-for (var key in interfaceResolvers) {
+for (let key in interfaceResolvers) {
   if (interfaceResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = interfaceResolvers[key];
 }
 
-for (var key in unionResolvers) {
+for (let key in unionResolvers) {
   if (unionResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = unionResolvers[key];
 }
 
