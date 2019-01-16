@@ -4,9 +4,10 @@ import { neo4jgraphql, cypherQuery } from "neo4j-graphql-js";
 export const queryResolvers = {
   Query: {
     // LegalPerson(object, params, ctx, resolveInfo) {
+    //   console.log('Query LegalPerson');
     //   console.log(params);
     //   let session = driver.session();
-    //   let query = "MATCH (`person`:`Person` {identifier:$identifier}) RETURN `person` { .name }";
+    //   let query = "MATCH (`person`:`Person`) RETURN `person` { .name }";
     //
     //   let promise = session.run(query, params)
     //     //.then( result => { return result;})

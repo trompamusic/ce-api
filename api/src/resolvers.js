@@ -1,6 +1,7 @@
 import { queryResolvers } from "./resolvers/query";
 import { interfaceResolvers } from "./resolvers/interface";
 import { unionResolvers } from "./resolvers/union";
+import { mutationResolvers } from "./resolvers/mutation";
 
 /*
  * Concatenate resolvers
@@ -13,6 +14,10 @@ for (let key in interfaceResolvers) {
 
 for (let key in unionResolvers) {
   if (unionResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = unionResolvers[key];
+}
+
+for (let key in mutationResolvers) {
+  if (mutationResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = mutationResolvers[key];
 }
 
 export const resolvers = aggregatedResolvers;

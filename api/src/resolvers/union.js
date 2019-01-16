@@ -19,15 +19,4 @@ export const unionResolvers = {
       return 'Organization';
     },
   },
-  CreativeWorkBase: {
-    __resolveType(obj, context, info){
-      var typeUniqueProperties = {"manufacturer":"Product","articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review", "videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","firstPerformance":"MusicComposition","numTracks":"MusicPlaylist","inAlbum":"MusicRecording","contentUrl":"MediaObject"};
-      for (var key in typeUniqueProperties) {
-        if(key in obj){
-          return typeUniqueProperties[key];
-        }
-      }
-      return 'CreativeWork';
-    },
-  },
 }

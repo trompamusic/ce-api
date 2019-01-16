@@ -23,6 +23,7 @@ export const interfaceResolvers = {
   },
   CreativeWorkInterface: {
     __resolveType(obj, context, info){
+      console.log('CreativeWorkInterface __resolveType called');
       var typeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
       for (var key in typeUniqueProperties) {
         if(key in obj){
@@ -62,4 +63,9 @@ export const interfaceResolvers = {
       return 'Action';
     },
   },
+  // MusicComposition: {
+  //   __isTypeOf(source, context, info) {
+  //     return Object.prototype.hasOwnProperty.call(source, 'firstPerformance')
+  //   }
+  // }
 }
