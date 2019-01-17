@@ -1,9 +1,10 @@
 
 ### Queries ###
-#type Query {
+type Query {
 ##  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
 #  LegalPerson (identifier: String): Person #@cypher(statement:"MATCH (p:Person {identifier:$identifier}) RETURN distinct p { .name }")
-#}
+  personBySubstring(substring: String): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
+}
 
 type Mutation {
   AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload

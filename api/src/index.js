@@ -9,8 +9,8 @@ import { ApolloServer } from "apollo-server";
  * generated resolvers to connect to the database.
  */
 const server = new ApolloServer({
+  schema: schema,
   context: { driver },
-  schema: schema
 });
 
 /*
