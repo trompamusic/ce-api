@@ -7,14 +7,23 @@
 
 type Mutation {
   AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
+  AddMusicCompositionExampleOfWork(from:_MusicCompositionInput, to:_CreativeWorkInterfacedInput): _AddMusicCompositionExampleOfWorkPayload
 }
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
 }
+input _CreativeWorkInterfacedInput {
+  identifier: String!
+  type: CreativeWorkInterfacedType!
+}
 type _AddMusicCompositionAuthorPayload {
   from: MusicComposition
   to: LegalPerson
+}
+type _AddMusicCompositionExampleOfWorkPayload {
+  from: MusicComposition
+  to: CreativeWorkInterfaced
 }
 
 ###############
@@ -251,7 +260,7 @@ interface CreativeWorkInterface {
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -925,7 +934,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -1962,7 +1971,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -2190,7 +2199,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -2406,7 +2415,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -2648,7 +2657,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -2872,7 +2881,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -3118,7 +3127,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -3370,7 +3379,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -3622,7 +3631,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -3875,7 +3884,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -4139,7 +4148,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -4395,7 +4404,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -4643,7 +4652,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
@@ -4897,7 +4906,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWork] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
