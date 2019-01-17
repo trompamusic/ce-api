@@ -63,9 +63,4 @@ export const interfaceResolvers = {
       return 'Action';
     },
   },
-  // MusicComposition: {
-  //   __isTypeOf(source, context, info) {
-  //     return Object.prototype.hasOwnProperty.call(source, 'firstPerformance')
-  //   }
-  // }
 }

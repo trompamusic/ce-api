@@ -6,17 +6,13 @@
 #}
 
 type Mutation {
-  AddCreativeWorkInterfaceAuthor(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput): _AddCreativeWorkInterfaceAuthorPayload
-}
-input _CreativeWorkInterfaceInput {
-  identifier: String!
-  type: CreativeWorkInterfacedType!
+  AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
 }
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
 }
-type _AddCreativeWorkInterfaceAuthorPayload {
+type _AddMusicCompositionAuthorPayload {
   from: MusicComposition
   to: LegalPerson
 }
