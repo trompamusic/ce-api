@@ -1,6 +1,5 @@
 import { makeAugmentedSchema  } from "neo4j-graphql-js";
 import { resolvers } from "./resolvers";
-import { addResolveFunctionsToSchema } from 'graphql-tools';
 import fs from "fs";
 import path from "path";
 

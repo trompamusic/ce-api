@@ -3,7 +3,8 @@
 type Query {
 ##  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
 #  LegalPerson (identifier: String): Person #@cypher(statement:"MATCH (p:Person {identifier:$identifier}) RETURN distinct p { .name }")
-  personBySubstring(substring: String): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
+  personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
+  byName(substring: String!): [MetadataInterfaced] #@cypher(statement: "MATCH (r) WHERE NOT (r:Action OR r:Intangible OR r:PropertyValue) AND toLower(r.name) CONTAINS toLower($substring) RETURN r")
 }
 
 type Mutation {
@@ -51,6 +52,7 @@ union MusicCreator = Person | MusicGroup
 
 union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject
 
+union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject | Organization | MusicGroup | Product | Place
 
 #############
 ### enums ###

@@ -1,3 +1,7 @@
+const metadataInterfacedTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
+const creativeWorkInterfacedTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
+const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
+
 export const unionResolvers = {
   MusicCreator: {
     __resolveType(obj, context, info){
@@ -9,10 +13,9 @@ export const unionResolvers = {
   },
   LegalPerson: {
     __resolveType(obj, context, info){
-      var typeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
-      for (var key in typeUniqueProperties) {
+      for (var key in legalPersonTypeUniqueProperties) {
         if(key in obj){
-          return typeUniqueProperties[key];
+          return legalPersonTypeUniqueProperties[key];
         }
       }
       return 'Organization';
@@ -20,14 +23,31 @@ export const unionResolvers = {
   },
   CreativeWorkInterfaced: {
     __resolveType(obj, context, info){
-      var typeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-      for (var key in typeUniqueProperties) {
-        console.log(key);
+      for (var key in creativeWorkInterfacedTypeUniqueProperties) {
         if(key in obj){
-          return typeUniqueProperties[key];
+          return creativeWorkInterfacedTypeUniqueProperties[key];
         }
       }
       return 'CreativeWork';
     },
   },
+  MetadataInterfaced: {
+    __resolveType(obj, context, info){
+      // if set, return first element of label array
+      if(obj.hasOwnProperty('_schemaType') && obj._schemaType != "undefined"){
+        //console.log('object type resolved as ' + obj._schemaType + ' (_schemaType property)');
+        return obj._schemaType;
+      }
+
+      // try to resolve type by interpreting object properties
+      for (var key in metadataInterfacedTypeUniqueProperties) {
+        if(key in obj){
+          const type = metadataInterfacedTypeUniqueProperties[key];
+          //console.log('object type resolved as ' + type + ' (interpreting typeUniqueProperties)');
+          return type;
+        }
+      }
+      return null;
+    },
+  }
 }
