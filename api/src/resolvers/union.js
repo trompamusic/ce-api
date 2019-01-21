@@ -35,7 +35,7 @@ export const unionResolvers = {
     __resolveType(obj, context, info){
       // if set, return first element of label array
       if(obj.hasOwnProperty('_schemaType') && obj._schemaType != "undefined"){
-        //console.log('object type resolved as ' + obj._schemaType + ' (_schemaType property)');
+        console.log('object type resolved as ' + obj._schemaType + ' (_schemaType property)');
         return obj._schemaType;
       }
 
@@ -43,7 +43,7 @@ export const unionResolvers = {
       for (var key in metadataInterfacedTypeUniqueProperties) {
         if(key in obj){
           const type = metadataInterfacedTypeUniqueProperties[key];
-          //console.log('object type resolved as ' + type + ' (interpreting typeUniqueProperties)');
+          console.log('object type resolved as ' + type + ' (interpreting typeUniqueProperties)');
           return type;
         }
       }

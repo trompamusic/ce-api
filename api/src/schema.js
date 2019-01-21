@@ -22,4 +22,5 @@ const typeDefs = fs
 export const schema = makeAugmentedSchema({
   typeDefs,
   resolvers,
+  allowUndefinedInResolve: true
 });
