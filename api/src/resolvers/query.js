@@ -27,7 +27,7 @@ export const queryResolvers = {
       fieldClause = fieldClause.substring(0,fieldClause.length-4) + ")";
       //console.log(fieldClause);
 
-      const searchQuery = "MATCH (`node`) WHERE " + typeClause + " AND " + fieldClause + " RETURN `node` as `result`";
+      const searchQuery = "MATCH (`node`) WHERE " + typeClause + " AND " + fieldClause + " RETURN `node` as `result` SKIP $offset LIMIT $first";
       console.log('Query: ');
       console.log(searchQuery);
 
