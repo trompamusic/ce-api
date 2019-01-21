@@ -21,17 +21,17 @@ export const mutationResolvers = {
 
       return promise;
     },
-    AddMusicCompositionExampleOfWork (object, params, ctx, resolveInfo) {
+    AddCreativeWorkInterfaceExampleOfWork (object, params, ctx, resolveInfo) {
       let session = driver.session();
-      let query = "MATCH (`musicComposition_from`:`MusicComposition` {identifier: $from.identifier})" +
+      let query = "MATCH (`creativeWorkInterface_from`:`" + params.from.type + "` {identifier: $from.identifier})" +
         " MATCH (`creativeWorkInterfaced_to`: `" + params.to.type + "` {identifier: $to.identifier})" +
-        " CREATE (`musicComposition_from`)-[`exampleOfWork_relation`:`EXAMPLE_OF_WORK`]->(`creativeWorkInterfaced_to`)" +
-        " RETURN { from: `musicComposition_from` ,to: `creativeWorkInterfaced_to` } AS `_AddMusicCompositionExampleOfWorkPayload`;"
+        " CREATE (`creativeWorkInterface_from`)-[`exampleOfWork_relation`:`EXAMPLE_OF_WORK`]->(`creativeWorkInterfaced_to`)" +
+        " RETURN { from: `creativeWorkInterface_from` ,to: `creativeWorkInterfaced_to` } AS `_AddCreativeWorkInterfaceExampleOfWorkPayload`;"
 
       let promise = session.run(query, params)
         .then( result => {
           let rt = result.records.map(record => {
-            let data = record.get("_AddMusicCompositionExampleOfWorkPayload");
+            let data = record.get("_AddCreativeWorkInterfaceExampleOfWorkPayload");
             return {from:data.from.properties, to:data.to.properties};
           });
           return rt[0];

@@ -7,7 +7,7 @@ type Query {
 
 type Mutation {
   AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
-  AddMusicCompositionExampleOfWork(from:_MusicCompositionInput, to:_CreativeWorkInterfacedInput): _AddMusicCompositionExampleOfWorkPayload
+  AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfacedInput, to:_CreativeWorkInterfacedInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
 }
 input _LegalPersonInput {
   identifier: String!
@@ -21,8 +21,8 @@ type _AddMusicCompositionAuthorPayload {
   from: MusicComposition
   to: LegalPerson
 }
-type _AddMusicCompositionExampleOfWorkPayload {
-  from: MusicComposition
+type _AddCreativeWorkInterfaceExampleOfWorkPayload {
+  from: CreativeWorkInterfaced
   to: CreativeWorkInterfaced
 }
 
