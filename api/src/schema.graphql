@@ -1,8 +1,6 @@
 
 ### Queries ###
 type Query {
-##  personsBySubstring(substring: String, first: Int = 10, offset: Int = 0): Person @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-#  LegalPerson (identifier: String): Person #@cypher(statement:"MATCH (p:Person {identifier:$identifier}) RETURN distinct p { .name }")
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
   searchMetadataBySubstring(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced] #@cypher(statement: "MATCH (r) WHERE NOT (r:Action OR r:Intangible OR r:PropertyValue) AND toLower(r.name) CONTAINS toLower($substring) RETURN r")
 }
@@ -31,10 +29,6 @@ type _AddMusicCompositionExampleOfWorkPayload {
 ###############
 ### Scalars ###
 
-#"https://schema.org/Date"
-#scalar _Neo4jDate
-#"https://schema.org/DateTime"
-#scalar _Neo4jDateTime
 "https://schema.org/Duration"
 scalar Duration
 "https://schema.org/URL"

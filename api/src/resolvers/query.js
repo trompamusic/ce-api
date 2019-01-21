@@ -13,7 +13,6 @@ export const queryResolvers = {
           return "`node`:`" + typeName + "` OR ";
         }).join('');
       typeClause = typeClause.substring(0,typeClause.length-4) + ")";
-      //console.log(typeClause);
 
       // determine metadata fields to evaluate in the search query: fields passed with query parameters, or if left empty; all SearchableMetadataFields
       const searchIncludedFields = (params.onFields === undefined || params.onFields.length == 0) ? resolveInfo.schema._typeMap.SearchableMetadataFields._values : params.onFields;
@@ -25,14 +24,9 @@ export const queryResolvers = {
           return "toLower(`node`.`" + fieldName + "`) CONTAINS toLower($substring) OR ";
         }).join('');
       fieldClause = fieldClause.substring(0,fieldClause.length-4) + ")";
-      //console.log(fieldClause);
 
       const searchQuery = "MATCH (`node`) WHERE " + typeClause + " AND " + fieldClause + " RETURN `node` as `result` SKIP $offset LIMIT $first";
-      console.log('Query: ');
-      console.log(searchQuery);
 
-      //console.log(resolveInfo.fieldNodes[0].selectionSet.selections[0].selectionSet);
-      //resolveInfo.fieldNodes.map( node => {console.log(node.selectionSet.selections); node.selectionSet.selections.map( selection => {console.log('selection-set:'); console.log(selection)})});
       let session = driver.session();
       return session.run(searchQuery, params)
         .then( result => {
@@ -44,10 +38,8 @@ export const queryResolvers = {
                 object._schemaType = labels.shift();
                 object._additionalSchemaType = labels;
               }
-              //console.log(object);
               return object;
             })
-          //console.log(toReturn);
           return toReturn;
         })
     },
