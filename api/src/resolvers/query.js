@@ -33,7 +33,7 @@ export const queryResolvers = {
           return result.records.map(
             record => {
               const object = record.get("node").properties;
-              object._weight = record.get("weight");
+              object._searchScore = record.get("weight");
               const labels = record.get("node").labels;
               if (labels instanceof Array && labels.length > 0){
                 object._schemaType = labels.shift();
