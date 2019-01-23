@@ -3,7 +3,6 @@
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
   searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
-#  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 10): [MetadataInterfaced]
 }
 
 type Mutation {
