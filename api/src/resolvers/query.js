@@ -74,7 +74,7 @@ export const queryResolvers = {
           const toReturn = result.records.map(
             record => {
               const object = record.get("node").properties;
-              object.weight = record.get("weight");
+              object._weight = record.get("weight");
               const labels = record.get("node").labels;
               if (labels instanceof Array && labels.length > 0){
                 object._schemaType = labels.shift();

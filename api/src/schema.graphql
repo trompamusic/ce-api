@@ -196,7 +196,7 @@ interface MetadataInterface {
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
 }
 
 "https://schema.org/Thing,https://www.w3.org/TR/prov-o/#Entity"
@@ -746,7 +746,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -860,7 +860,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1073,7 +1073,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1213,7 +1213,7 @@ type Intangible implements MetadataInterface & ThingInterface & ProvenanceEntity
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1295,7 +1295,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1463,7 +1463,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1643,7 +1643,7 @@ type Place implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1771,7 +1771,7 @@ type Product implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -1904,7 +1904,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -2133,7 +2133,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -2350,7 +2350,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -2593,7 +2593,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -2818,7 +2818,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -3065,7 +3065,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -3318,7 +3318,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ##################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -3571,7 +3571,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -3824,7 +3824,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -4090,7 +4090,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -4347,7 +4347,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -4596,7 +4596,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -4851,7 +4851,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -5115,7 +5115,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -5294,7 +5294,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -5412,7 +5412,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -5513,7 +5513,7 @@ type PropertyValue {
   identifier: ID
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
-  weight: Float
+  _weight: Float
   ################################
   ### PropertyValue properties ###
   #maxValue: Int
