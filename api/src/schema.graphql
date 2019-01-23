@@ -2,8 +2,8 @@
 ### Queries ###
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  searchMetadataBySubstring(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced] #@cypher(statement: "MATCH (r) WHERE NOT (r:Action OR r:Intangible OR r:PropertyValue) AND toLower(r.name) CONTAINS toLower($substring) RETURN r")
-  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 10): [MetadataInterfaced]
+  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
+#  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 10): [MetadataInterfaced]
 }
 
 type Mutation {
