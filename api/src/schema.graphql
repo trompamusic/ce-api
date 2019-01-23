@@ -9,6 +9,7 @@ type Mutation {
   AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
   AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfacedInput, to:_CreativeWorkInterfacedInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
 }
+
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
@@ -17,6 +18,7 @@ input _CreativeWorkInterfacedInput {
   identifier: String!
   type: CreativeWorkInterfacedType!
 }
+
 type _AddMusicCompositionAuthorPayload {
   from: MusicComposition
   to: LegalPerson
@@ -322,7 +324,7 @@ interface CreativeWorkInterface {
   "https://schema.org/position"
   position: Int
   "https://schema.org/producer"
-  producer: [Person] @relation(name: "PRODUCER", direction: "IN")
+  producer: [LegalPerson] @relation(name: "PRODUCER", direction: "IN")
   #provider:
   #publication:
   "https://schema.org/publisher"
@@ -1569,7 +1571,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/jobTitle"
   jobTitle: String
   "https://schema.org/knows"
-  knows: Person @relation(name: "KNOWS", direction: "OUT")
+  knows: [Person] @relation(name: "KNOWS", direction: "OUT")
   "https://schema.org/knowsAbout"
   knowsAbout: ThingInterface @relation(name: "KNOWS_ABOUT", direction: "OUT")
   "https://schema.org/knowsLanguage"
@@ -5497,7 +5499,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/replacee"
   replacee: CreativeWork @relation(name: "REPLACEE", direction: "OUT")
   "https://schema.org/replacer"
-  replacer: Person @relation(name: "REPLACER", direction: "OUT")
+  replacer: ThingInterface @relation(name: "REPLACER", direction: "OUT")
 }
 
 
