@@ -10,6 +10,9 @@ export const mutationResolvers = {
     AddCreativeWorkInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
       return runAdd(params);
     },
+    AddMediaObjectInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
   }
 }
 

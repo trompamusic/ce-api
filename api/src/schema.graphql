@@ -8,6 +8,7 @@ type Query {
 type Mutation {
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
   AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
+  AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
 }
 
 input _LegalPersonInput {
@@ -18,6 +19,10 @@ input _CreativeWorkInterfaceInput {
   identifier: String!
   type: CreativeWorkInterfaceType!
 }
+input _MediaObjectInterfaceInput {
+  identifier: String!
+  type: MediaObjectInterfaceType!
+}
 
 type _AddCreativeWorkInterfaceLegalPersonPayload {
   from: CreativeWorkInterfaced
@@ -25,6 +30,10 @@ type _AddCreativeWorkInterfaceLegalPersonPayload {
 }
 type _AddCreativeWorkInterfaceCreativeWorkInterfacePayload {
   from: CreativeWorkInterfaced
+  to: CreativeWorkInterfaced
+}
+type _AddMediaObjectInterfaceCreativeWorkInterfacePayload {
+  from: MediaObjectInterfaced
   to: CreativeWorkInterfaced
 }
 
@@ -46,9 +55,12 @@ union LegalPerson = Person | Organization | MusicGroup
 
 union MusicCreator = Person | MusicGroup
 
-union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject
+union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
 
-union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
+union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
+
+union MediaObjectInterfaced = MediaObject | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
+
 
 #############
 ### enums ###
@@ -79,6 +91,11 @@ enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
   exampleOfWork
   workExample
   translator
+}
+
+# TODO auto generate
+enum MediaObjectInterfaceRelationToCreativeWorkInterface {
+  encodesCreativeWork
 }
 
 # TODO auto generate
@@ -117,6 +134,21 @@ enum CreativeWorkInterfaceType {
   Dataset
   ImageObject
   MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+}
+
+# TODO auto generate
+enum MediaObjectInterfaceType {
+  MediaObject
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
   MusicPlaylist
   MusicRecording
   VideoObject
@@ -402,7 +434,7 @@ interface MediaObjectInterface {
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/height"
@@ -2566,7 +2598,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3034,7 +3066,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3281,7 +3313,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3534,7 +3566,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3787,7 +3819,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4041,7 +4073,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4306,7 +4338,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4563,7 +4595,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4812,7 +4844,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -5067,7 +5099,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
