@@ -1,3 +1,5 @@
+import { retrieveSchemaType } from "../resolvers";
+
 const MetadataInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
 const CreativeWorkInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
 const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
@@ -5,6 +7,11 @@ const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Perso
 export const unionResolvers = {
   MusicCreator: {
     __resolveType(obj, context, info){
+      const schemaType = retrieveSchemaType(obj);
+      if(schemaType){
+        return schemaType;
+      }
+
       if(obj.birthDate){
         return 'Person';
       }
@@ -13,6 +20,11 @@ export const unionResolvers = {
   },
   LegalPerson: {
     __resolveType(obj, context, info){
+      const schemaType = retrieveSchemaType(obj);
+      if(schemaType){
+        return schemaType;
+      }
+
       for (var key in legalPersonTypeUniqueProperties) {
         if(key in obj){
           return legalPersonTypeUniqueProperties[key];
@@ -23,11 +35,12 @@ export const unionResolvers = {
   },
   CreativeWorkInterfaced: {
     __resolveType(obj, context, info){
-      // if set, return first element of label array
-      if(obj.hasOwnProperty('_schemaType') && obj._schemaType != "undefined"){
-        return obj._schemaType;
+      const schemaType = retrieveSchemaType(obj);
+      if(typeof schemaType === 'string'){
+        return schemaType;
       }
 
+      // if no schemaType was passed along, try resolving the type by evaluating fields
       for (var key in CreativeWorkInterfaceTypeUniqueProperties) {
         if(key in obj){
           return CreativeWorkInterfaceTypeUniqueProperties[key];
@@ -38,9 +51,9 @@ export const unionResolvers = {
   },
   MetadataInterfaced: {
     __resolveType(obj, context, info){
-      // if set, return first element of label array
-      if(obj.hasOwnProperty('_schemaType') && obj._schemaType != "undefined"){
-        return obj._schemaType;
+      const schemaType = retrieveSchemaType(obj);
+      if(typeof schemaType === 'string'){
+        return schemaType;
       }
 
       // try to resolve type by interpreting object properties

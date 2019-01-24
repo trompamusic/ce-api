@@ -43,8 +43,6 @@ export const mutationResolvers = {
       return promise;
     },
     AddCreativeWorkInterfaceLegalPerson (object, params, ctx, resolveInfo) {
-      // console.log(snakeCase(params.field).toUpperCase());
-      console.log(params.from.type);
       let session = driver.session();
       let query = "MATCH (`creativeWorkInterface_from`:`" + params.from.type + "` {identifier: $from.identifier})" +
         " MATCH (`legalPerson_to`: `" + params.to.type + "` {identifier: $to.identifier})" +
