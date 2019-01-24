@@ -7,6 +7,11 @@ type Query {
 
 type Mutation {
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
+  AddOrganizationInterfaceLegalPerson(from:_OrganizationInterfaceInput, to:_LegalPersonInput, field:OrganizationInterfaceRelationToLegalPerson): _AddOrganizationInterfaceLegalPersonPayload
+  AddActionInterfaceLegalPerson(from:_ActionInterfaceInput, to:_LegalPersonInput, field:ActionInterfaceRelationToLegalPerson): _AddActionInterfaceLegalPersonPayload
+  AddDigitalDocumentPermissionGrantee(from:_DigitalDocumentPermissionInput, to:_LegalPersonInput): _AddDigitalDocumentPermissionLegalPersonPayload
+  AddEventLegalPerson(from:_EventInput, to:_LegalPersonInput, field:EventRelationToLegalPerson): _AddEventLegalPersonPayload
+  AddVideoObjectMusicBy(from:_VideoObjectInput, to:_LegalPersonInput): _AddVideoObjectMusicByPayload
   AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
   AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
 }
@@ -14,6 +19,10 @@ type Mutation {
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
+}
+input _OrganizationInterfaceInput {
+  identifier: String!
+  type: OrganizationInterfaceType!
 }
 input _CreativeWorkInterfaceInput {
   identifier: String!
@@ -23,9 +32,25 @@ input _MediaObjectInterfaceInput {
   identifier: String!
   type: MediaObjectInterfaceType!
 }
+input _ActionInterfaceInput {
+  identifier: String!
+  type: ActionInterfaceType!
+}
 
 type _AddCreativeWorkInterfaceLegalPersonPayload {
   from: CreativeWorkInterfaced
+  to: LegalPerson
+}
+type _AddOrganizationInterfaceLegalPersonPayload {
+  from: OrganizationInterfaced
+  to: LegalPerson
+}
+type _AddActionInterfaceLegalPersonPayload {
+  from: ActionInterfaced
+  to: LegalPerson
+}
+type _AddDigitalDocumentPermissionLegalPersonPayload {
+  from: DigitalDocumentPermission
   to: LegalPerson
 }
 type _AddCreativeWorkInterfaceCreativeWorkInterfacePayload {
@@ -36,6 +61,15 @@ type _AddMediaObjectInterfaceCreativeWorkInterfacePayload {
   from: MediaObjectInterfaced
   to: CreativeWorkInterfaced
 }
+type _AddEventLegalPersonPayload {
+  from: Event
+  to: LegalPerson
+}
+type _AddVideoObjectMusicByPayload {
+  from: VideoObject
+  to: LegalPerson
+}
+
 
 ###############
 ### Scalars ###
@@ -61,16 +95,13 @@ union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocumen
 
 union MediaObjectInterfaced = MediaObject | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
 
+union OrganizationInterfaced = Organization | MusicGroup
+
+union ActionInterfaced = Action | UpdateAction | ReplaceAction
+
 
 #############
 ### enums ###
-
-# TODO auto generate
-enum LegalPersonType {
-  Person
-  Organization
-  MusicGroup
-}
 
 # TODO auto generate
 enum CreativeWorkInterfaceRelationToLegalPerson {
@@ -80,6 +111,19 @@ enum CreativeWorkInterfaceRelationToLegalPerson {
   producer
   schema_publisher
   translator
+}
+
+# TODO auto generate
+enum OrganizationInterfaceRelationToLegalPerson {
+  member
+  funder
+  sponsor
+}
+
+# TODO auto generate
+enum ActionInterfaceRelationToLegalPerson {
+  agent
+  participant
 }
 
 # TODO auto generate
@@ -96,6 +140,19 @@ enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
 # TODO auto generate
 enum MediaObjectInterfaceRelationToCreativeWorkInterface {
   encodesCreativeWork
+}
+
+# TODO auto generate
+enum EventRelationToLegalPerson {
+  performer
+  composer
+}
+
+# TODO auto generate
+enum LegalPersonType {
+  Person
+  Organization
+  MusicGroup
 }
 
 # TODO auto generate
@@ -152,6 +209,19 @@ enum MediaObjectInterfaceType {
   MusicPlaylist
   MusicRecording
   VideoObject
+}
+
+# TODO auto generate
+enum OrganizationInterfaceType {
+  Organization
+  MusicGroup
+}
+
+# TODO auto generate
+enum ActionInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
 }
 
 enum AvailableLanguage {
@@ -349,7 +419,7 @@ interface CreativeWorkInterface {
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -489,7 +559,7 @@ interface OrganizationInterface {
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -507,7 +577,7 @@ interface OrganizationInterface {
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -523,7 +593,7 @@ interface OrganizationInterface {
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -540,7 +610,7 @@ interface ActionInterface {
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -552,9 +622,9 @@ interface ActionInterface {
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -861,7 +931,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -873,9 +943,9 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -1025,7 +1095,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -1198,7 +1268,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   endDate: _Neo4jDateTime
   #eventStatus: EventStatusType
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/inLanguage"
   inLanguage: String
   "https://schema.org/isAccessibleForFree"
@@ -1219,7 +1289,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   "https://schema.org/review"
   review: [Review]
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/startDate"
   startDate: _Neo4jDateTime
   "https://schema.org/subEvent"
@@ -1439,7 +1509,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -1457,7 +1527,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -1473,7 +1543,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -1606,7 +1676,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #"https://schema.org/follows"
   #follows: Person
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/gender"
   gender: Gender
   "https://schema.org/givenName"
@@ -1652,7 +1722,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/sibling"
   sibling: [Person] @relation(name: "SIBLING", direction: "OUT")
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/spouse"
   spouse: [Person] @relation(name: "SPOUSE", direction: "OUT")
   #taxID
@@ -2069,7 +2139,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -2298,7 +2368,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -2515,7 +2585,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -2758,7 +2828,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -2983,7 +3053,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -3230,7 +3300,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -3483,7 +3553,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -3736,7 +3806,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -3990,7 +4060,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -4255,7 +4325,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -4512,7 +4582,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -4761,7 +4831,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -5016,7 +5086,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
@@ -5259,7 +5329,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -5277,7 +5347,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -5293,7 +5363,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -5409,7 +5479,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -5421,9 +5491,9 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -5527,7 +5597,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -5539,9 +5609,9 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"

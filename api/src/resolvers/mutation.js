@@ -7,10 +7,30 @@ export const mutationResolvers = {
     AddCreativeWorkInterfaceLegalPerson (object, params, ctx, resolveInfo) {
       return runAdd(params);
     },
+    AddOrganizationInterfaceLegalPerson (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
     AddCreativeWorkInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
       return runAdd(params);
     },
     AddMediaObjectInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddActionInterfaceLegalPerson (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddDigitalDocumentPermissionGrantee (object, params, ctx, resolveInfo) {
+      params.from.type = 'DigitalDocumentPermission';
+      params.field = 'grantee';
+      return runAdd(params);
+    },
+    AddEventLegalPerson (object, params, ctx, resolveInfo) {
+      params.from.type = 'Event';
+      return runAdd(params);
+    },
+    AddVideoObjectMusicBy (object, params, ctx, resolveInfo) {
+      params.from.type = 'VideoObject';
+      params.field = 'musicBy';
       return runAdd(params);
     },
   }
