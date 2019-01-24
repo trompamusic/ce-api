@@ -6,10 +6,8 @@ type Query {
 }
 
 type Mutation {
-  AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
-  AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
-  AddCreativeWorkInterfaceSchemaPublisher(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput):_AddCreativeWorkInterfaceSchemaPublisherPayload
+  AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
 }
 
 input _LegalPersonInput {
@@ -25,17 +23,9 @@ type _AddCreativeWorkInterfaceLegalPersonPayload {
   from: CreativeWorkInterfaced
   to: LegalPerson
 }
-type _AddMusicCompositionAuthorPayload {
-  from: MusicComposition
-  to: LegalPerson
-}
-type _AddCreativeWorkInterfaceExampleOfWorkPayload {
-from: CreativeWorkInterfaced
-to: CreativeWorkInterfaced
-}
-type _AddCreativeWorkInterfaceSchemaPublisherPayload {
-  from: CreativeWorkInterface
-  to: LegalPerson
+type _AddCreativeWorkInterfaceCreativeWorkInterfacePayload {
+  from: CreativeWorkInterfaced
+  to: CreativeWorkInterfaced
 }
 
 ###############
@@ -77,6 +67,17 @@ enum CreativeWorkInterfaceRelationToLegalPerson {
   funder
   producer
   schema_publisher
+  translator
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
+  citation
+  hasPart
+  isBasedOn
+  isPartOf
+  exampleOfWork
+  workExample
   translator
 }
 
@@ -283,7 +284,7 @@ interface CreativeWorkInterface {
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -320,7 +321,7 @@ interface CreativeWorkInterface {
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -328,10 +329,10 @@ interface CreativeWorkInterface {
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -381,9 +382,9 @@ interface CreativeWorkInterface {
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
 }
 
 "https://schema.org/MediaObject"
@@ -959,7 +960,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -996,7 +997,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -1004,10 +1005,10 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -1057,9 +1058,9 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
 }
 
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Event"
@@ -2003,7 +2004,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2040,7 +2041,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2048,10 +2049,10 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2101,9 +2102,9 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   ##########################
   ### Article properties ###
   "https://schema.org/articleBody"
@@ -2232,7 +2233,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2269,7 +2270,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2277,10 +2278,10 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2330,9 +2331,9 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   ##########################
   ### DigitalDocument properties ###
   "https://schema.org/hasDigitalDocumentPermission"
@@ -2449,7 +2450,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2486,7 +2487,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2494,10 +2495,10 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2547,9 +2548,9 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -2692,7 +2693,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2729,7 +2730,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2737,10 +2738,10 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2790,9 +2791,9 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### Review properties ###
   "https://bib.schema.org/itemReviewed"
@@ -2917,7 +2918,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2954,7 +2955,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2962,10 +2963,10 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3015,9 +3016,9 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3164,7 +3165,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3201,7 +3202,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3209,10 +3210,10 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3262,9 +3263,9 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3417,7 +3418,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3454,7 +3455,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3462,10 +3463,10 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3515,9 +3516,9 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3670,7 +3671,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3707,7 +3708,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3715,10 +3716,10 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3768,9 +3769,9 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3924,7 +3925,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3961,7 +3962,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3969,10 +3970,10 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4022,9 +4023,9 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4189,7 +4190,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4226,7 +4227,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4234,10 +4235,10 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4287,9 +4288,9 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4446,7 +4447,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4483,7 +4484,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4491,10 +4492,10 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4544,9 +4545,9 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4695,7 +4696,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4732,7 +4733,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4740,10 +4741,10 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4793,9 +4794,9 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4950,7 +4951,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4987,7 +4988,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4995,10 +4996,10 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -5048,9 +5049,9 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
