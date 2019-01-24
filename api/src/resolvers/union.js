@@ -1,5 +1,5 @@
-const metadataInterfacedTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-const creativeWorkInterfacedTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
+const MetadataInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
+const CreativeWorkInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
 const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
 
 export const unionResolvers = {
@@ -23,9 +23,14 @@ export const unionResolvers = {
   },
   CreativeWorkInterfaced: {
     __resolveType(obj, context, info){
-      for (var key in creativeWorkInterfacedTypeUniqueProperties) {
+      // if set, return first element of label array
+      if(obj.hasOwnProperty('_schemaType') && obj._schemaType != "undefined"){
+        return obj._schemaType;
+      }
+
+      for (var key in CreativeWorkInterfaceTypeUniqueProperties) {
         if(key in obj){
-          return creativeWorkInterfacedTypeUniqueProperties[key];
+          return CreativeWorkInterfaceTypeUniqueProperties[key];
         }
       }
       return 'CreativeWork';
@@ -39,9 +44,9 @@ export const unionResolvers = {
       }
 
       // try to resolve type by interpreting object properties
-      for (var key in metadataInterfacedTypeUniqueProperties) {
+      for (var key in MetadataInterfaceTypeUniqueProperties) {
         if(key in obj){
-          const type = metadataInterfacedTypeUniqueProperties[key];
+          const type = MetadataInterfaceTypeUniqueProperties[key];
           return type;
         }
       }

@@ -2,30 +2,40 @@
 ### Queries ###
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
+  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
 }
 
 type Mutation {
   AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
-  AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfacedInput, to:_CreativeWorkInterfacedInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
+  AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
+  AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
+  AddCreativeWorkInterfaceSchemaPublisher(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput):_AddCreativeWorkInterfaceSchemaPublisherPayload
 }
 
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
 }
-input _CreativeWorkInterfacedInput {
+input _CreativeWorkInterfaceInput {
   identifier: String!
-  type: CreativeWorkInterfacedType!
+  type: CreativeWorkInterfaceType!
 }
 
+type _AddCreativeWorkInterfaceLegalPersonPayload {
+  from: CreativeWorkInterfaced
+  to: LegalPerson
+}
 type _AddMusicCompositionAuthorPayload {
   from: MusicComposition
   to: LegalPerson
 }
 type _AddCreativeWorkInterfaceExampleOfWorkPayload {
-  from: CreativeWorkInterfaced
-  to: CreativeWorkInterfaced
+from: CreativeWorkInterfaced
+to: CreativeWorkInterfaced
+}
+type _AddCreativeWorkInterfaceSchemaPublisherPayload {
+  from: CreativeWorkInterface
+  to: LegalPerson
 }
 
 ###############
@@ -53,13 +63,25 @@ union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | M
 #############
 ### enums ###
 
+# TODO auto generate
 enum LegalPersonType {
   Person
   Organization
   MusicGroup
 }
 
-enum MetadataInterfacedType {
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToLegalPerson {
+  author
+  copyrightHolder
+  funder
+  producer
+  schema_publisher
+  translator
+}
+
+# TODO auto generate
+enum MetadataInterfaceType {
   Person
   CreativeWork
   Article
@@ -81,7 +103,8 @@ enum MetadataInterfacedType {
   Place
 }
 
-enum CreativeWorkInterfacedType {
+# TODO auto generate
+enum CreativeWorkInterfaceType {
   Product
   CreativeWork
   Article

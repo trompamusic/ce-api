@@ -1,10 +1,12 @@
 import { driver } from "../driver";
+import { retrieveNodeData } from "../resolvers"
+import { hydrateNodeSearchScore } from "../resolvers";
 
 export const queryResolvers = {
   Query: {
     searchMetadataText(object, params, context, resolveInfo){
       // determine whether to evaluate only a subset of MetadataInterfaced types
-      const doEvaluateTypeSubset = !(params.onTypes === undefined || params.onTypes.length == 0 || params.onTypes.length == resolveInfo.schema._typeMap.MetadataInterfacedType._values.length)
+      const doEvaluateTypeSubset = !(params.onTypes === undefined || params.onTypes.length == 0 || params.onTypes.length == resolveInfo.schema._typeMap.MetadataInterfaceType._values.length)
       // determine whether to evaluate only a subset of Metadata fields
       const doEvaluateFieldSubset = !(params.onFields === undefined || params.onFields.length == 0 || params.onFields.length == resolveInfo.schema._typeMap.SearchableMetadataFields._values.length)
 
@@ -13,7 +15,7 @@ export const queryResolvers = {
       let indexQueryClause = params.substring + '~';
       // if only a subset of types and/or fields need to be evaluated: build query clause for [substring]~ on all eligible types/fields
       if(doEvaluateTypeSubset || doEvaluateFieldSubset){
-        const typeNames = doEvaluateTypeSubset ? params.onTypes : resolveInfo.schema._typeMap.MetadataInterfacedType._values.map(type => {return type.name});
+        const typeNames = doEvaluateTypeSubset ? params.onTypes : resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => {return type.name});
         const fieldNames = doEvaluateFieldSubset ? params.onFields : resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => {return field.name});
         const substring = indexQueryClause;
         indexQueryClause = '';
@@ -26,20 +28,14 @@ export const queryResolvers = {
       }
       const searchQuery = 'CALL apoc.index.search("metadata", "' + indexQueryClause + '") YIELD `node`, `weight` RETURN `node`, `weight` ORDER BY `weight` DESC SKIP $offset LIMIT $first';
 
-      // fetch and process serahc results
+      // fetch and process search results
       let session = driver.session();
       return session.run(searchQuery, params)
         .then( result => {
           return result.records.map(
             record => {
-              const object = record.get("node").properties;
-              object._searchScore = record.get("weight");
-              const labels = record.get("node").labels;
-              if (labels instanceof Array && labels.length > 0){
-                object._schemaType = labels.shift();
-                object._additionalSchemaType = labels;
-              }
-              return object;
+              let nodeData = retrieveNodeData(record.get('node'));
+              return hydrateNodeSearchScore(nodeData, record.get('weight'));
             })
         })
     }

@@ -21,3 +21,22 @@ for (let key in mutationResolvers) {
 }
 
 export const resolvers = aggregatedResolvers;
+
+// retrieval function for node data, hydrated with private schemaType properties
+export function retrieveNodeData (node) {
+  let data = node.properties;
+  const labels = node.labels;
+  if (labels instanceof Array && labels.length > 0){
+    data._schemaType = labels.shift();
+    data._additionalSchemaType = labels;
+  }
+  return data;
+}
+
+// hydrate node data with searchScore
+export function hydrateNodeSearchScore(nodeData, weight) {
+  if(weight !== undefined){
+    nodeData._searchScore = weight;
+  }
+  return nodeData;
+}
