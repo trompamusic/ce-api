@@ -6,8 +6,10 @@ type Query {
 }
 
 type Mutation {
+  AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
   AddOrganizationInterfaceLegalPerson(from:_OrganizationInterfaceInput, to:_LegalPersonInput, field:OrganizationInterfaceRelationToLegalPerson): _AddOrganizationInterfaceLegalPersonPayload
+  AddActionInterfaceThingInterface(from:_ActionInterfaceInput, to:_ThingInterfaceInput, field:ActionInterfaceRelationToThingInterface): _AddActionInterfaceThingInterfacePayload
   AddActionInterfaceLegalPerson(from:_ActionInterfaceInput, to:_LegalPersonInput, field:ActionInterfaceRelationToLegalPerson): _AddActionInterfaceLegalPersonPayload
   AddDigitalDocumentPermissionGrantee(from:_DigitalDocumentPermissionInput, to:_LegalPersonInput): _AddDigitalDocumentPermissionLegalPersonPayload
   AddEventComposer(from:_EventInput, to:_LegalPersonInput): _AddEventComposerPayload
@@ -17,6 +19,11 @@ type Mutation {
   AddThingInterfacePotentialAction(from:_ThingInterfaceInput, to:_ActionInterfaceInput): _AddThingInterfacePotentialActionPayload
   AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
   AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
+  AddProvenanceEntityInterfaceThingInterface(from:_ProvenanceEntityInterfaceInput, to:_ThingInterfaceInput, field:ProvenanceEntityInterfaceRelationToThingInterface): _AddProvenanceEntityInterfaceThingInterfacePayload
+  AddProvenanceEntityInterfaceWasAttributedTo(from:_ProvenanceEntityInterfaceInput, to:_LegalPersonInput): _AddProvenanceEntityInterfaceWasAttributedToPayload
+  AddProvenanceEntityInterfaceWasGeneratedBy(from:_ProvenanceEntityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceEntityInterfaceWasGeneratedByPayload
+  AddProvenanceAgentInterfaceLegalPerson(from:_ProvenanceAgentInterfaceInput, to:_LegalPersonInput): _AddProvenanceAgentInterfaceLegalPersonPayload
+  AddProvenanceActivityInterfaceActionInterface(from:_ProvenanceActivityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceActivityInterfaceWasInformedByPayload
 }
 
 input _ThingInterfaceInput {
@@ -47,7 +54,23 @@ input _PerformerInput {
   identifier: String!
   type: PerformerType!
 }
+input _ProvenanceEntityInterfaceInput {
+  identifier: String!
+  type: ProvenanceEntityInterfaceType!
+}
+input _ProvenanceAgentInterfaceInput {
+  identifier: String!
+  type: ProvenanceAgentInterfaceType!
+}
+input _ProvenanceActivityInterfaceInput {
+  identifier: String!
+  type: ProvenanceActivityInterfaceType!
+}
 
+type _AddThingInterfaceThingInterfacePayload {
+  from: ThingInterfaced
+  to: ThingInterfaced
+}
 type _AddThingInterfaceCreativeWorkInterfacePayload {
   from: ThingInterfaced
   to: CreativeWorkInterfaced
@@ -63,6 +86,10 @@ type _AddCreativeWorkInterfaceLegalPersonPayload {
 type _AddOrganizationInterfaceLegalPersonPayload {
   from: OrganizationInterfaced
   to: LegalPerson
+}
+type _AddActionInterfaceThingInterfacePayload {
+  from: ActionInterfaced
+  to: ThingInterfaced
 }
 type _AddActionInterfaceLegalPersonPayload {
   from: ActionInterfaced
@@ -92,6 +119,26 @@ type _AddVideoObjectMusicByPayload {
   from: VideoObject
   to: Performer
 }
+type _AddProvenanceEntityInterfaceThingInterfacePayload {
+  from: ProvenanceEntityInterfaced
+  to: ThingInterfaced
+}
+type _AddProvenanceEntityInterfaceWasAttributedToPayload {
+  from: ProvenanceEntityInterfaced
+  to: LegalPerson
+}
+type _AddProvenanceEntityInterfaceWasGeneratedByPayload {
+  from: ProvenanceEntityInterfaced
+  to: ActionInterfaced
+}
+type _AddProvenanceAgentInterfaceLegalPersonPayload {
+  from: ProvenanceAgentInterfaced
+  to: LegalPerson
+}
+type _AddProvenanceActivityInterfaceWasInformedByPayload {
+  from: ProvenanceActivityInterfaced
+  to: ActionInterfaced
+}
 
 
 ###############
@@ -112,21 +159,34 @@ union LegalPerson = Person | Organization | MusicGroup
 
 union Performer = Person | MusicGroup
 
+# TODO auto generate
 union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience
-
+# TODO auto generate
 union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
-
+# TODO auto generate
 union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
-
+# TODO auto generate
 union MediaObjectInterfaced = MediaObject | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
-
+# TODO auto generate
 union OrganizationInterfaced = Organization | MusicGroup
-
+# TODO auto generate
 union ActionInterfaced = Action | UpdateAction | ReplaceAction
-
+# TODO auto generate
+union ProvenanceEntityInterfaced = DigitalDocumentPermission | Action | CreativeWork | Event | Intangible | Organization | Person | Place | Product | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject | MusicGroup | UpdateAction | ReplaceAction
+# TODO auto generate
+union ProvenanceAgentInterfaced = Person | Organization | MusicGroup
+# TODO auto generate
+union ProvenanceActivityInterfaced = Action | UpdateAction | ReplaceAction
 
 #############
 ### enums ###
+
+# TODO auto generate
+enum ThingInterfaceRelationToThingInterface {
+  about
+  mainEntity
+  mentions
+}
 
 # TODO auto generate
 enum ThingInterfaceRelationToCreativeWorkInterface {
@@ -152,6 +212,13 @@ enum OrganizationInterfaceRelationToLegalPerson {
 }
 
 # TODO auto generate
+enum ActionInterfaceRelationToThingInterface {
+  error
+  object
+  result
+}
+
+# TODO auto generate
 enum ActionInterfaceRelationToLegalPerson {
   agent
   participant
@@ -171,6 +238,18 @@ enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
 # TODO auto generate
 enum MediaObjectInterfaceRelationToCreativeWorkInterface {
   encodesCreativeWork
+}
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceRelationToThingInterface {
+  wasDerivedFrom
+  used
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceRelationToLegalPersonInterface {
+  wasAssociatedWith
+  actedOnBehalfOf
 }
 
 # TODO auto generate
@@ -276,11 +355,55 @@ enum ActionInterfaceType {
   ReplaceAction
 }
 
+enum ProvenanceActivityInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
+}
+
 # TODO auto generate
 enum PerformerType {
   Person
   MusicGroup
 }
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceType {
+  DigitalDocumentPermission
+  Action
+  CreativeWork
+  Event
+  Intangible
+  Organization
+  Person
+  Place
+  Product
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+  MusicGroup
+  UpdateAction
+  ReplaceAction
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceType {
+  Person
+  Organization
+  MusicGroup
+}
+
+
 
 enum AvailableLanguage {
   en
@@ -678,11 +801,11 @@ interface ActionInterface {
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -999,11 +1122,11 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -5547,11 +5670,11 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -5665,11 +5788,11 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [ThingInterface] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"

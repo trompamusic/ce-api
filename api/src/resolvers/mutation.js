@@ -4,7 +4,14 @@ import { retrieveNodeData } from "../resolvers"
 
 export const mutationResolvers = {
   Mutation: {
+    AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
     AddThingInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddThingInterfacePotentialAction (object, params, ctx, resolveInfo) {
+      params.field = 'potentialAction';
       return runAdd(params);
     },
     AddCreativeWorkInterfaceLegalPerson (object, params, ctx, resolveInfo) {
@@ -40,6 +47,26 @@ export const mutationResolvers = {
     AddVideoObjectMusicBy (object, params, ctx, resolveInfo) {
       params.from.type = 'VideoObject';
       params.field = 'musicBy';
+      return runAdd(params);
+    },
+    AddProvenanceEntityInterfaceWasAttributedTo (object, params, ctx, resolveInfo) {
+      params.field = 'wasAttributedTo';
+      return runAdd(params);
+    },
+    AddProvenanceAgentInterfaceLegalPerson (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddActionInterfaceThingInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddProvenanceEntityInterfaceThingInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
+    AddProvenanceEntityInterfaceWasGeneratedBy (object, params, ctx, resolveInfo) {
+      params.field = 'wasGeneratedBy';
+      return runAdd(params);
+    },
+    AddProvenanceActivityInterfaceActionInterface (object, params, ctx, resolveInfo) {
       return runAdd(params);
     },
   }
