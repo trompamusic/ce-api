@@ -4,6 +4,9 @@ import { retrieveNodeData } from "../resolvers"
 
 export const mutationResolvers = {
   Mutation: {
+    AddThingInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
+      return runAdd(params);
+    },
     AddCreativeWorkInterfaceLegalPerson (object, params, ctx, resolveInfo) {
       return runAdd(params);
     },
@@ -24,8 +27,14 @@ export const mutationResolvers = {
       params.field = 'grantee';
       return runAdd(params);
     },
-    AddEventLegalPerson (object, params, ctx, resolveInfo) {
+    AddEventComposer (object, params, ctx, resolveInfo) {
       params.from.type = 'Event';
+      params.field = 'composer';
+      return runAdd(params);
+    },
+    AddEventPerformer (object, params, ctx, resolveInfo) {
+      params.from.type = 'Event';
+      params.field = 'performer';
       return runAdd(params);
     },
     AddVideoObjectMusicBy (object, params, ctx, resolveInfo) {

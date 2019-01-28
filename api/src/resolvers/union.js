@@ -5,7 +5,7 @@ const CreativeWorkInterfaceTypeUniqueProperties = {"articleBody":"Article","hasD
 const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
 
 export const unionResolvers = {
-  MusicCreator: {
+  Performer: {
     __resolveType(obj, context, info){
       const schemaType = retrieveSchemaType(obj);
       if(schemaType){

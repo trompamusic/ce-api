@@ -10,12 +10,18 @@ type Mutation {
   AddOrganizationInterfaceLegalPerson(from:_OrganizationInterfaceInput, to:_LegalPersonInput, field:OrganizationInterfaceRelationToLegalPerson): _AddOrganizationInterfaceLegalPersonPayload
   AddActionInterfaceLegalPerson(from:_ActionInterfaceInput, to:_LegalPersonInput, field:ActionInterfaceRelationToLegalPerson): _AddActionInterfaceLegalPersonPayload
   AddDigitalDocumentPermissionGrantee(from:_DigitalDocumentPermissionInput, to:_LegalPersonInput): _AddDigitalDocumentPermissionLegalPersonPayload
-  AddEventLegalPerson(from:_EventInput, to:_LegalPersonInput, field:EventRelationToLegalPerson): _AddEventLegalPersonPayload
-  AddVideoObjectMusicBy(from:_VideoObjectInput, to:_LegalPersonInput): _AddVideoObjectMusicByPayload
+  AddEventComposer(from:_EventInput, to:_LegalPersonInput): _AddEventComposerPayload
+  AddEventPerformer(from:_EventInput, to:_PerformerInput): _AddEventPerformerPayload
+  AddVideoObjectMusicBy(from:_VideoObjectInput, to:_PerformerInput): _AddVideoObjectMusicByPayload
+  AddThingInterfaceCreativeWorkInterface(from:_ThingInterfaceInput, to:_CreativeWorkInterfaceInput, field:ThingInterfaceRelationToCreativeWorkInterface): _AddThingInterfaceCreativeWorkInterfacePayload
   AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
   AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
 }
 
+input _ThingInterfaceInput {
+  identifier: String!
+  type: ThingInterfaceType!
+}
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
@@ -36,7 +42,15 @@ input _ActionInterfaceInput {
   identifier: String!
   type: ActionInterfaceType!
 }
+input _PerformerInput {
+  identifier: String!
+  type: PerformerType!
+}
 
+type _AddThingInterfaceCreativeWorkInterfacePayload {
+  from: ThingInterfaced
+  to: CreativeWorkInterfaced
+}
 type _AddCreativeWorkInterfaceLegalPersonPayload {
   from: CreativeWorkInterfaced
   to: LegalPerson
@@ -61,13 +75,17 @@ type _AddMediaObjectInterfaceCreativeWorkInterfacePayload {
   from: MediaObjectInterfaced
   to: CreativeWorkInterfaced
 }
-type _AddEventLegalPersonPayload {
+type _AddEventComposerPayload {
   from: Event
   to: LegalPerson
 }
+type _AddEventPerformerPayload {
+  from: Event
+  to: Performer
+}
 type _AddVideoObjectMusicByPayload {
   from: VideoObject
-  to: LegalPerson
+  to: Performer
 }
 
 
@@ -87,7 +105,9 @@ scalar Value
 
 union LegalPerson = Person | Organization | MusicGroup
 
-union MusicCreator = Person | MusicGroup
+union Performer = Person | MusicGroup
+
+union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience
 
 union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
 
@@ -102,6 +122,12 @@ union ActionInterfaced = Action | UpdateAction | ReplaceAction
 
 #############
 ### enums ###
+
+# TODO auto generate
+enum ThingInterfaceRelationToCreativeWorkInterface {
+  mainEntityOfPage
+  subjectOf
+}
 
 # TODO auto generate
 enum CreativeWorkInterfaceRelationToLegalPerson {
@@ -143,16 +169,37 @@ enum MediaObjectInterfaceRelationToCreativeWorkInterface {
 }
 
 # TODO auto generate
-enum EventRelationToLegalPerson {
-  performer
-  composer
-}
-
-# TODO auto generate
 enum LegalPersonType {
   Person
   Organization
   MusicGroup
+}
+
+# TODO auto generate
+enum ThingInterfaceType {
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicAlbum
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+  Occupation
+  DigitalDocumentPermission
+  Audience
 }
 
 # TODO auto generate
@@ -222,6 +269,12 @@ enum ActionInterfaceType {
   Action
   UpdateAction
   ReplaceAction
+}
+
+# TODO auto generate
+enum PerformerType {
+  Person
+  MusicGroup
 }
 
 enum AvailableLanguage {
@@ -830,7 +883,7 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   ############################################
   ### DigitalDocumentPermission properties ###
   "https://pending.schema.org/grantee"
-  grantee: [Person] @relation(name: "GRANTEE", direction: "IN")
+  grantee: [LegalPerson] @relation(name: "GRANTEE", direction: "IN")
   "https://pending.schema.org/permissionType"
   permissionType: DigitalDocumentPermissionType
 }
@@ -1256,7 +1309,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   attendee: [Person] @relation(name: "ATTENDEE", direction: "IN")
   #audience: Audience
   "https://schema.org/composer"
-  composer: [Person] @relation(name: "COMPOSER", direction: "IN")
+  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "IN")
   #"https://schema.org/contributor"
   #contributor: LegalPerson @relation(name: "CONTRIBUTOR", direction: "IN")
   "https://schema.org/director"
@@ -1281,7 +1334,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   "https://schema.org/organizer"
   organizer: [Organization] @relation(name: "ORGANIZER", direction: "IN")
   "https://schema.org/performer"
-  performer: [MusicGroup] @relation(name: "PERFORMER", direction: "IN")
+  performer: [Performer] @relation(name: "PERFORMER", direction: "IN")
   #previousStartDate: _Neo4jDate
   "https://schema.org/recordedIn"
   recordedIn: [CreativeWork] @relation(name: "RECORDED_IN", direction: "OUT")
@@ -4161,7 +4214,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   ###################################
   ### MusicComposition properties ###
   "https://schema.org/composer"
-  composer: [Person] @relation(name: "COMPOSER", direction: "OUT")
+  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "OUT")
   "https://schema.org/firstPerformance"
   firstPerformance: Event @relation(name: "FIRST_PERFORMANCE", direction: "OUT")
   "https://schema.org/includedComposition"
@@ -5193,7 +5246,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/director"
   director: [Person] @relation(name: "DIRECTOR", direction: "IN")
   "https://schema.org/musicBy"
-  musicBy: [MusicGroup] @relation(name: "MUSIC_BY", direction: "OUT")
+  musicBy: [Performer] @relation(name: "MUSIC_BY", direction: "OUT")
   "https://schema.org/thumbnail"
   thumbnail: [ImageObject] @relation(name: "THUMBNAIL", direction: "OUT")
   "https://schema.org/transcript"
