@@ -14,6 +14,7 @@ type Mutation {
   AddEventPerformer(from:_EventInput, to:_PerformerInput): _AddEventPerformerPayload
   AddVideoObjectMusicBy(from:_VideoObjectInput, to:_PerformerInput): _AddVideoObjectMusicByPayload
   AddThingInterfaceCreativeWorkInterface(from:_ThingInterfaceInput, to:_CreativeWorkInterfaceInput, field:ThingInterfaceRelationToCreativeWorkInterface): _AddThingInterfaceCreativeWorkInterfacePayload
+  AddThingInterfacePotentialAction(from:_ThingInterfaceInput, to:_ActionInterfaceInput): _AddThingInterfacePotentialActionPayload
   AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
   AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
 }
@@ -50,6 +51,10 @@ input _PerformerInput {
 type _AddThingInterfaceCreativeWorkInterfacePayload {
   from: ThingInterfaced
   to: CreativeWorkInterfaced
+}
+type _AddThingInterfacePotentialActionPayload {
+  from: ThingInterfaced
+  to: ActionInterfaced
 }
 type _AddCreativeWorkInterfaceLegalPersonPayload {
   from: CreativeWorkInterfaced
