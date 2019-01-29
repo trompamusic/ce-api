@@ -9,12 +9,20 @@ export const queryResolvers = {
     MusicComposition (object, params, context, resolveInfo) {
       //return neo4jgraphql(object, params, context, resolveInfo);
       console.log('Query.MusicComposition');
-      //const query = cypherQuery(params, context, resolveInfo);
+      // const query = cypherQuery(params, context, resolveInfo);
+      // console.log(query);
 
+      // works: (WHERE on multiple labels)
+      // const query = [
+      //   'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { `musicComposition` ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(c) WHERE (c:CreativeWork OR c:MusicComposition) RETURN c", {this: musicComposition}, true) | musicComposition_workSample]) } AS `musicComposition` SKIP $offset LIMIT $first',
+      //   { offset: 0, first: 1 }
+      //   ];
+
+      // works: (UNIONs for multiple labels)
       const query = [
-        'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { .name ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(c:CreativeWork) RETURN c", {this: musicComposition}, true) | musicComposition_workSample]) } AS `musicComposition` SKIP $offset LIMIT $first',
+        'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { `musicComposition` ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(ws:CreativeWork) RETURN ws UNION MATCH (ws:MusicComposition) RETURN ws", {this: musicComposition}, true) | musicComposition_workSample]) } AS `musicComposition` SKIP $offset LIMIT $first',
         { offset: 0, first: 1 }
-        ];
+      ];
 
       console.log(query);
       let session = driver.session();
@@ -22,7 +30,10 @@ export const queryResolvers = {
         .then( result => {
           return result.records.map(
             record => {
-              console.log(record.get('musicComposition'));
+              let musicComposition = record.get('musicComposition');
+              // musicComposition.map(node => {console.log(node)});
+              console.log('musicComposition:');
+              console.log(musicComposition);
               let nodeData = retrieveNodeData(record.get('musicComposition'));
               console.log(nodeData);
               return nodeData;
