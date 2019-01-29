@@ -22,5 +22,10 @@ const typeDefs = fs
 export const schema = makeAugmentedSchema({
   typeDefs,
   resolvers,
-  allowUndefinedInResolve: true
+  allowUndefinedInResolve: true,
+  config: {
+    query: {
+      exclude: ["MusicComposition"]
+    }
+  }
 });

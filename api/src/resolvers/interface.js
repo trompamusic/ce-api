@@ -35,6 +35,7 @@ export const interfaceResolvers = {
   },
   CreativeWorkInterface: {
     __resolveType(obj, context, info){
+      console.log('CreativeWorkInterface.__resolveType');
       const schemaType = retrieveSchemaType(obj);
       if(schemaType){
         return schemaType;

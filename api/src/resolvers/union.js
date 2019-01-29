@@ -35,6 +35,7 @@ export const unionResolvers = {
   },
   CreativeWorkInterfaced: {
     __resolveType(obj, context, info){
+      console.log('CreativeWorkInterfaced.__resolveType');
       const schemaType = retrieveSchemaType(obj);
       if(typeof schemaType === 'string'){
         return schemaType;

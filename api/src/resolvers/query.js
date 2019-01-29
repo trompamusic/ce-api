@@ -1,9 +1,36 @@
 import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
+import { cypherQuery } from "neo4j-graphql-js";
+import { neo4jgraphql } from "neo4j-graphql-js";
 
 export const queryResolvers = {
   Query: {
+    MusicComposition (object, params, context, resolveInfo) {
+      //return neo4jgraphql(object, params, context, resolveInfo);
+      console.log('Query.MusicComposition');
+      //const query = cypherQuery(params, context, resolveInfo);
+
+      const query = [
+        'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { .name ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(c:CreativeWork) RETURN c", {this: musicComposition}, true) | musicComposition_workSample]) } AS `musicComposition` SKIP $offset LIMIT $first',
+        { offset: 0, first: 1 }
+        ];
+
+      console.log(query);
+      let session = driver.session();
+      return session.run(query[0], query[1])
+        .then( result => {
+          return result.records.map(
+            record => {
+              console.log(record.get('musicComposition'));
+              let nodeData = retrieveNodeData(record.get('musicComposition'));
+              console.log(nodeData);
+              return nodeData;
+              // return hydrateNodeSearchScore(nodeData, record.get('weight'));
+            })
+        })
+      // return query;
+    },
     searchMetadataText(object, params, context, resolveInfo){
       // determine whether to evaluate only a subset of MetadataInterfaced types
       const doEvaluateTypeSubset = !(params.onTypes === undefined || params.onTypes.length == 0 || params.onTypes.length == resolveInfo.schema._typeMap.MetadataInterfaceType._values.length)
