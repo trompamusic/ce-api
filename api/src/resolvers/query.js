@@ -76,6 +76,7 @@ export const queryResolvers = {
               return hydrateNodeSearchScore(nodeData, record.get('weight'));
             })
         })
+        .catch(function (error) {console.log(error);});
     }
   }
 }

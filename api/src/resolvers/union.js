@@ -1,70 +1,61 @@
 import { retrieveSchemaType } from "../resolvers";
 
-const MetadataInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-const CreativeWorkInterfaceTypeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-const legalPersonTypeUniqueProperties = {"album":"MusicGroup","birthDate":"Person"};
-
 export const unionResolvers = {
-  Performer: {
-    __resolveType(obj, context, info){
-      const schemaType = retrieveSchemaType(obj);
-      if(schemaType){
-        return schemaType;
-      }
-
-      if(obj.birthDate){
-        return 'Person';
-      }
-      return 'MusicGroup';
-    },
-  },
   LegalPerson: {
     __resolveType(obj, context, info){
-      const schemaType = retrieveSchemaType(obj);
-      if(schemaType){
-        return schemaType;
-      }
-
-      for (var key in legalPersonTypeUniqueProperties) {
-        if(key in obj){
-          return legalPersonTypeUniqueProperties[key];
-        }
-      }
-      return 'Organization';
+      return retrieveSchemaType(obj);
     },
   },
-  CreativeWorkInterfaced: {
+  Performer: {
     __resolveType(obj, context, info){
-      console.log('CreativeWorkInterfaced.__resolveType');
-      const schemaType = retrieveSchemaType(obj);
-      if(typeof schemaType === 'string'){
-        return schemaType;
-      }
-
-      // if no schemaType was passed along, try resolving the type by evaluating fields
-      for (var key in CreativeWorkInterfaceTypeUniqueProperties) {
-        if(key in obj){
-          return CreativeWorkInterfaceTypeUniqueProperties[key];
-        }
-      }
-      return 'CreativeWork';
+      return retrieveSchemaType(obj);
+    },
+  },
+  ThingInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
     },
   },
   MetadataInterfaced: {
     __resolveType(obj, context, info){
-      const schemaType = retrieveSchemaType(obj);
-      if(typeof schemaType === 'string'){
-        return schemaType;
-      }
-
-      // try to resolve type by interpreting object properties
-      for (var key in MetadataInterfaceTypeUniqueProperties) {
-        if(key in obj){
-          const type = MetadataInterfaceTypeUniqueProperties[key];
-          return type;
-        }
-      }
-      return null;
+      return retrieveSchemaType(obj);
     },
-  }
+  },
+  CreativeWorkInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  MediaObjectInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  OrganizationInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  ActionInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  ProvenanceEntityInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  ProvenanceAgentInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
+  ProvenanceActivityInterfaced: {
+    __resolveType(obj, context, info){
+      return retrieveSchemaType(obj);
+    },
+  },
 }
+
+

@@ -43,8 +43,8 @@ export function hydrateNodeSearchScore(nodeData, weight) {
 
 // extract _schemaType from resolve object
 export function retrieveSchemaType (obj) {
-  if(!obj.hasOwnProperty('_schemaType') || obj._schemaType === undefined){
-    return;
+  if(obj.hasOwnProperty('_schemaType') && obj._schemaType !== undefined){
+    return obj._schemaType;
   }
-  return obj._schemaType;
+  throw Error('_schemaType could not be retrieved');
 }
