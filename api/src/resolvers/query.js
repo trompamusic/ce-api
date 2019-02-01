@@ -12,18 +12,25 @@ export const queryResolvers = {
       //       identifier: '641679b2-c1d7-432f-baf2-d1f608f97b5c',
       //       wasAttributedTo: [] },
       //   identifier: 'f5b6a92e-184c-4602-82f3-6daa2a7f2eb5' } ];
-
-
-      // let promise = neo4jgraphql(object, params, context, resolveInfo);
-      // promise.then(result => {console.log(result)});
-      // return promise;
-
-      // return neo4jgraphql(object, params, context, resolveInfo);
-      console.log('Query.MusicComposition');
-      const autoQuery = cypherQuery(params, context, resolveInfo);
-      // return autoQuery;
+      console.log('resolveInfo:');
+      // console.log(resolveInfo);
+      console.log(resolveInfo.fieldNodes[0]);
+      const autoQuery = cypherQuery(params, context, resolveInfo, true);
       console.log('autoQuery:');
       console.log(autoQuery);
+
+      let promise = neo4jgraphql(object, params, context, resolveInfo);
+      promise.then(result => {
+        console.log(result);
+      });
+      return promise;
+
+      // return neo4jgraphql(object, params, context, resolveInfo);
+      // console.log('Query.MusicComposition');
+      // const autoQuery = cypherQuery(params, context, resolveInfo, true);
+      // // return autoQuery;
+      // console.log('autoQuery:');
+      // console.log(autoQuery);
 
       // works: (WHERE on multiple labels)
       // const query = [
@@ -44,8 +51,8 @@ export const queryResolvers = {
       let session = driver.session();
       return session.run(autoQuery[0], autoQuery[1])
         .then( result => {
-          console.log('result:');
-          console.log(result);
+          console.log('result.records:');
+          console.log(result.records);
           const returnData = result.records.map(
             record => {
               console.log('record:');
@@ -61,8 +68,8 @@ export const queryResolvers = {
 
                 console.log('record.get(key):');
                 let data = record.get(key);
-                data.firstPerformance._schemaType = 'Event';
-                data._schemaType = 'MusicComposition';
+                // data.firstPerformance._schemaType = 'Event';
+                // data._schemaType = 'MusicComposition';
                 console.log('data:');
                 console.log(data);
                 return data;
