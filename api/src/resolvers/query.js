@@ -7,91 +7,31 @@ import { neo4jgraphql } from "neo4j-graphql-js";
 export const queryResolvers = {
   Query: {
     MusicComposition (object, params, context, resolveInfo) {
-      // return [ { firstPerformance:
-      //     { name: 'Concert',
-      //       identifier: '641679b2-c1d7-432f-baf2-d1f608f97b5c',
-      //       wasAttributedTo: [] },
-      //   identifier: 'f5b6a92e-184c-4602-82f3-6daa2a7f2eb5' } ];
-      console.log('resolveInfo:');
-      // console.log(resolveInfo);
-      console.log(resolveInfo.fieldNodes[0]);
       const autoQuery = cypherQuery(params, context, resolveInfo, true);
-      console.log('autoQuery:');
-      console.log(autoQuery);
 
-      let promise = neo4jgraphql(object, params, context, resolveInfo);
-      promise.then(result => {
-        console.log(result);
-      });
-      return promise;
-
-      // return neo4jgraphql(object, params, context, resolveInfo);
-      // console.log('Query.MusicComposition');
-      // const autoQuery = cypherQuery(params, context, resolveInfo, true);
-      // // return autoQuery;
-      // console.log('autoQuery:');
-      // console.log(autoQuery);
-
-      // works: (WHERE on multiple labels)
-      // const query = [
-      //   'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { `musicComposition` ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(c) WHERE (c:CreativeWork OR c:MusicComposition) RETURN c", {this: musicComposition}, true) | musicComposition_workSample]) } AS `musicComposition` SKIP $offset LIMIT $first',
-      //   { offset: 0, first: 1 }
-      //   ];
-
-      // works: (UNIONs for multiple labels)
-      // console.log('manual Query:');
-      // const query = [
-      //   'MATCH (`musicComposition`:`MusicComposition` {}) RETURN `musicComposition` { `musicComposition` ,workSample: head([ musicComposition_workSample IN apoc.cypher.runFirstColumn("MATCH (this)-[r:WORK_EXAMPLE]->(ws:CreativeWork) RETURN ws UNION MATCH (ws:MusicComposition) RETURN ws", {this: musicComposition}, true) | musicComposition_workSample]) } AS `result` SKIP $offset LIMIT $first',
-      //   { offset: 0, first: 1 }
-      // ];
-      // return query;
-
-
-      // console.log(query);
       let session = driver.session();
+
       return session.run(autoQuery[0], autoQuery[1])
         .then( result => {
-          console.log('result.records:');
-          console.log(result.records);
-          const returnData = result.records.map(
+          // console.log('result:');
+          // console.log(result);
+          // console.log('result.records[0]._fields:');
+          // console.log(result.records[0]._fields);
+          return result.records.map(
             record => {
-              console.log('record:');
-              console.log(record);
-              console.log('record.keys:');
-              console.log(record.keys);
-              console.log('record._fields:');
-              record._fields.map(field => {
-                console.log(field);
-                //return field;
-              });
-              return record.keys.map( key => {
-
-                console.log('record.get(key):');
-                let data = record.get(key);
-                // data.firstPerformance._schemaType = 'Event';
-                // data._schemaType = 'MusicComposition';
-                console.log('data:');
-                console.log(data);
-                return data;
-                // let nodeData = retrieveNodeData(result);
-                // console.log('nodeData:');
-                // return nodeData;
-              })
-              // console.log(record.get('firstPerformance'));
-              // let result = record.get('result');
-              // // musicComposition.map(node => {console.log(node)});
-              // console.log('result:');
-              // console.log(result);
-              // let nodeData = retrieveNodeData(result.musicComposition);
-              // console.log('nodeData:');
-              // console.log(nodeData);
-              // return nodeData;
-              // return hydrateNodeSearchScore(nodeData, record.get('weight'));
+              // console.log('record:');
+              // console.log(record);
+              // console.log('record.keys:');
+              // console.log(record.keys);
+              // console.log('record._fields:');
+              // record._fields.map(field => {
+              //   console.log(field);
+              //   //return field;
+              // });
+              return record._fields[0];
             })
-          console.log('returnData');
-          console.log(returnData);
-          return returnData[0];
         })
+        .catch(function (error) {console.log(error);});
       // return query;
     },
     searchMetadataText(object, params, context, resolveInfo){
