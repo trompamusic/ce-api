@@ -7,11 +7,28 @@ import { neo4jgraphql } from "neo4j-graphql-js";
 export const queryResolvers = {
   Query: {
     MusicComposition (object, params, context, resolveInfo) {
-      const autoQuery = cypherQuery(params, context, resolveInfo, true);
+      // return [ { firstPerformance:
+      //     { name: 'Concert',
+      //       identifier: '641679b2-c1d7-432f-baf2-d1f608f97b5c',
+      //       wasAttributedTo: [],
+      //       mainEntityOfPage: [Array] },
+      //       someRandomProperty: true,
+      //   identifier: 'f5b6a92e-184c-4602-82f3-6daa2a7f2eb5' } ];
+
+
+      // console.log('resolveInfo:');
+      // console.log(resolveInfo);
+
+      // const autoQuery = cypherQuery(params, context, resolveInfo, true);
+      // console.log('autoQuery[0]:');
+      // console.log(autoQuery[0]);
+
+      // const autoQuery = ['MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, labels(`musicComposition`)[0] as _schemaType RETURN `musicComposition` {.identifier, .name, _schemaType}',null]
+      const autoQuery = ["MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier , .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`", null];
+      //return neo4jgraphql(object, params, context, resolveInfo, true);
 
       let session = driver.session();
-
-      return session.run(autoQuery[0], autoQuery[1])
+      return session.run(autoQuery.shift(), autoQuery.shift())
         .then( result => {
           // console.log('result:');
           // console.log(result);
@@ -23,16 +40,17 @@ export const queryResolvers = {
               // console.log(record);
               // console.log('record.keys:');
               // console.log(record.keys);
-              // console.log('record._fields:');
+              console.log('record._fields:');
+              console.log(record._fields);
               // record._fields.map(field => {
+              //   console.log('field:');
               //   console.log(field);
               //   //return field;
               // });
-              return record._fields[0];
+              return record._fields.shift();
             })
         })
         .catch(function (error) {console.log(error);});
-      // return query;
     },
     searchMetadataText(object, params, context, resolveInfo){
       // determine whether to evaluate only a subset of MetadataInterfaced types
