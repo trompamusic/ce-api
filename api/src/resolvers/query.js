@@ -20,8 +20,8 @@ export const queryResolvers = {
       // generate queryAlias
       const alias = lowercaseFirstCharacter(resolveInfo.fieldName);
       // only resolve first node
-      const baseNode = resolveInfo.fieldNodes.shift();
-      let query = "MATCH (`" + alias + "`:`" + baseNode.name.value + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, .identifier , .name}";
+      const [baseNode] = resolveInfo.fieldNodes;
+      let query = "MATCH (`" + alias + "`:`" + baseNode.name.value + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, " + selectionSetClause(baseNode.selectionSet) + "}";
 
       // conclude query
       query += " AS `" + alias + "`";
@@ -130,24 +130,40 @@ export const queryResolvers = {
 }
 
 const selectionSetClause = function (selectionSet) {
-  console.log('selectionSetClause, selectionSet:');
-  console.log(selectionSet);
-  // switch(selectionSet.kind){
-  //   case "SelectionSet":
-  //     selectionSet.selections.map(selection => {
-  //       console.log('selection:');
-  //       console.log(selection);
-  //       switch(selection.kind){
-  //         case "Field":
-  //           console.log('selection.kind Field encountered');
-  //           break;
-  //         default:
-  //           console.log('unknown selection Kind encountered: ' + selection.kind);
-  //       }
-  //     });
-  //     break;
-  //   default:
-  //     console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
-  // }
-  return ".identifier , .name";
+  // const [selectionSet] = sets;
+  // console.log('selectionSetClause, selectionSet:');
+  // console.log(selectionSet);
+  let properties = [];
+  let relations = [];
+  switch(selectionSet.kind){
+    case "SelectionSet":
+      selectionSet.selections.map(selection => {
+        console.log('selection:');
+        console.log(selection);
+        switch(selection.kind){
+          case "Field":
+            console.log('selection.kind Field encountered');
+            if(selection.selectionSet === undefined){
+              properties.push("." + selection.name.value);
+            } else {
+              // this is a deeper node with its own properties - recurse
+              relations.push(selection.name.value);
+            }
+            break;
+          default:
+            console.log('unknown selection Kind encountered: ' + selection.kind);
+        }
+      });
+      break;
+    default:
+      console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
+  }
+
+  console.log('properties:');
+  console.log(properties.join(', '));
+  console.log('relations:');
+  console.log(relations);
+  let clause = properties.join(', ');
+
+  return clause;
 }
