@@ -21,7 +21,8 @@ export const queryResolvers = {
       const alias = lowercaseFirstCharacter(resolveInfo.fieldName);
       // only resolve first node
       const [baseNode] = resolveInfo.fieldNodes;
-      let query = "MATCH (`" + alias + "`:`" + baseNode.name.value + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, " + selectionSetClause(baseNode.selectionSet) + "}";
+      const baseType = baseNode.name.value;
+      let query = "MATCH (`" + alias + "`:`" + baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, " + selectionSetClause(alias, baseNode.selectionSet) + "}";
 
       // conclude query
       query += " AS `" + alias + "`";
@@ -129,7 +130,7 @@ export const queryResolvers = {
   }
 }
 
-const selectionSetClause = function (selectionSet) {
+const selectionSetClause = function (parentAlias, selectionSet) {
   // const [selectionSet] = sets;
   // console.log('selectionSetClause, selectionSet:');
   // console.log(selectionSet);
@@ -147,7 +148,7 @@ const selectionSetClause = function (selectionSet) {
               properties.push("." + selection.name.value);
             } else {
               // this is a deeper node with its own properties - recurse
-              properties.push(embeddedNodeClause(selection));
+              properties.push(embeddedNodeClause(parentAlias, selection));
             }
             break;
           default:
@@ -168,9 +169,13 @@ const selectionSetClause = function (selectionSet) {
   return clause;
 }
 
-const embeddedNodeClause = function (selection) {
+const embeddedNodeClause = function (parentAlias, selection) {
+  console.log(selection);
+
+  const alias = parentAlias + "_" + selection.name.value;
+
   // TODO interpret arrayed/non arrayed relation properties (HEAD)
-  let clause = selection.name.value + ":HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) ";
+  let clause = selection.name.value + ":HEAD([(`" + parentAlias + "`)-[:`FIRST_PERFORMANCE`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
 
 
   return clause;
