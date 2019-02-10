@@ -133,7 +133,7 @@ const selectionSetClause = function (selectionSet) {
   // const [selectionSet] = sets;
   // console.log('selectionSetClause, selectionSet:');
   // console.log(selectionSet);
-  let properties = [];
+  let properties = ['_schemaType'];
   let relations = [];
   switch(selectionSet.kind){
     case "SelectionSet":
@@ -147,7 +147,7 @@ const selectionSetClause = function (selectionSet) {
               properties.push("." + selection.name.value);
             } else {
               // this is a deeper node with its own properties - recurse
-              relations.push(selection.name.value);
+              properties.push(embeddedNodeClause(selection));
             }
             break;
           default:
@@ -161,9 +161,17 @@ const selectionSetClause = function (selectionSet) {
 
   console.log('properties:');
   console.log(properties.join(', '));
-  console.log('relations:');
-  console.log(relations);
+  // console.log('relations:');
+  // console.log(relations);
   let clause = properties.join(', ');
+
+  return clause;
+}
+
+const embeddedNodeClause = function (selection) {
+  // TODO interpret arrayed/non arrayed relation properties (HEAD)
+  let clause = selection.name.value + ":HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) ";
+
 
   return clause;
 }
