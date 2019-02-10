@@ -529,7 +529,7 @@ interface MetadataInterface {
 "https://schema.org/Thing,https://www.w3.org/TR/prov-o/#Entity"
 interface ThingInterface {
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -869,7 +869,7 @@ type Audience implements ThingInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -919,7 +919,7 @@ type Occupation implements ThingInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -980,7 +980,7 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1077,7 +1077,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1191,7 +1191,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1404,7 +1404,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1544,7 +1544,7 @@ type Intangible implements MetadataInterface & ThingInterface & ProvenanceEntity
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1626,7 +1626,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1794,7 +1794,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1974,7 +1974,7 @@ type Place implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2102,7 +2102,7 @@ type Product implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2235,7 +2235,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2464,7 +2464,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2681,7 +2681,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2924,7 +2924,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3149,7 +3149,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3396,7 +3396,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3649,7 +3649,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   ##################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3902,7 +3902,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4155,7 +4155,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4422,7 +4422,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4679,7 +4679,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4928,7 +4928,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5183,7 +5183,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5447,7 +5447,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5626,7 +5626,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5744,7 +5744,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"

@@ -1,12 +1,42 @@
 import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
+import { lowercaseFirstCharacter } from "../resolvers";
 import { cypherQuery } from "neo4j-graphql-js";
 import { neo4jgraphql } from "neo4j-graphql-js";
 
 export const queryResolvers = {
   Query: {
     MusicComposition (object, params, context, resolveInfo) {
+      //console.log(cypherQuery(params, context, resolveInfo, true));
+      // console.log(params);
+      // if(!params.hasOwnProperty('offset')){
+      //   params.offset = -1;
+      // }
+      // if(!params.hasOwnProperty('first')){
+      //   params.first = -1;
+      // }
+      //console.log(resolveInfo);
+      // generate queryAlias
+      const alias = lowercaseFirstCharacter(resolveInfo.fieldName);
+      // only resolve first node
+      const baseNode = resolveInfo.fieldNodes.shift();
+      let query = "MATCH (`" + alias + "`:`" + baseNode.name.value + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, .identifier , .name}";
+
+      // conclude query
+      query += " AS `" + alias + "`";
+      // if(params.hasOwnProperty('offset') && params.offset > 0){
+      //   query += ' SKIP ' + params.offset;
+      // }
+      // if(params.hasOwnProperty('first') && params.first > 0){
+      //   query += ' LIMIT ' + params.first;
+      // }
+      console.log('query:');
+      console.log(query);
+
+      //resolveFieldNodes(resolveInfo.fieldNodes);
+
+      //console.log(resolveInfo.get());
       // return [ { firstPerformance:
       //     { name: 'Concert',
       //       identifier: '641679b2-c1d7-432f-baf2-d1f608f97b5c',
@@ -19,13 +49,21 @@ export const queryResolvers = {
       // console.log('resolveInfo:');
       // console.log(resolveInfo);
 
-      // const autoQuery = cypherQuery(params, context, resolveInfo, true);
+      //const autoQuery = cypherQuery(params, context, resolveInfo, true);
       // console.log('autoQuery[0]:');
       // console.log(autoQuery[0]);
 
       // const autoQuery = ['MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, labels(`musicComposition`)[0] as _schemaType RETURN `musicComposition` {.identifier, .name, _schemaType}',null]
-      const autoQuery = ["MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier , .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`", null];
-      //return neo4jgraphql(object, params, context, resolveInfo, true);
+      // const autoQuery = [
+      //   "MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier , .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`",
+      //   null
+      // ];
+
+      const autoQuery = [
+        query,
+        params
+      ];
+      //console.log(neo4jgraphql(object, params, context, resolveInfo, true));
 
       let session = driver.session();
       return session.run(autoQuery.shift(), autoQuery.shift())
@@ -89,4 +127,27 @@ export const queryResolvers = {
         .catch(function (error) {console.log(error);});
     }
   }
+}
+
+const selectionSetClause = function (selectionSet) {
+  console.log('selectionSetClause, selectionSet:');
+  console.log(selectionSet);
+  // switch(selectionSet.kind){
+  //   case "SelectionSet":
+  //     selectionSet.selections.map(selection => {
+  //       console.log('selection:');
+  //       console.log(selection);
+  //       switch(selection.kind){
+  //         case "Field":
+  //           console.log('selection.kind Field encountered');
+  //           break;
+  //         default:
+  //           console.log('unknown selection Kind encountered: ' + selection.kind);
+  //       }
+  //     });
+  //     break;
+  //   default:
+  //     console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
+  // }
+  return ".identifier , .name";
 }

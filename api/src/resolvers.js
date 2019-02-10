@@ -49,3 +49,7 @@ export function retrieveSchemaType (obj) {
   }
   throw Error('_schemaType could not be retrieved');
 }
+
+export function lowercaseFirstCharacter (string) {
+  return string.charAt(0).toLowerCase() + string.slice(1);
+}
