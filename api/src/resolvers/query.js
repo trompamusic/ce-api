@@ -1,6 +1,7 @@
 import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
+import GetQuery from "../classes/GetQuery";
 import { lowercaseFirstCharacter } from "../resolvers";
 import { cypherQuery } from "neo4j-graphql-js";
 import { neo4jgraphql } from "neo4j-graphql-js";
@@ -8,6 +9,9 @@ import { neo4jgraphql } from "neo4j-graphql-js";
 export const queryResolvers = {
   Query: {
     MusicComposition (object, params, context, resolveInfo) {
+      const queryGenerator = new GetQuery(params, resolveInfo);
+      const query = queryGenerator.query;
+
       //console.log(cypherQuery(params, context, resolveInfo, true));
       // console.log(params);
       // if(!params.hasOwnProperty('offset')){
@@ -18,14 +22,14 @@ export const queryResolvers = {
       // }
       //console.log(resolveInfo);
       // generate queryAlias
-      const alias = lowercaseFirstCharacter(resolveInfo.fieldName);
-      // only resolve first node
-      const [baseNode] = resolveInfo.fieldNodes;
-      const baseType = baseNode.name.value;
-      let query = "MATCH (`" + alias + "`:`" + baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, " + selectionSetClause(alias, baseNode.selectionSet) + "}";
-
-      // conclude query
-      query += " AS `" + alias + "`";
+      // const alias = lowercaseFirstCharacter(resolveInfo.fieldName);
+      // // only resolve first node
+      // const [baseNode] = resolveInfo.fieldNodes;
+      // const baseType = baseNode.name.value;
+      // let query = "MATCH (`" + alias + "`:`" + baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {_schemaType, " + selectionSetClause(baseType, alias, baseNode.selectionSet) + "}";
+      //
+      // // conclude query
+      // query += " AS `" + alias + "`";
       // if(params.hasOwnProperty('offset') && params.offset > 0){
       //   query += ' SKIP ' + params.offset;
       // }
@@ -130,7 +134,7 @@ export const queryResolvers = {
   }
 }
 
-const selectionSetClause = function (parentAlias, selectionSet) {
+const selectionSetClause = function (parentType, parentAlias, selectionSet, schema) {
   // const [selectionSet] = sets;
   // console.log('selectionSetClause, selectionSet:');
   // console.log(selectionSet);
@@ -148,7 +152,7 @@ const selectionSetClause = function (parentAlias, selectionSet) {
               properties.push("." + selection.name.value);
             } else {
               // this is a deeper node with its own properties - recurse
-              properties.push(embeddedNodeClause(parentAlias, selection));
+              properties.push(embeddedNodeClause(parentType, parentAlias, selection, schema));
             }
             break;
           default:
@@ -169,14 +173,18 @@ const selectionSetClause = function (parentAlias, selectionSet) {
   return clause;
 }
 
-const embeddedNodeClause = function (parentAlias, selection) {
+const embeddedNodeClause = function (parentType, parentAlias, selection, schema) {
   console.log(selection);
-
+  console.log(schema);
   const alias = parentAlias + "_" + selection.name.value;
+  const relation = findRelation(parentType, selection.name.value);
+  console.log(relation);
+  //const relationType =
 
   // TODO interpret arrayed/non arrayed relation properties (HEAD)
-  let clause = selection.name.value + ":HEAD([(`" + parentAlias + "`)-[:`FIRST_PERFORMANCE`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
+  let clause = selection.name.value + ":HEAD([(`" + parentAlias + "`)-[:`Event`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
 
 
   return clause;
 }
+
