@@ -1,0 +1,116 @@
+// GetQuery.js
+"use strict"
+
+import { lowercaseFirstCharacter } from "../resolvers";
+
+class GetQuery {
+
+  constructor (params, resolveInfo) {
+    this.params = params;
+    this.resolveInfo = resolveInfo;
+
+    this.schema = resolveInfo.schema;
+    this.baseNode = this.resolveInfo.fieldNodes[0];
+    this.baseType = this.baseNode.name.value;
+  }
+
+  get query() {
+    return this._generateQuery();
+  }
+
+  _generateQuery() {
+    // retrieve constants from parameters
+    const alias = lowercaseFirstCharacter(this.resolveInfo.fieldName);
+
+    // generate base query
+    let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectionSetClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
+
+    // conclude query
+    queryString += " AS `" + alias + "`";
+    if(this.params.hasOwnProperty('offset') && this.params.offset > 0){
+      queryString += ' SKIP ' + this.params.offset;
+    }
+    if(this.params.hasOwnProperty('first') && this.params.first > 0){
+      queryString += ' LIMIT ' + this.params.first;
+    }
+
+    // queryString = "MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier , .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`";
+
+    return queryString;
+  }
+
+  _selectionSetClause (parentType, parentAlias, selectionSet) {
+    let properties = ['_schemaType'];
+    switch(selectionSet.kind){
+      case "SelectionSet":
+        selectionSet.selections.map(selection => {
+          switch(selection.kind){
+            case "Field":
+              if(selection.selectionSet === undefined){
+                properties.push("." + selection.name.value);
+              } else {
+                // this is a deeper node with its own properties - recurse
+                properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
+              }
+              break;
+            default:
+              console.log('unknown selection kind encountered: ' + selection.kind);
+          }
+        });
+        break;
+      default:
+        console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
+    }
+
+    let clause = properties.join(', ');
+
+    return clause;
+  }
+
+  _embeddedNodeClause (parentType, parentAlias, selection, schema) {
+    const alias = parentAlias + "_" + selection.name.value;
+    const relationName = this._findRelationName(parentType, selection.name.value);
+
+    // TODO interpret arrayed/non arrayed relation properties (HEAD)
+    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
+
+    return clause;
+  }
+
+  _findRelationName (type, propertyName) {
+    let relationName = null;
+
+    const typeMap = this.schema._typeMap[type];
+    if(typeof typeMap === 'undefined'){
+      throw Error('Type could not be retrieved from schema');
+    }
+
+    const typeProperty = typeMap._fields[propertyName];
+    if(typeof typeProperty === 'undefined'){
+      throw Error('Type property could not be retrieved from schema');
+    }
+
+    const directives = typeProperty.astNode.directives;
+    if(false === directives instanceof Array){
+      throw Error('Type property directives could not be retrieved from schema');
+    }
+    for (let di = 0; di < directives.length; di++) {
+      const directive = directives[di];
+      if(directive.name.value === 'relation'){
+        const directiveArguments = directive.arguments;
+        directiveArguments.map(directiveArgument => {
+          if(directiveArgument.kind == 'Argument' && directiveArgument.name.value == 'name'){
+            relationName = directiveArgument.value.value;
+          }
+        });
+        if(relationName !== null){
+          break;
+        }
+      }
+    }
+
+    return relationName;
+  }
+}
+
+export default GetQuery;

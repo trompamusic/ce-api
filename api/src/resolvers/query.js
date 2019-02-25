@@ -1,7 +1,7 @@
 import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
-import GetQuery from "../classes/GetQuery";
+import GetQuery from "../queries/GetQuery";
 import { lowercaseFirstCharacter } from "../resolvers";
 import { cypherQuery } from "neo4j-graphql-js";
 import { neo4jgraphql } from "neo4j-graphql-js";
@@ -147,7 +147,6 @@ const selectionSetClause = function (parentType, parentAlias, selectionSet, sche
         console.log(selection);
         switch(selection.kind){
           case "Field":
-            console.log('selection.kind Field encountered');
             if(selection.selectionSet === undefined){
               properties.push("." + selection.name.value);
             } else {
