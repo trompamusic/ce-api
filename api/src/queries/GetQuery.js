@@ -69,31 +69,40 @@ class GetQuery {
 
   _embeddedNodeClause (parentType, parentAlias, selection, schema) {
     const alias = parentAlias + "_" + selection.name.value;
-    const relationName = this._findRelationName(parentType, selection.name.value);
+    const propertyType = this._findPropertyType(parentType, selection.name.value);
+    const relationName = this._retrievePropertyTypeRelationName(propertyType);
+
+    console.log('selection:');
+    console.log(selection.selectionSet.selections);
 
     // TODO interpret arrayed/non arrayed relation properties (HEAD)
-    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
+    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyType.type+"`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
 
     return clause;
   }
 
-  _findRelationName (type, propertyName) {
-    let relationName = null;
-
-    const typeMap = this.schema._typeMap[type];
+  _findPropertyType (parentType, propertyName) {
+    const typeMap = this.schema._typeMap[parentType];
     if(typeof typeMap === 'undefined'){
       throw Error('Type could not be retrieved from schema');
     }
 
-    const typeProperty = typeMap._fields[propertyName];
-    if(typeof typeProperty === 'undefined'){
-      throw Error('Type property could not be retrieved from schema');
+    const propertyType = typeMap._fields[propertyName];
+    if(typeof propertyType === 'undefined'){
+      throw Error('Property type could not be retrieved from schema');
     }
 
-    const directives = typeProperty.astNode.directives;
+    return propertyType;
+  }
+
+  _retrievePropertyTypeRelationName (propertyType) {
+    let relationName = null;
+
+    const directives = propertyType.astNode.directives;
     if(false === directives instanceof Array){
       throw Error('Type property directives could not be retrieved from schema');
     }
+
     for (let di = 0; di < directives.length; di++) {
       const directive = directives[di];
       if(directive.name.value === 'relation'){

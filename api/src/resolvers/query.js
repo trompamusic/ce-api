@@ -83,8 +83,8 @@ export const queryResolvers = {
               // console.log(record);
               // console.log('record.keys:');
               // console.log(record.keys);
-              console.log('record._fields:');
-              console.log(record._fields);
+              // console.log('record._fields:');
+              // console.log(record._fields);
               // record._fields.map(field => {
               //   console.log('field:');
               //   console.log(field);
