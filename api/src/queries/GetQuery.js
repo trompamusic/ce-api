@@ -77,7 +77,6 @@ class GetQuery {
     let propertyTypeName = propertyType.type.toString();
     if(true === this.bracketRegEx.test(propertyTypeName)){
       propertyTypeName = propertyTypeName.slice(1,-1);
-
     }
 
     // TODO interpret arrayed/non arrayed relation properties (HEAD)
@@ -90,7 +89,7 @@ class GetQuery {
   _relationClause (relationDetails) {
     let clause = "-[:`"+relationDetails['name']+"`]-";
 
-    switch (relationDetails['direction']) {
+    switch (relationDetails['direction'].toString().toUpperCase()) {
       case 'OUT':
         clause += ">";
         break;
