@@ -12,6 +12,7 @@ class GetQuery {
     this.schema = resolveInfo.schema;
     this.baseNode = this.resolveInfo.fieldNodes[0];
     this.baseType = this.baseNode.name.value;
+    this.bracketRegEx = new RegExp("^\\[.*?\\]$");
   }
 
   get query() {
@@ -34,23 +35,23 @@ class GetQuery {
       queryString += ' LIMIT ' + this.params.first;
     }
 
-    // queryString = "MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier , .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`";
+    // queryString = "MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier, .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`";
 
     return queryString;
   }
 
   _selectionSetClause (parentType, parentAlias, selectionSet) {
-    let properties = ['_schemaType'];
+    let properties = ["`_schemaType`:HEAD(labels(`"+parentAlias+"`))"];
     switch(selectionSet.kind){
       case "SelectionSet":
         selectionSet.selections.map(selection => {
           switch(selection.kind){
             case "Field":
-              if(selection.selectionSet === undefined){
-                properties.push("." + selection.name.value);
-              } else {
+              if(typeof selection.selectionSet === 'object' && selection.selectionSet !== null){
                 // this is a deeper node with its own properties - recurse
                 properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
+              } else {
+                properties.push("`"+selection.name.value+"`:`"+parentAlias+"`.`"+selection.name.value+"`");
               }
               break;
             default:
@@ -72,11 +73,15 @@ class GetQuery {
     const propertyType = this._findPropertyType(parentType, selection.name.value);
     const relationName = this._retrievePropertyTypeRelationName(propertyType);
 
-    console.log('selection:');
-    console.log(selection.selectionSet.selections);
+    // retrieve property name without brackets
+    let propertyTypeName = propertyType.type.toString();
+    if(true === this.bracketRegEx.test(propertyTypeName)){
+      propertyTypeName = propertyTypeName.slice(1,-1);
+    }
 
     // TODO interpret arrayed/non arrayed relation properties (HEAD)
-    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyType.type+"`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
+    // let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyType.type+"`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
+    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]) ";
 
     return clause;
   }
@@ -91,6 +96,8 @@ class GetQuery {
     if(typeof propertyType === 'undefined'){
       throw Error('Property type could not be retrieved from schema');
     }
+
+    // remove array-brackets
 
     return propertyType;
   }
