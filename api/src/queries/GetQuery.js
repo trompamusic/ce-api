@@ -71,17 +71,38 @@ class GetQuery {
   _embeddedNodeClause (parentType, parentAlias, selection, schema) {
     const alias = parentAlias + "_" + selection.name.value;
     const propertyType = this._findPropertyType(parentType, selection.name.value);
-    const relationName = this._retrievePropertyTypeRelationName(propertyType);
+    const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
 
     // retrieve property name without brackets
     let propertyTypeName = propertyType.type.toString();
     if(true === this.bracketRegEx.test(propertyTypeName)){
       propertyTypeName = propertyTypeName.slice(1,-1);
+
     }
 
     // TODO interpret arrayed/non arrayed relation properties (HEAD)
     // let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyType.type+"`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
-    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]) ";
+    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)"+this._relationClause(relationDetails)+"(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]) ";
+
+    return clause;
+  }
+
+  _relationClause (relationDetails) {
+    let clause = "-[:`"+relationDetails['name']+"`]-";
+
+    switch (relationDetails['direction']) {
+      case 'OUT':
+        clause += ">";
+        break;
+      case 'IN':
+        clause = "<" + clause;
+        break;
+      case "BOTH":
+        clause = "<" + clause + ">";
+        break;
+      default:
+        throw Error('Unknown relation direction encountered');
+    }
 
     return clause;
   }
@@ -102,8 +123,8 @@ class GetQuery {
     return propertyType;
   }
 
-  _retrievePropertyTypeRelationName (propertyType) {
-    let relationName = null;
+  _retrievePropertyTypeRelationDetails (propertyType) {
+    let relationDetails = {};
 
     const directives = propertyType.astNode.directives;
     if(false === directives instanceof Array){
@@ -112,20 +133,31 @@ class GetQuery {
 
     for (let di = 0; di < directives.length; di++) {
       const directive = directives[di];
-      if(directive.name.value === 'relation'){
+      if (directive.name.value === 'relation') {
         const directiveArguments = directive.arguments;
         directiveArguments.map(directiveArgument => {
-          if(directiveArgument.kind == 'Argument' && directiveArgument.name.value == 'name'){
-            relationName = directiveArgument.value.value;
+          console.log('directiveArgument:');
+          console.log(directiveArgument);
+          if (directiveArgument.kind == 'Argument') {
+            switch(directiveArgument.name.value.toString()){
+              case 'name':
+                relationDetails.name = directiveArgument.value.value;
+                break;
+              case 'direction':
+                relationDetails.direction = directiveArgument.value.value;
+                break;
+              default:
+                // do nothing
+            }
           }
         });
-        if(relationName !== null){
+        if (Object.keys(relationDetails).length >= 1) {
           break;
         }
       }
     }
 
-    return relationName;
+    return relationDetails;
   }
 }
 
