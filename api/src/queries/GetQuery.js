@@ -74,14 +74,14 @@ class GetQuery {
     const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
 
     // retrieve property name without brackets
+    let isPropertyTypeCollection = false;
     let propertyTypeName = propertyType.type.toString();
     if(true === this.bracketRegEx.test(propertyTypeName)){
       propertyTypeName = propertyTypeName.slice(1,-1);
+      isPropertyTypeCollection = true;
     }
 
-    // TODO interpret arrayed/non arrayed relation properties (HEAD)
-    // let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)-[:`"+relationName+"`]->(`" + alias + "`:`"+propertyType.type+"`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
-    let clause = selection.name.value + ": HEAD([(`" + parentAlias + "`)"+this._relationClause(relationDetails)+"(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]) ";
+    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)"+this._relationClause(relationDetails)+"(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
 
     return clause;
   }
@@ -117,8 +117,6 @@ class GetQuery {
       throw Error('Property type could not be retrieved from schema');
     }
 
-    // remove array-brackets
-
     return propertyType;
   }
 
@@ -135,8 +133,6 @@ class GetQuery {
       if (directive.name.value === 'relation') {
         const directiveArguments = directive.arguments;
         directiveArguments.map(directiveArgument => {
-          console.log('directiveArgument:');
-          console.log(directiveArgument);
           if (directiveArgument.kind == 'Argument') {
             switch(directiveArgument.name.value.toString()){
               case 'name':
