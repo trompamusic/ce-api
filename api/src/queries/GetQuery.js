@@ -24,7 +24,7 @@ class GetQuery {
     const alias = lowercaseFirstCharacter(this.resolveInfo.fieldName);
 
     // generate base query
-    let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectionSetClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
+    let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
 
     // conclude query
     queryString += " AS `" + alias + "`";
@@ -35,33 +35,30 @@ class GetQuery {
       queryString += ' LIMIT ' + this.params.first;
     }
 
-    // queryString = "MATCH (`musicComposition`:`MusicComposition` {}) WITH `musicComposition`, HEAD(labels(`musicComposition`)) as _schemaType RETURN `musicComposition` {_schemaType, .identifier, .name, firstPerformance: HEAD([(`musicComposition`)-[:`FIRST_PERFORMANCE`]->(`musicComposition_firstPerformance`:`Event`) | {`_schemaType`:HEAD(labels(`musicComposition_firstPerformance`)), `identifier`:`musicComposition_firstPerformance`.`identifier`, `name`:`musicComposition_firstPerformance`.`name`}]) }  AS `musicComposition`";
-
     return queryString;
   }
 
-  _selectionSetClause (parentType, parentAlias, selectionSet) {
+  _selectedPropertiesClause (parentType, parentAlias, selectionSet) {
     let properties = ["`_schemaType`:HEAD(labels(`"+parentAlias+"`))"];
-    switch (selectionSet.kind) {
-      case "SelectionSet":
-        selectionSet.selections.map(selection => {
-          switch (selection.kind) {
-            case "Field":
-              if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
-                // this is a deeper node with its own properties - recurse
-                properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
-              } else {
-                properties.push("`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`");
-              }
-              break;
-            default:
-              console.log('unknown selection kind encountered: ' + selection.kind);
-          }
-        });
-        break;
-      default:
-        console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
+
+    if (selectionSet.kind !== 'SelectionSet') {
+      throw Error('Property clause generation needs a selectionSet');
     }
+
+    selectionSet.selections.map(selection => {
+      switch (selection.kind) {
+        case "Field":
+          if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
+            // this is a deeper node with its own properties - recurse
+            properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
+          } else {
+            properties.push("`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`");
+          }
+          break;
+          default:
+            console.log('unknown selection kind encountered: ' + selection.kind);
+      }
+    });
 
     let clause = properties.join(', ');
 
@@ -81,7 +78,7 @@ class GetQuery {
       isPropertyTypeCollection = true;
     }
 
-    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
+    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
 
     return clause;
   }
