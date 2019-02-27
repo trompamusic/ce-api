@@ -45,15 +45,28 @@ class GetQuery {
       throw Error('Property clause generation needs a selectionSet');
     }
 
+    // TODO distinguish between Root, Interface and Union types
+
     selectionSet.selections.map(selection => {
       switch (selection.kind) {
         case "Field":
+          // weed out selections for Unions and Interfaces (will be handled in 'InlineFragment case')
+          // console.log(this.schema);
+
           if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
             // this is a deeper node with its own properties - recurse
-            properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
+            console.log('deeper node');
+            const nodeClause = this._selectionSetNodeClause(parentType, parentAlias, selection);
+            if (typeof nodeClause === 'string') {
+              properties.push(nodeClause);
+            }
           } else {
             properties.push("`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`");
           }
+          break;
+        case 'InlineFragment':
+          console.log('InlineFragment encountered');
+          // properties.push(this._inlineFragmentNodeClause(parentType, parentAlias, selection));
           break;
           default:
             console.log('unknown selection kind encountered: ' + selection.kind);
@@ -65,22 +78,55 @@ class GetQuery {
     return clause;
   }
 
-  _embeddedNodeClause (parentType, parentAlias, selection, schema) {
+  _selectionSetNodeClause (parentType, parentAlias, selection) {
     const alias = parentAlias + "_" + selection.name.value;
     const propertyType = this._findPropertyType(parentType, selection.name.value);
-    const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
 
-    // retrieve property name without brackets
-    let isPropertyTypeCollection = false;
+    // determine property has single or multiple values
     let propertyTypeName = propertyType.type.toString();
+    let isPropertyTypeCollection = false;
     if (true === this.bracketRegEx.test(propertyTypeName)) {
       propertyTypeName = propertyTypeName.slice(1,-1);
       isPropertyTypeCollection = true;
     }
 
+    // determine property is of implementation type (Union or Interface)
+    const implementationType = this.schema._implementations[propertyTypeName];
+    if (typeof implementationType === 'object') {
+      return null;
+    }
+
+    const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
+
     let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
 
     return clause;
+  }
+
+  _inlineFragmentNodeClause (parentType, parentAlias, selection) {
+    console.log('_inlineFragmentNodeClause() called');
+    console.log('selection:');
+    console.log(selection);
+
+    // const alias = parentAlias + "_" + selection.name.value;
+    const propertyTypeName = selection.typeCondition.name.value;
+    console.log('propertyTypeName:');
+    console.log(propertyTypeName);
+
+
+
+    const propertyType = this._findPropertyType(parentType, propertyTypeName);
+    console.log('propertyType:');
+    console.log(propertyType);
+
+    // const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
+
+
+
+
+    // console.log(propertyType);
+    // const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
+    // let isPropertyTypeCollection = false;
   }
 
   _relationClause (relationDetails) {
@@ -104,6 +150,7 @@ class GetQuery {
   }
 
   _findPropertyType (parentType, propertyName) {
+    console.log('_findPropertyType() called');
     const typeMap = this.schema._typeMap[parentType];
     if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema');
