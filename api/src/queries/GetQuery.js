@@ -19,7 +19,7 @@ class GetQuery {
     return this._generateQuery();
   }
 
-  _generateQuery() {
+  _generateQuery () {
     // retrieve constants from parameters
     const alias = lowercaseFirstCharacter(this.resolveInfo.fieldName);
 
@@ -42,16 +42,16 @@ class GetQuery {
 
   _selectionSetClause (parentType, parentAlias, selectionSet) {
     let properties = ["`_schemaType`:HEAD(labels(`"+parentAlias+"`))"];
-    switch(selectionSet.kind){
+    switch (selectionSet.kind) {
       case "SelectionSet":
         selectionSet.selections.map(selection => {
-          switch(selection.kind){
+          switch (selection.kind) {
             case "Field":
-              if(typeof selection.selectionSet === 'object' && selection.selectionSet !== null){
+              if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
                 // this is a deeper node with its own properties - recurse
                 properties.push(this._embeddedNodeClause(parentType, parentAlias, selection));
               } else {
-                properties.push("`"+selection.name.value+"`:`"+parentAlias+"`.`"+selection.name.value+"`");
+                properties.push("`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`");
               }
               break;
             default:
@@ -76,18 +76,18 @@ class GetQuery {
     // retrieve property name without brackets
     let isPropertyTypeCollection = false;
     let propertyTypeName = propertyType.type.toString();
-    if(true === this.bracketRegEx.test(propertyTypeName)){
+    if (true === this.bracketRegEx.test(propertyTypeName)) {
       propertyTypeName = propertyTypeName.slice(1,-1);
       isPropertyTypeCollection = true;
     }
 
-    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)"+this._relationClause(relationDetails)+"(`" + alias + "`:`"+propertyTypeName+"`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
+    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectionSetClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
 
     return clause;
   }
 
   _relationClause (relationDetails) {
-    let clause = "-[:`"+relationDetails['name']+"`]-";
+    let clause = "-[:`" + relationDetails['name'] + "`]-";
 
     switch (relationDetails['direction'].toString().toUpperCase()) {
       case 'OUT':
@@ -108,12 +108,12 @@ class GetQuery {
 
   _findPropertyType (parentType, propertyName) {
     const typeMap = this.schema._typeMap[parentType];
-    if(typeof typeMap === 'undefined'){
+    if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema');
     }
 
     const propertyType = typeMap._fields[propertyName];
-    if(typeof propertyType === 'undefined'){
+    if (typeof propertyType === 'undefined') {
       throw Error('Property type could not be retrieved from schema');
     }
 
@@ -124,7 +124,7 @@ class GetQuery {
     let relationDetails = {};
 
     const directives = propertyType.astNode.directives;
-    if(false === directives instanceof Array){
+    if (false === directives instanceof Array) {
       throw Error('Type property directives could not be retrieved from schema');
     }
 
@@ -134,7 +134,7 @@ class GetQuery {
         const directiveArguments = directive.arguments;
         directiveArguments.map(directiveArgument => {
           if (directiveArgument.kind == 'Argument') {
-            switch(directiveArgument.name.value.toString()){
+            switch (directiveArgument.name.value.toString()) {
               case 'name':
                 relationDetails.name = directiveArgument.value.value;
                 break;
