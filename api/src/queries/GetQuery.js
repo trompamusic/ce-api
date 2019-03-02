@@ -11,7 +11,6 @@ class GetQuery {
     this.resolveInfo = resolveInfo;
 
     this.schemaHelper = new SchemaHelper(resolveInfo.schema);
-    this.schema = resolveInfo.schema;
     this.baseNode = this.resolveInfo.fieldNodes[0];
     this.baseType = this.baseNode.name.value;
     this.bracketRegEx = new RegExp("^\\[.*?\\]$");
@@ -98,14 +97,21 @@ class GetQuery {
       isPropertyTypeCollection = true;
     }
 
-    // determine property is of implementation type (Union or Interface)
-    const implementationType = this.schemaHelper.findImplementationType(propertyTypeName);
-    if (typeof implementationType === 'object') {
-      console.log('implementationType:');
-      console.log(implementationType);
-      console.log('retrieve Inlinefragments.selection:');
+    // determine propertyType represents either possible Union types or Interface implementations
+    let representsMultipleTypes = this.schemaHelper.findInterfaceImplementingTypes(propertyTypeName);
+    if (false === representsMultipleTypes instanceof Array) {
+      representsMultipleTypes = this.schemaHelper.findPossibleTypes(propertyTypeName);
+    }
+
+    // const implementingTypes = this.schemaHelper.findInterfaceImplementingTypes(propertyTypeName);
+    // const possibleTypes = this.schemaHelper.findPossibleTypes(propertyTypeName);
+
+    if (representsMultipleTypes instanceof Array) {
+      console.log('represents multiple Types:');
+      console.log(representsMultipleTypes);
+      console.log('retrieve Inlinefragments selection:');
       console.log(selection);
-      console.log('retrieve Inlinefragments.selection.selectionSet:');
+      console.log('retrieve Inlinefragments selection.selectionSet:');
       console.log(selection.selectionSet);
       // clause = _implementationTypeClause(alias, selection);
     }

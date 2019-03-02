@@ -8,7 +8,8 @@ class SchemaHelper {
   constructor(schema) {
     console.log('typeof schema');
     console.log(typeof schema);
-    this.schema = (typeof schema === 'undefined') ? defaultSchema : schema;
+    this.schema = (typeof schema === 'object') ? schema : defaultSchema;
+
   }
 
   findPropertyType (parentType, propertyName) {
@@ -26,9 +27,27 @@ class SchemaHelper {
     return propertyType;
   }
 
-  findImplementationType (typeName) {
-    return this.schema._implementations[typeName];
+  findInterfaceImplementingTypes (interfaceName) {
+    const implementations = this.schema._implementations[interfaceName];
+    if (false === implementations instanceof Array || !implementations.length) {
+      return null;
+    }
+
+    return implementations.map(implementation => {return implementation.toString()})
   }
+
+  findPossibleTypes (unionName) {
+    const possibleTypes = this.schema._possibleTypeMap[unionName];
+    if (typeof possibleTypes !== 'object') {
+      return null;
+    }
+
+    return Object.keys(possibleTypes);
+  }
+
+  // findImplementationType (typeName) {
+  //   return this.schema._implementations[typeName];
+  // }
 
   static retrievePropertyTypeRelationDetails (propertyType) {
     console.log('retrievePropertyTypeRelationDetails() called');
