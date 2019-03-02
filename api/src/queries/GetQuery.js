@@ -1,7 +1,8 @@
 // GetQuery.js
 "use strict"
 
-import { lowercaseFirstCharacter } from "../resolvers";
+import StringHelper from "../helpers/StringHelper";
+import SchemaHelper from "../helpers/SchemaHelper";
 
 class GetQuery {
 
@@ -9,6 +10,7 @@ class GetQuery {
     this.params = params;
     this.resolveInfo = resolveInfo;
 
+    this.schemaHelper = new SchemaHelper(resolveInfo.schema);
     this.schema = resolveInfo.schema;
     this.baseNode = this.resolveInfo.fieldNodes[0];
     this.baseType = this.baseNode.name.value;
@@ -21,7 +23,7 @@ class GetQuery {
 
   _generateQuery () {
     // retrieve constants from parameters
-    const alias = lowercaseFirstCharacter(this.resolveInfo.fieldName);
+    const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName);
 
     // generate base query
     let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
@@ -50,6 +52,8 @@ class GetQuery {
     selectionSet.selections.map(selection => {
       switch (selection.kind) {
         case "Field":
+          console.log('Field encountered:');
+          console.log(selection);
           // weed out selections for Unions and Interfaces (will be handled in 'InlineFragment case')
           // console.log(this.schema);
 
@@ -65,7 +69,11 @@ class GetQuery {
           }
           break;
         case 'InlineFragment':
-          console.log('InlineFragment encountered');
+          console.log('InlineFragment encountered:');
+          // console.log(selection);
+          // let inlineNodeClause = this._inlineFragmentNodeClause(parentType, parentAlias, selection);
+          // console.log('inlineNodeClause:');
+          // console.log(inlineNodeClause);
           // properties.push(this._inlineFragmentNodeClause(parentType, parentAlias, selection));
           break;
           default:
@@ -80,7 +88,7 @@ class GetQuery {
 
   _selectionSetNodeClause (parentType, parentAlias, selection) {
     const alias = parentAlias + "_" + selection.name.value;
-    const propertyType = this._findPropertyType(parentType, selection.name.value);
+    const propertyType = this.schemaHelper.findPropertyType(parentType, selection.name.value);
 
     // determine property has single or multiple values
     let propertyTypeName = propertyType.type.toString();
@@ -91,16 +99,28 @@ class GetQuery {
     }
 
     // determine property is of implementation type (Union or Interface)
-    const implementationType = this.schema._implementations[propertyTypeName];
+    const implementationType = this.schemaHelper.findImplementationType(propertyTypeName);
     if (typeof implementationType === 'object') {
-      return null;
+      console.log('implementationType:');
+      console.log(implementationType);
+      console.log('retrieve Inlinefragments.selection:');
+      console.log(selection);
+      console.log('retrieve Inlinefragments.selection.selectionSet:');
+      console.log(selection.selectionSet);
+      // clause = _implementationTypeClause(alias, selection);
     }
 
-    const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
+    const relationDetails = SchemaHelper.retrievePropertyTypeRelationDetails(propertyType);
 
     let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
-
+    return null;
     return clause;
+  }
+
+  _implementationTypeClause (alias, selection) {
+    console.log('_implementationTypeClause called');
+
+
   }
 
   _inlineFragmentNodeClause (parentType, parentAlias, selection) {
@@ -115,11 +135,11 @@ class GetQuery {
 
 
 
-    const propertyType = this._findPropertyType(parentType, propertyTypeName);
+    const propertyType = this.schemaHelper.findPropertyType(parentType, propertyTypeName);
     console.log('propertyType:');
     console.log(propertyType);
 
-    // const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
+    // const relationDetails = retrievePropertyTypeRelationDetails(propertyType);
 
 
 
@@ -147,56 +167,6 @@ class GetQuery {
     }
 
     return clause;
-  }
-
-  _findPropertyType (parentType, propertyName) {
-    console.log('_findPropertyType() called');
-    const typeMap = this.schema._typeMap[parentType];
-    if (typeof typeMap === 'undefined') {
-      throw Error('Type could not be retrieved from schema');
-    }
-
-    const propertyType = typeMap._fields[propertyName];
-    if (typeof propertyType === 'undefined') {
-      throw Error('Property type could not be retrieved from schema');
-    }
-
-    return propertyType;
-  }
-
-  _retrievePropertyTypeRelationDetails (propertyType) {
-    let relationDetails = {};
-
-    const directives = propertyType.astNode.directives;
-    if (false === directives instanceof Array) {
-      throw Error('Type property directives could not be retrieved from schema');
-    }
-
-    for (let di = 0; di < directives.length; di++) {
-      const directive = directives[di];
-      if (directive.name.value === 'relation') {
-        const directiveArguments = directive.arguments;
-        directiveArguments.map(directiveArgument => {
-          if (directiveArgument.kind == 'Argument') {
-            switch (directiveArgument.name.value.toString()) {
-              case 'name':
-                relationDetails.name = directiveArgument.value.value;
-                break;
-              case 'direction':
-                relationDetails.direction = directiveArgument.value.value;
-                break;
-              default:
-                // do nothing
-            }
-          }
-        });
-        if (Object.keys(relationDetails).length >= 1) {
-          break;
-        }
-      }
-    }
-
-    return relationDetails;
   }
 }
 

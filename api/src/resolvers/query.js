@@ -2,12 +2,19 @@ import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
 import GetQuery from "../queries/GetQuery";
-import { lowercaseFirstCharacter } from "../resolvers";
+// import "../helpers/StringHelper";
 import { cypherQuery } from "neo4j-graphql-js";
 import { neo4jgraphql } from "neo4j-graphql-js";
 
 export const queryResolvers = {
   Query: {
+    Event (object, params, context, resolveInfo) {
+      const queryGenerator = new GetQuery(params, resolveInfo);
+      const query = queryGenerator.query;
+
+      console.log('query:');
+      console.log(query);
+    },
     MusicComposition (object, params, context, resolveInfo) {
       const queryGenerator = new GetQuery(params, resolveInfo);
       const query = queryGenerator.query;
@@ -20,8 +27,8 @@ export const queryResolvers = {
       //   params
       // ];
 
-      console.log('neo4jgraphql generated:');
-      console.log(neo4jgraphql(object, params, context, resolveInfo, true));
+      // console.log('neo4jgraphql generated:');
+      // console.log(neo4jgraphql(object, params, context, resolveInfo, true));
 
       let session = driver.session();
       return session.run(query, params)
@@ -32,8 +39,8 @@ export const queryResolvers = {
           // console.log(result.records[0]._fields);
           return result.records.map(
             record => {
-              console.log('record:');
-              console.log(record._fields[0].firstPerformance);
+              // console.log('record:');
+              // console.log(record._fields[0].firstPerformance);
               // console.log('record.keys:');
               // console.log(record.keys);
               // console.log('record._fields:');
