@@ -24,8 +24,6 @@ export const schema = makeAugmentedSchema({
   resolvers,
   allowUndefinedInResolve: true,
   config: {
-    query: {
-      exclude: ["MusicComposition"]
-    }
+    query: false
   }
 });
