@@ -82,9 +82,9 @@ class GetQuery {
       propertyClause = this._selectionSetNodeClause(parentType, parentAlias, selection);
     } else {
       const propertyName = selection.name.value.toString();
-      // ignore library private properties, indicated with __ prefix, like __typename
+      // ignore library private properties, indicated with double-underscore prefix, like '__typename'
       if (propertyName.substring(0,2) !== '__') {
-        propertyClause = "`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`";
+        propertyClause = "`" + propertyName + "`:`" + parentAlias + "`.`" + propertyName + "`";
       }
     }
 
@@ -92,11 +92,22 @@ class GetQuery {
   }
 
   _selectionSetNodeClause (parentType, parentAlias, selection) {
-    const alias = parentAlias + "_" + selection.name.value;
-    const propertyType = this.schemaHelper.findPropertyType(parentType, selection.name.value);
+    const propertyName = selection.name.value;
+    const propertyType = this.schemaHelper.findPropertyType(parentType, propertyName);
+    const alias = parentAlias + "_" + propertyName;
+
+    // determine if property is library private type - these are not related nodes but refer to Neo4j property collection, like '_Neo4jDate'
+    let propertyTypeName = propertyType.type.toString();
+    if (propertyTypeName.substring(0,1) === '_') {
+      const visibleProperties = selection.selectionSet.selections.map(selection => {
+        const visiblePropertyName = selection.name.value;
+        return visiblePropertyName + ': `' + parentAlias + '`.' + propertyName + '.' + visiblePropertyName;
+      });
+
+      return propertyName + ': { ' + visibleProperties.join(', ') + ' }';
+    }
 
     // determine property is single or array of values
-    let propertyTypeName = propertyType.type.toString();
     let isPropertyTypeCollection = false;
     if (true === this.bracketRegEx.test(propertyTypeName)) {
       propertyTypeName = propertyTypeName.slice(1,-1);
@@ -112,7 +123,7 @@ class GetQuery {
     }
 
     // start clause
-    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(");
+    let clause = propertyName + ": " + (isPropertyTypeCollection ? "" : "HEAD(");
 
     if (representsMultipleTypes instanceof Array) {
       // if Union or Interface type: generate subquery for each represented Type
