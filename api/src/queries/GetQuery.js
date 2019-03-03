@@ -116,11 +116,9 @@ class GetQuery {
 
     if (representsMultipleTypes instanceof Array) {
       // if Union or Interface type: generate subquery for each represented Type
-      let selectedPropertiesClauses = [];
-      representsMultipleTypes.map(propertyTypeName => {
-        selectedPropertiesClauses.push("[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]");
-      });
-      clause += selectedPropertiesClauses.join(' + ');
+      clause += representsMultipleTypes.map(propertyTypeName => {
+        return "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]";
+      }).join(' + ');
     } else {
       // if root-type: generate only one sub-query
       clause += "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]";
