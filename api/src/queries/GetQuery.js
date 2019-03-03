@@ -40,56 +40,62 @@ class GetQuery {
   }
 
   _selectedPropertiesClause (parentType, parentAlias, selectionSet) {
-    let properties = ["`_schemaType`:HEAD(labels(`"+parentAlias+"`))"];
+    let propertyClauses = ["`_schemaType`:HEAD(labels(`"+parentAlias+"`))"];
 
     if (selectionSet.kind !== 'SelectionSet') {
       throw Error('Property clause generation needs a selectionSet');
     }
 
-    // TODO distinguish between Root, Interface and Union types
-
     selectionSet.selections.map(selection => {
       switch (selection.kind) {
         case "Field":
-          console.log('Field encountered:');
-          console.log(selection);
-          // weed out selections for Unions and Interfaces (will be handled in 'InlineFragment case')
-          // console.log(this.schema);
-
-          if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
-            // this is a deeper node with its own properties - recurse
-            console.log('deeper node');
-            const nodeClause = this._selectionSetNodeClause(parentType, parentAlias, selection);
-            if (typeof nodeClause === 'string') {
-              properties.push(nodeClause);
-            }
-          } else {
-            properties.push("`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`");
+          const nodeClause = this._selectedPropertyClause (parentType, parentAlias, selection);
+          if (typeof nodeClause === 'string') {
+            propertyClauses.push(nodeClause);
           }
           break;
         case 'InlineFragment':
-          console.log('InlineFragment encountered:');
-          // console.log(selection);
-          // let inlineNodeClause = this._inlineFragmentNodeClause(parentType, parentAlias, selection);
-          // console.log('inlineNodeClause:');
-          // console.log(inlineNodeClause);
-          // properties.push(this._inlineFragmentNodeClause(parentType, parentAlias, selection));
+          if (selection.typeCondition.kind === 'NamedType' && selection.typeCondition.name.value === parentType) {
+            selection.selectionSet.selections.map(namedTypeSelection => {
+              const nodeClause = this._selectedPropertyClause (parentType, parentAlias, namedTypeSelection);
+              if (typeof nodeClause === 'string') {
+                propertyClauses.push(nodeClause);
+              }
+            });
+          }
           break;
           default:
             console.log('unknown selection kind encountered: ' + selection.kind);
       }
     });
 
-    let clause = properties.join(', ');
+    let clause = propertyClauses.join(', ');
 
     return clause;
+  }
+
+  _selectedPropertyClause (parentType, parentAlias, selection) {
+    let propertyClause = null;
+
+    if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
+      // this is a deeper node with its own properties - recurse
+      propertyClause = this._selectionSetNodeClause(parentType, parentAlias, selection);
+    } else {
+      const propertyName = selection.name.value.toString();
+      // ignore library private properties, indicated with __ prefix, like __typename
+      if (propertyName.substring(0,2) !== '__') {
+        propertyClause = "`" + selection.name.value + "`:`" + parentAlias + "`.`" + selection.name.value + "`";
+      }
+    }
+
+    return propertyClause;
   }
 
   _selectionSetNodeClause (parentType, parentAlias, selection) {
     const alias = parentAlias + "_" + selection.name.value;
     const propertyType = this.schemaHelper.findPropertyType(parentType, selection.name.value);
 
-    // determine property has single or multiple values
+    // determine property is single or array of values
     let propertyTypeName = propertyType.type.toString();
     let isPropertyTypeCollection = false;
     if (true === this.bracketRegEx.test(propertyTypeName)) {
@@ -97,62 +103,33 @@ class GetQuery {
       isPropertyTypeCollection = true;
     }
 
+    const relationDetails = SchemaHelper.retrievePropertyTypeRelationDetails(propertyType);
+
     // determine propertyType represents either possible Union types or Interface implementations
     let representsMultipleTypes = this.schemaHelper.findInterfaceImplementingTypes(propertyTypeName);
     if (false === representsMultipleTypes instanceof Array) {
       representsMultipleTypes = this.schemaHelper.findPossibleTypes(propertyTypeName);
     }
 
-    // const implementingTypes = this.schemaHelper.findInterfaceImplementingTypes(propertyTypeName);
-    // const possibleTypes = this.schemaHelper.findPossibleTypes(propertyTypeName);
+    // start clause
+    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(");
 
     if (representsMultipleTypes instanceof Array) {
-      console.log('represents multiple Types:');
-      console.log(representsMultipleTypes);
-      console.log('retrieve Inlinefragments selection:');
-      console.log(selection);
-      console.log('retrieve Inlinefragments selection.selectionSet:');
-      console.log(selection.selectionSet);
-      // clause = _implementationTypeClause(alias, selection);
+      // if Union or Interface type: generate subquery for each represented Type
+      let selectedPropertiesClauses = [];
+      representsMultipleTypes.map(propertyTypeName => {
+        selectedPropertiesClauses.push("[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]");
+      });
+      clause += selectedPropertiesClauses.join(' + ');
+    } else {
+      // if root-type: generate only one sub-query
+      clause += "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]";
     }
 
-    const relationDetails = SchemaHelper.retrievePropertyTypeRelationDetails(propertyType);
+    // end clause
+    clause += (isPropertyTypeCollection ? "" : ")") + " ";
 
-    let clause = selection.name.value + ": " + (isPropertyTypeCollection ? "" : "HEAD(") + "[(`" + parentAlias + "`)" + this._relationClause(relationDetails) + "(`" + alias + "`:`" + propertyTypeName + "`) | {" + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + "}]" + (isPropertyTypeCollection ? "" : ")") + " ";
-    return null;
     return clause;
-  }
-
-  _implementationTypeClause (alias, selection) {
-    console.log('_implementationTypeClause called');
-
-
-  }
-
-  _inlineFragmentNodeClause (parentType, parentAlias, selection) {
-    console.log('_inlineFragmentNodeClause() called');
-    console.log('selection:');
-    console.log(selection);
-
-    // const alias = parentAlias + "_" + selection.name.value;
-    const propertyTypeName = selection.typeCondition.name.value;
-    console.log('propertyTypeName:');
-    console.log(propertyTypeName);
-
-
-
-    const propertyType = this.schemaHelper.findPropertyType(parentType, propertyTypeName);
-    console.log('propertyType:');
-    console.log(propertyType);
-
-    // const relationDetails = retrievePropertyTypeRelationDetails(propertyType);
-
-
-
-
-    // console.log(propertyType);
-    // const relationDetails = this._retrievePropertyTypeRelationDetails(propertyType);
-    // let isPropertyTypeCollection = false;
   }
 
   _relationClause (relationDetails) {

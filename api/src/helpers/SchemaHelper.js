@@ -6,14 +6,10 @@ import { schema as defaultSchema } from "../schema"
 class SchemaHelper {
 
   constructor(schema) {
-    console.log('typeof schema');
-    console.log(typeof schema);
     this.schema = (typeof schema === 'object') ? schema : defaultSchema;
-
   }
 
   findPropertyType (parentType, propertyName) {
-    console.log('findPropertyType() called');
     const typeMap = this.schema._typeMap[parentType];
     if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema');
@@ -45,12 +41,7 @@ class SchemaHelper {
     return Object.keys(possibleTypes);
   }
 
-  // findImplementationType (typeName) {
-  //   return this.schema._implementations[typeName];
-  // }
-
   static retrievePropertyTypeRelationDetails (propertyType) {
-    console.log('retrievePropertyTypeRelationDetails() called');
     let relationDetails = {};
 
     const directives = propertyType.astNode.directives;

@@ -9,13 +9,16 @@ import { neo4jgraphql } from "neo4j-graphql-js";
 export const queryResolvers = {
   Query: {
     Event (object, params, context, resolveInfo) {
-      const queryGenerator = new GetQuery(params, resolveInfo);
-      const query = queryGenerator.query;
+      // const queryGenerator = new GetQuery(params, resolveInfo);
+      // const query = queryGenerator.query;
 
       console.log('query:');
       console.log(query);
     },
     MusicComposition (object, params, context, resolveInfo) {
+      // console.log('cypherQuery generated:');
+      // console.log(cypherQuery(params, context, resolveInfo, true));
+
       const queryGenerator = new GetQuery(params, resolveInfo);
       const query = queryGenerator.query;
 
@@ -93,57 +96,3 @@ export const queryResolvers = {
     }
   }
 }
-
-// const selectionSetClause = function (parentType, parentAlias, selectionSet, schema) {
-//   // const [selectionSet] = sets;
-//   // console.log('selectionSetClause, selectionSet:');
-//   // console.log(selectionSet);
-//   let properties = ['_schemaType'];
-//   let relations = [];
-//   switch(selectionSet.kind){
-//     case "SelectionSet":
-//       selectionSet.selections.map(selection => {
-//         console.log('selection:');
-//         console.log(selection);
-//         switch(selection.kind){
-//           case "Field":
-//             if(selection.selectionSet === undefined){
-//               properties.push("." + selection.name.value);
-//             } else {
-//               // this is a deeper node with its own properties - recurse
-//               properties.push(embeddedNodeClause(parentType, parentAlias, selection, schema));
-//             }
-//             break;
-//           default:
-//             console.log('unknown selection Kind encountered: ' + selection.kind);
-//         }
-//       });
-//       break;
-//     default:
-//       console.log('unknown selectionSet kind encountered: ' + selectionSet.kind);
-//   }
-//
-//   console.log('properties:');
-//   console.log(properties.join(', '));
-//   // console.log('relations:');
-//   // console.log(relations);
-//   let clause = properties.join(', ');
-//
-//   return clause;
-// }
-//
-// const embeddedNodeClause = function (parentType, parentAlias, selection, schema) {
-//   console.log(selection);
-//   console.log(schema);
-//   const alias = parentAlias + "_" + selection.name.value;
-//   const relation = findRelation(parentType, selection.name.value);
-//   console.log(relation);
-//   //const relationType =
-//
-//   // TODO interpret arrayed/non arrayed relation properties (HEAD)
-//   let clause = selection.name.value + ":HEAD([(`" + parentAlias + "`)-[:`Event`]->(`" + alias + "`:`Event`) | {`_schemaType`:HEAD(labels(`" + alias + "`)), `identifier`:`" + alias + "`.`identifier`, `name`:`" + alias + "`.`name`}]) ";
-//
-//
-//   return clause;
-// }
-
