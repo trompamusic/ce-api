@@ -16,21 +16,22 @@ class SearchQuery {
   }
 
   _generateQuery () {
-    // generate query clause
     // If all metadataInterfaced types AND all metadata textfields need to be evaluated: [substring]~ suffies
+    const subStringClause = this.params.substring + '~';
     let indexQueryClause = this.params.substring + '~';
+
     // if only a subset of types and/or fields need to be evaluated: build query clause for [substring]~ on all eligible types/fields
     if(this.doEvaluateTypeSubset || this.doEvaluateFieldSubset){
       const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => {return type.name});
       const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => {return field.name});
-      const substring = indexQueryClause;
-      indexQueryClause = '';
+      let queryClauses = [];
       typeNames.map(type => {
         fieldNames.map(field => {
-          indexQueryClause += type + '.' + field + ':' + substring + ' OR ';
+          queryClauses.push(type + '.' + field + ':' + subStringClause);
         })
       })
-      indexQueryClause = indexQueryClause.substring(0,indexQueryClause.length-4);
+      // overwrite indexQueryClause with concatenated query clauses
+      indexQueryClause = queryClauses.join(' OR ');
     }
 
     return 'CALL apoc.index.search("metadata", "' + indexQueryClause + '") YIELD `node`, `weight` RETURN `node`, `weight` ORDER BY `weight` DESC SKIP $offset LIMIT $first';
