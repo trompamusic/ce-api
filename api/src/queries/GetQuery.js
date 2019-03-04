@@ -4,6 +4,8 @@
 import StringHelper from "../helpers/StringHelper";
 import SchemaHelper from "../helpers/SchemaHelper";
 
+const paginationParameters = {'offset':'SKIP', 'first':'LIMIT'};
+
 class GetQuery {
 
   constructor (params, resolveInfo) {
@@ -25,18 +27,39 @@ class GetQuery {
     const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName);
 
     // generate base query
-    let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
+    let queryString = "MATCH (`" + alias + "`:`" + this.baseType + "` {" + this._generateConditionalClause() + "}) WITH `" + alias + "`, HEAD(labels(`" + alias + "`)) as _schemaType RETURN `" + alias + "` {" + this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet) + "}";
 
     // conclude query
-    queryString += " AS `" + alias + "`";
-    if(this.params.hasOwnProperty('offset') && this.params.offset > 0){
-      queryString += ' SKIP ' + this.params.offset;
-    }
-    if(this.params.hasOwnProperty('first') && this.params.first > 0){
-      queryString += ' LIMIT ' + this.params.first;
-    }
+    queryString += " AS `" + alias + "`" + this._generatePaginationClause();
 
     return queryString;
+  }
+
+  _generateConditionalClause () {
+    let conditionalClause = '';
+
+    // process all parameters, except pagination parameters
+    for (let param in this.params) {
+      // ignore pagination parameters
+      if(param in paginationParameters) {
+        continue;
+      }
+      conditionalClause += '`' + param + '`:"' + this.params[param] + '"';
+    }
+
+    return conditionalClause;
+  }
+
+  _generatePaginationClause () {
+    let paginationClause = '';
+
+    for (let paginationParam in paginationParameters) {
+      if (paginationParam in this.params) {
+        paginationClause += ' ' + paginationParameters[paginationParam] + ' ' + this.params[paginationParam];
+      }
+    }
+
+    return paginationClause;
   }
 
   _selectedPropertiesClause (parentType, parentAlias, selectionSet) {

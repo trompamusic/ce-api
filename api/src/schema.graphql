@@ -13,7 +13,7 @@ type Query {
   DataDownload(offset: Int, first: Int):[DataDownload]
   Dataset(offset: Int, first: Int):[Dataset]
   ImageObject(offset: Int, first: Int):[ImageObject]
-  MusicComposition(offset: Int, first: Int):[MusicComposition]
+  MusicComposition(identifier: String, offset: Int, first: Int):[MusicComposition]
   MusicPlaylist(offset: Int, first: Int):[MusicPlaylist]
   MusicAlbum(offset: Int, first: Int):[MusicAlbum]
   MusicRecording(offset: Int, first: Int):[MusicRecording]
