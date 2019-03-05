@@ -146,17 +146,22 @@ const runRemove = function (params) {
 }
 
 const generateAddQuery = function (params) {
-  return 'MATCH (`node_from`:`' + params.from.type + '` {identifier: "' + params.from.identifier + '"})' +
-    ' MATCH (`node_to`: `' + params.to.type + '` {identifier: "' + params.to.identifier + '"})' +
-    ' CREATE (`node_from`)-[`relation`:`' + snakeCase(params.field).toUpperCase() + '`]->(`node_to`)' +
-    ' RETURN { from: `node_from` ,to: `node_to` } AS `_payload`;'
+  return [
+    `MATCH (\`node_from\`:\`${params.from.type}\` {identifier: "${params.from.identifier}"})`,
+    `MATCH (\`node_to\`: \`${params.to.type}\` {identifier: "${params.to.identifier}"})`,
+    `CREATE (\`node_from\`)-[\`relation\`:\`${snakeCase(params.field).toUpperCase()}\`]->(\`node_to\`)`,
+    `RETURN { from: \`node_from\` ,to: \`node_to\` } AS \`_payload\`;`
+  ].join(' ')
 }
 
 const generateRemoveQuery = function (params) {
-  return 'MATCH (`node_from`:`' + params.from.type + '` {`identifier`: "' + params.from.identifier + '"})' +
-    ' -[`relation`:' + snakeCase(params.field).toUpperCase() + ']-> (`node_to`: `' + params.to.type + '` {`identifier`: "' + params.to.identifier + '"})' +
-    ' DELETE `relation`' +
-    ' RETURN { from: `node_from` ,to: `node_to` } AS `_payload`;'
+  return [
+    `MATCH (\`node_from\`:\`${params.from.type}\` {\`identifier\`: "${params.from.identifier}"})`,
+    `-[\`relation\`:${snakeCase(params.field).toUpperCase()}]->`,
+    `(\`node_to\`: \`${params.to.type}\` {\`identifier\`: "${params.to.identifier}"})`,
+    `DELETE \`relation\``,
+    `RETURN { from: \`node_from\` ,to: \`node_to\` } AS \`_payload\`;`
+  ].join(' ')
 }
 
 const runQuery = function (query) {

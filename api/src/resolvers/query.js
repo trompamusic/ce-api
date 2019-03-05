@@ -96,7 +96,7 @@ export const queryResolvers = {
         })
         indexQueryClause = indexQueryClause.substring(0, indexQueryClause.length - 4)
       }
-      const searchQuery = 'CALL apoc.index.search("metadata", "' + indexQueryClause + '") YIELD `node`, `weight` RETURN `node`, `weight` ORDER BY `weight` DESC SKIP $offset LIMIT $first'
+      const searchQuery = `CALL apoc.index.search("metadata", "${indexQueryClause}") YIELD \`node\`, \`weight\` RETURN \`node\`, \`weight\` ORDER BY \`weight\` DESC SKIP $offset LIMIT $first`
 
       // fetch and process search results
       let session = driver.session()

@@ -23,11 +23,18 @@ class GetQuery {
     // retrieve constants from parameters
     const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName)
 
-    // generate base query
-    let queryString = 'MATCH (`' + alias + '`:`' + this.baseType + '` {' + this._generateConditionalClause() + '}) WITH `' + alias + '`, HEAD(labels(`' + alias + '`)) as _schemaType RETURN `' + alias + '` {' + this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet) + '}'
-
-    // conclude query
-    queryString += ' AS `' + alias + '`' + this._generatePaginationClause()
+    // compose query string
+    let queryString = [
+      `MATCH (\`${alias}\`:\`${this.baseType}\` {`,
+      this._generateConditionalClause(),
+      `})`,
+      `WITH \`${alias}\`, HEAD(labels(\`${alias}\`)) as _schemaType`,
+      `RETURN \`${alias}\` {`,
+      this._selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet),
+      `}`,
+      `AS \`${alias}\``,
+      this._generatePaginationClause()
+    ].join(` `)
 
     return queryString
   }
@@ -52,7 +59,7 @@ class GetQuery {
 
     for (let paginationParam in paginationParameters) {
       if (paginationParam in this.params) {
-        paginationClause += ' ' + paginationParameters[paginationParam] + ' ' + this.params[paginationParam]
+        paginationClause += ` ${paginationParameters[paginationParam]} ${this.params[paginationParam]}`
       }
     }
 
@@ -60,7 +67,7 @@ class GetQuery {
   }
 
   _selectedPropertiesClause (parentType, parentAlias, selectionSet) {
-    let propertyClauses = ['`_schemaType`:HEAD(labels(`' + parentAlias + '`))']
+    let propertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
 
     if (selectionSet.kind !== 'SelectionSet') {
       throw Error('Property clause generation needs a selectionSet')
@@ -89,7 +96,7 @@ class GetQuery {
       }
     })
 
-    let clause = propertyClauses.join(', ')
+    let clause = propertyClauses.join(`, `)
 
     return clause
   }
@@ -104,7 +111,7 @@ class GetQuery {
       const propertyName = selection.name.value.toString()
       // ignore library private properties, indicated with double-underscore prefix, like '__typename'
       if (propertyName.substring(0, 2) !== '__') {
-        propertyClause = '`' + propertyName + '`:`' + parentAlias + '`.`' + propertyName + '`'
+        propertyClause = `\`${propertyName}\`:\`${parentAlias}\`.\`${propertyName}\``
       }
     }
 
@@ -114,17 +121,17 @@ class GetQuery {
   _selectionSetNodeClause (parentType, parentAlias, selection) {
     const propertyName = selection.name.value
     const propertyType = this.schemaHelper.findPropertyType(parentType, propertyName)
-    const alias = parentAlias + '_' + propertyName
+    const alias = `${parentAlias}_${propertyName}`
 
     // determine if property is library private type - these are not related nodes but refer to Neo4j property collection, like '_Neo4jDate'
     let propertyTypeName = propertyType.type.toString()
     if (propertyTypeName.substring(0, 1) === '_') {
       const visibleProperties = selection.selectionSet.selections.map(selection => {
         const visiblePropertyName = selection.name.value
-        return visiblePropertyName + ': `' + parentAlias + '`.' + propertyName + '.' + visiblePropertyName
+        return `${visiblePropertyName}: \`${parentAlias}\`.${propertyName}.${visiblePropertyName}`
       })
 
-      return propertyName + ': { ' + visibleProperties.join(', ') + ' }'
+      return `${propertyName}: { ${visibleProperties.join(', ')} }`
     }
 
     // determine property is single or array of values
@@ -143,16 +150,28 @@ class GetQuery {
     }
 
     // start clause
-    let clause = propertyName + ': ' + (isPropertyTypeCollection ? '' : 'HEAD(')
+    let clause = `${propertyName}: ${(isPropertyTypeCollection ? '' : 'HEAD(')}`
 
     if (representsMultipleTypes instanceof Array) {
       // if Union or Interface type: generate subquery for each represented Type
       clause += representsMultipleTypes.map(propertyTypeName => {
-        return '[(`' + parentAlias + '`)' + this._relationClause(relationDetails) + '(`' + alias + '`:`' + propertyTypeName + '`) | {' + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + '}]'
+        return [
+          `[(\`${parentAlias}\`)`,
+          this._relationClause(relationDetails),
+          `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
+          this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
+          `}]`
+        ].join(' ')
       }).join(' + ')
     } else {
       // if root-type: generate only one sub-query
-      clause += '[(`' + parentAlias + '`)' + this._relationClause(relationDetails) + '(`' + alias + '`:`' + propertyTypeName + '`) | {' + this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet) + '}]'
+      clause += [
+        `[(\`${parentAlias}\`)`,
+        this._relationClause(relationDetails),
+        `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
+        this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
+        `}]`
+      ].join(' ')
     }
 
     // end clause
@@ -162,20 +181,20 @@ class GetQuery {
   }
 
   _relationClause (relationDetails) {
-    let clause = '-[:`' + relationDetails['name'] + '`]-'
+    let clause = `-[:\`${relationDetails['name']}\`]-`
 
     switch (relationDetails['direction'].toString().toUpperCase()) {
       case 'OUT':
         clause += '>'
         break
       case 'IN':
-        clause = '<' + clause
+        clause = `<${clause}`
         break
       case 'BOTH':
-        clause = '<' + clause + '>'
+        clause = `<${clause}>`
         break
       default:
-        throw Error('Unknown relation direction encountered')
+        throw Error('Invalid relation direction encountered')
     }
 
     return clause
