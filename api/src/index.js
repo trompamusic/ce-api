@@ -1,10 +1,10 @@
-import { driver } from "./driver";
-import { schema } from "./schema"
-import { ApolloServer } from "apollo-server";
-import { debug as Debug } from "debug";
-export const debug = Debug('ce-api-debug');
-export const info = Debug('ce-api-info');
-export const warning = Debug('ce-api-warning');
+import { driver } from './driver'
+import { schema } from './schema'
+import { ApolloServer } from 'apollo-server'
+import { debug as Debug } from 'debug'
+export const debug = Debug('ce-api-debug')
+export const info = Debug('ce-api-info')
+export const warning = Debug('ce-api-warning')
 
 /*
  * Create a new ApolloServer instance, serving the GraphQL schema
@@ -14,12 +14,12 @@ export const warning = Debug('ce-api-warning');
  */
 const server = new ApolloServer({
   schema: schema,
-  context: { driver },
-});
+  context: { driver }
+})
 
 /*
  * Start Apollo server
  */
-server.listen(process.env.GRAPHQL_LISTEN_PORT, "0.0.0.0").then(({ url }) => {
-  debug(`GraphQL API ready at ${url}`);
-});
+server.listen(process.env.GRAPHQL_LISTEN_PORT, '0.0.0.0').then(({ url }) => {
+  debug(`GraphQL API ready at ${url}`)
+})
