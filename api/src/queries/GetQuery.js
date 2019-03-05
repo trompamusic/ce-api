@@ -3,6 +3,7 @@ import StringHelper from '../helpers/StringHelper'
 import SchemaHelper from '../helpers/SchemaHelper'
 
 const paginationParameters = { 'offset': 'SKIP', 'first': 'LIMIT' }
+const bracketRegExString = '^\\[.*?\\]$'
 
 class GetQuery {
   constructor (params, resolveInfo) {
@@ -12,7 +13,6 @@ class GetQuery {
     this.schemaHelper = new SchemaHelper(resolveInfo.schema)
     this.baseNode = this.resolveInfo.fieldNodes[0]
     this.baseType = this.baseNode.name.value
-    this.bracketRegEx = new RegExp('^\\[.*?\\]$')
   }
 
   get query () {
@@ -24,7 +24,7 @@ class GetQuery {
     const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName)
 
     // compose query string
-    let queryString = [
+    return [
       `MATCH (\`${alias}\`:\`${this.baseType}\` {`,
       this._generateConditionalClause(),
       `})`,
@@ -35,8 +35,6 @@ class GetQuery {
       `AS \`${alias}\``,
       this._generatePaginationClause()
     ].join(` `)
-
-    return queryString
   }
 
   _generateConditionalClause () {
@@ -48,7 +46,7 @@ class GetQuery {
       if (param in paginationParameters) {
         continue
       }
-      conditionalClause += '`' + param + '`:"' + this.params[param] + '"'
+      conditionalClause += `\`${param}\`:"${this.params[param]}"`
     }
 
     return conditionalClause
@@ -96,9 +94,7 @@ class GetQuery {
       }
     })
 
-    let clause = propertyClauses.join(`, `)
-
-    return clause
+    return propertyClauses.join(`, `)
   }
 
   _selectedPropertyClause (parentType, parentAlias, selection) {
@@ -136,7 +132,8 @@ class GetQuery {
 
     // determine property is single or array of values
     let isPropertyTypeCollection = false
-    if (this.bracketRegEx.test(propertyTypeName) === true) {
+    const bracketTest = new RegExp(bracketRegExString)
+    if (bracketTest.test(propertyTypeName) === true) {
       propertyTypeName = propertyTypeName.slice(1, -1)
       isPropertyTypeCollection = true
     }
