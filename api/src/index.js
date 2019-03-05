@@ -1,6 +1,10 @@
 import { driver } from "./driver";
 import { schema } from "./schema"
 import { ApolloServer } from "apollo-server";
+import { debug as Debug } from "debug";
+export const debug = Debug('ce-api-debug');
+export const info = Debug('ce-api-info');
+export const warning = Debug('ce-api-warning');
 
 /*
  * Create a new ApolloServer instance, serving the GraphQL schema
@@ -17,5 +21,5 @@ const server = new ApolloServer({
  * Start Apollo server
  */
 server.listen(process.env.GRAPHQL_LISTEN_PORT, "0.0.0.0").then(({ url }) => {
-  console.log(`GraphQL API ready at ${url}`);
+  debug(`GraphQL API ready at ${url}`);
 });

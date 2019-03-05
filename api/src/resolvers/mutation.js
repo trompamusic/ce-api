@@ -11,7 +11,6 @@ export const mutationResolvers = {
       return runRemove(params);
     },
     AddThingInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
-      console.log('AddThingInterfaceCreativeWorkInterface function');
       return runAdd(params);
     },
     RemoveThingInterfaceCreativeWorkInterface (object, params, ctx, resolveInfo) {
@@ -173,7 +172,9 @@ const runQuery = function (query) {
       });
       return rt[0];
     })
-    .catch(function (error) {console.log(error);});
+    .catch(function (error) {
+      throw Error(error.toString());
+    });
 
   return promise;
 }

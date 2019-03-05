@@ -1,6 +1,4 @@
-// GetQuery.js
-"use strict"
-
+import { debug, info, warning } from "../index"
 import StringHelper from "../helpers/StringHelper";
 import SchemaHelper from "../helpers/SchemaHelper";
 
@@ -88,7 +86,7 @@ class GetQuery {
           }
           break;
           default:
-            console.log('unknown selection kind encountered: ' + selection.kind);
+            warning('unknown selection kind encountered: ' + selection.kind);
       }
     });
 

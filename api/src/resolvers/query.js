@@ -1,7 +1,9 @@
+import { debug, info, warning } from "../index"
 import { driver } from "../driver";
 import { retrieveNodeData } from "../resolvers"
 import { hydrateNodeSearchScore } from "../resolvers";
 import GetQuery from "../queries/GetQuery";
+
 
 export const queryResolvers = {
   Query: {
@@ -108,7 +110,9 @@ export const queryResolvers = {
               return hydrateNodeSearchScore(nodeData, record.get('weight'));
             })
         })
-        .catch(function (error) {console.log(error);});
+        .catch(function (error) {
+          throw Error(error.toString());
+        });
     }
   }
 }
@@ -116,8 +120,7 @@ export const queryResolvers = {
 const getQuery = function (params, resolveInfo) {
   const queryGenerator = new GetQuery(params, resolveInfo);
   const query = queryGenerator.query;
-  console.log('query:');
-  console.log(query);
+  info(`query: ${query}`);
 
   let session = driver.session();
   return session.run(query, params)
@@ -127,5 +130,7 @@ const getQuery = function (params, resolveInfo) {
           return record._fields.shift();
         })
     })
-    .catch(function (error) {console.log(error);});
+    .catch(function (error) {
+      throw Error(error.toString());
+    });
 }
