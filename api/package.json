@@ -16,6 +16,7 @@
     "apollo-client": "^2.4.7",
     "apollo-link-http": "^1.5.7",
     "apollo-server": "^2.2.4",
+    "debug": "^4.1.1",
     "dotenv": "^5.0.1",
     "graphql-tag": "^2.10.0",
     "neo4j-driver": "^1.7.2",
@@ -27,7 +28,8 @@
     "babel-preset-env": "^1.7.0",
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.7",
+    "standard": "^12.0.1"
   },
   "husky": {
     "hooks": {
