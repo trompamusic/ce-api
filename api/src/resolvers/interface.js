@@ -1,66 +1,34 @@
+import { retrieveSchemaType } from '../resolvers'
+
 export const interfaceResolvers = {
   MetadataInterface: {
-    __resolveType(obj, context, info){
-      var typeUniqueProperties = {"target":"Action","isBasedOn":"CreativeWork","attendee":"Event","department":"Organization","birthData":"Person","containedInPlace":"Place","manufacturer":"Product","grantee":"DigitalDocumentPermission","occupationLocation":"Occupation","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-      for (var key in typeUniqueProperties) {
-        if(key in typeUniqueProperties){
-          return typeUniqueProperties[key];
-        }
-      }
-      return null;
-    },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
   },
   ThingInterface: {
-    __resolveType(obj, context, info){
-      var typeUniqueProperties = {"target":"Action","isBasedOn":"CreativeWork","attendee":"Event","department":"Organization","birthData":"Person","containedInPlace":"Place","manufacturer":"Product","grantee":"DigitalDocumentPermission","occupationLocation":"Occupation","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-      for (var key in typeUniqueProperties) {
-        if(key in obj){
-          return typeUniqueProperties[key];
-        }
-      }
-      return null;
-    },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
   },
   CreativeWorkInterface: {
-    __resolveType(obj, context, info){
-      console.log('CreativeWorkInterface __resolveType called');
-      var typeUniqueProperties = {"articleBody":"Article","hasDigitalDocumentPermission":"DigitalDocument","itemReviewed":"Review","contentUrl":"MediaObject","videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-      for (var key in typeUniqueProperties) {
-        if(key in obj){
-          return typeUniqueProperties[key];
-        }
-      }
-      return 'CreativeWork';
-    },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
   },
   MediaObjectInterface: {
-    __resolveType(obj, context, info){
-      var typeUniqueProperties = {"videoQuality":"VideoObject","transcript":"AudioObject","distribution":"Dataset","measurementTechnique":"DataDownload","exifData":"ImageObject","albumProductionType":"MusicAlbum","numTracks":"MusicPlaylist","firstPerformance":"MusicComposition","inPlaylist":"MusicRecording"};
-      for (var key in typeUniqueProperties) {
-        if(key in obj){
-          return typeUniqueProperties[key];
-        }
-      }
-      return 'MediaObject';
-    },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
   },
   OrganizationInterface: {
-    __resolveType(obj, context, info){
-      if(obj.album){
-        return 'MusicGroup';
-      }
-      return 'Organization';
-    },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
   },
   ActionInterface: {
-    __resolveType(obj, context, info){
-      if(obj.replacer){
-        return 'ReplaceAction';
-      }
-      if(context.targetCollection){
-        return 'UpdateAction';
-      }
-      return 'Action';
-    },
-  },
+    __resolveType (obj, context, info) {
+      return retrieveSchemaType(obj)
+    }
+  }
 }

@@ -2,29 +2,185 @@
 ### Queries ###
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfacedType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
+  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
+  Person(identifier: String, offset: Int, first: Int):[Person]
+  CreativeWork(identifier: String, offset: Int, first: Int):[CreativeWork]
+  Article(identifier: String, offset: Int, first: Int):[Article]
+  DigitalDocument(identifier: String, offset: Int, first: Int):[DigitalDocument]
+  MediaObject(identifier: String, offset: Int, first: Int):[MediaObject]
+  Review(identifier: String, offset: Int, first: Int):[Review]
+  AudioObject(identifier: String, offset: Int, first: Int):[AudioObject]
+  DataDownload(identifier: String, offset: Int, first: Int):[DataDownload]
+  Dataset(identifier: String, offset: Int, first: Int):[Dataset]
+  ImageObject(identifier: String, offset: Int, first: Int):[ImageObject]
+  MusicComposition(identifier: String, offset: Int, first: Int):[MusicComposition]
+  MusicPlaylist(identifier: String, offset: Int, first: Int):[MusicPlaylist]
+  MusicAlbum(identifier: String, offset: Int, first: Int):[MusicAlbum]
+  MusicRecording(identifier: String, offset: Int, first: Int):[MusicRecording]
+  VideoObject(identifier: String, offset: Int, first: Int):[VideoObject]
+  Event(identifier: String, offset: Int, first: Int):[Event]
+  Organization(identifier: String, offset: Int, first: Int):[Organization]
+  MusicGroup(identifier: String, offset: Int, first: Int):[MusicGroup]
+  Product(identifier: String, offset: Int, first: Int):[Product]
+  Place(identifier: String, offset: Int, first: Int):[Place]
+  Occupation(identifier: String, offset: Int, first: Int):[Occupation]
+  DigitalDocumentPermission(identifier: String, offset: Int, first: Int):[DigitalDocumentPermission]
+  Audience(identifier: String, offset: Int, first: Int):[Audience]
 }
 
 type Mutation {
-  AddMusicCompositionAuthor(from:_MusicCompositionInput, to:_LegalPersonInput): _AddMusicCompositionAuthorPayload
-  AddCreativeWorkInterfaceExampleOfWork(from:_CreativeWorkInterfacedInput, to:_CreativeWorkInterfacedInput): _AddCreativeWorkInterfaceExampleOfWorkPayload
+  AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
+  RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
+  AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
+  RemoveCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
+  AddOrganizationInterfaceLegalPerson(from:_OrganizationInterfaceInput, to:_LegalPersonInput, field:OrganizationInterfaceRelationToLegalPerson): _AddOrganizationInterfaceLegalPersonPayload
+  RemoveOrganizationInterfaceLegalPerson(from:_OrganizationInterfaceInput, to:_LegalPersonInput, field:OrganizationInterfaceRelationToLegalPerson): _AddOrganizationInterfaceLegalPersonPayload
+  AddActionInterfaceThingInterface(from:_ActionInterfaceInput, to:_ThingInterfaceInput, field:ActionInterfaceRelationToThingInterface): _AddActionInterfaceThingInterfacePayload
+  RemoveActionInterfaceThingInterface(from:_ActionInterfaceInput, to:_ThingInterfaceInput, field:ActionInterfaceRelationToThingInterface): _AddActionInterfaceThingInterfacePayload
+  AddActionInterfaceLegalPerson(from:_ActionInterfaceInput, to:_LegalPersonInput, field:ActionInterfaceRelationToLegalPerson): _AddActionInterfaceLegalPersonPayload
+  RemoveActionInterfaceLegalPerson(from:_ActionInterfaceInput, to:_LegalPersonInput, field:ActionInterfaceRelationToLegalPerson): _AddActionInterfaceLegalPersonPayload
+  AddDigitalDocumentPermissionGrantee(from:_DigitalDocumentPermissionInput, to:_LegalPersonInput): _AddDigitalDocumentPermissionLegalPersonPayload
+  RemoveDigitalDocumentPermissionGrantee(from:_DigitalDocumentPermissionInput, to:_LegalPersonInput): _AddDigitalDocumentPermissionLegalPersonPayload
+  AddEventComposer(from:_EventInput, to:_LegalPersonInput): _AddEventComposerPayload
+  RemoveEventComposer(from:_EventInput, to:_LegalPersonInput): _AddEventComposerPayload
+  AddEventPerformer(from:_EventInput, to:_PerformerInput): _AddEventPerformerPayload
+  RemoveEventPerformer(from:_EventInput, to:_PerformerInput): _AddEventPerformerPayload
+  AddVideoObjectMusicBy(from:_VideoObjectInput, to:_PerformerInput): _AddVideoObjectMusicByPayload
+  RemoveVideoObjectMusicBy(from:_VideoObjectInput, to:_PerformerInput): _AddVideoObjectMusicByPayload
+  AddThingInterfaceCreativeWorkInterface(from:_ThingInterfaceInput, to:_CreativeWorkInterfaceInput, field:ThingInterfaceRelationToCreativeWorkInterface): _AddThingInterfaceCreativeWorkInterfacePayload
+  RemoveThingInterfaceCreativeWorkInterface(from:_ThingInterfaceInput, to:_CreativeWorkInterfaceInput, field:ThingInterfaceRelationToCreativeWorkInterface): _AddThingInterfaceCreativeWorkInterfacePayload
+  AddThingInterfacePotentialAction(from:_ThingInterfaceInput, to:_ActionInterfaceInput): _AddThingInterfacePotentialActionPayload
+  RemoveThingInterfacePotentialAction(from:_ThingInterfaceInput, to:_ActionInterfaceInput): _AddThingInterfacePotentialActionPayload
+  AddCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
+  RemoveCreativeWorkInterfaceCreativeWorkInterface(from:_CreativeWorkInterfaceInput, to:_CreativeWorkInterfaceInput, field:CreativeWorkInterfaceRelationToCreativeWorkInterface): _AddCreativeWorkInterfaceCreativeWorkInterfacePayload
+  AddMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
+  RemoveMediaObjectInterfaceCreativeWorkInterface(from:_MediaObjectInterfaceInput, to:_CreativeWorkInterfaceInput, field:MediaObjectInterfaceRelationToCreativeWorkInterface): _AddMediaObjectInterfaceCreativeWorkInterfacePayload
+  AddProvenanceEntityInterfaceThingInterface(from:_ProvenanceEntityInterfaceInput, to:_ThingInterfaceInput, field:ProvenanceEntityInterfaceRelationToThingInterface): _AddProvenanceEntityInterfaceThingInterfacePayload
+  RemoveProvenanceEntityInterfaceThingInterface(from:_ProvenanceEntityInterfaceInput, to:_ThingInterfaceInput, field:ProvenanceEntityInterfaceRelationToThingInterface): _AddProvenanceEntityInterfaceThingInterfacePayload
+  AddProvenanceEntityInterfaceWasAttributedTo(from:_ProvenanceEntityInterfaceInput, to:_LegalPersonInput): _AddProvenanceEntityInterfaceWasAttributedToPayload
+  RemoveProvenanceEntityInterfaceWasAttributedTo(from:_ProvenanceEntityInterfaceInput, to:_LegalPersonInput): _AddProvenanceEntityInterfaceWasAttributedToPayload
+  AddProvenanceEntityInterfaceWasGeneratedBy(from:_ProvenanceEntityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceEntityInterfaceWasGeneratedByPayload
+  RemoveProvenanceEntityInterfaceWasGeneratedBy(from:_ProvenanceEntityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceEntityInterfaceWasGeneratedByPayload
+  AddProvenanceAgentInterfaceLegalPerson(from:_ProvenanceAgentInterfaceInput, to:_LegalPersonInput): _AddProvenanceAgentInterfaceLegalPersonPayload
+  RemoveProvenanceAgentInterfaceLegalPerson(from:_ProvenanceAgentInterfaceInput, to:_LegalPersonInput): _AddProvenanceAgentInterfaceLegalPersonPayload
+  AddProvenanceActivityInterfaceActionInterface(from:_ProvenanceActivityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceActivityInterfaceWasInformedByPayload
+  RemoveProvenanceActivityInterfaceActionInterface(from:_ProvenanceActivityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceActivityInterfaceWasInformedByPayload
+}
+
+input _ThingInterfaceInput {
+  identifier: String!
+  type: ThingInterfaceType!
 }
 input _LegalPersonInput {
   identifier: String!
   type: LegalPersonType!
 }
-input _CreativeWorkInterfacedInput {
+input _OrganizationInterfaceInput {
   identifier: String!
-  type: CreativeWorkInterfacedType!
+  type: OrganizationInterfaceType!
 }
-type _AddMusicCompositionAuthorPayload {
-  from: MusicComposition
+input _CreativeWorkInterfaceInput {
+  identifier: String!
+  type: CreativeWorkInterfaceType!
+}
+input _MediaObjectInterfaceInput {
+  identifier: String!
+  type: MediaObjectInterfaceType!
+}
+input _ActionInterfaceInput {
+  identifier: String!
+  type: ActionInterfaceType!
+}
+input _PerformerInput {
+  identifier: String!
+  type: PerformerType!
+}
+input _ProvenanceEntityInterfaceInput {
+  identifier: String!
+  type: ProvenanceEntityInterfaceType!
+}
+input _ProvenanceAgentInterfaceInput {
+  identifier: String!
+  type: ProvenanceAgentInterfaceType!
+}
+input _ProvenanceActivityInterfaceInput {
+  identifier: String!
+  type: ProvenanceActivityInterfaceType!
+}
+
+type _AddThingInterfaceThingInterfacePayload {
+  from: ThingInterfaced
+  to: ThingInterfaced
+}
+type _AddThingInterfaceCreativeWorkInterfacePayload {
+  from: ThingInterfaced
+  to: CreativeWorkInterfaced
+}
+type _AddThingInterfacePotentialActionPayload {
+  from: ThingInterfaced
+  to: ActionInterfaced
+}
+type _AddCreativeWorkInterfaceLegalPersonPayload {
+  from: CreativeWorkInterfaced
   to: LegalPerson
 }
-type _AddCreativeWorkInterfaceExampleOfWorkPayload {
+type _AddOrganizationInterfaceLegalPersonPayload {
+  from: OrganizationInterfaced
+  to: LegalPerson
+}
+type _AddActionInterfaceThingInterfacePayload {
+  from: ActionInterfaced
+  to: ThingInterfaced
+}
+type _AddActionInterfaceLegalPersonPayload {
+  from: ActionInterfaced
+  to: LegalPerson
+}
+type _AddDigitalDocumentPermissionLegalPersonPayload {
+  from: DigitalDocumentPermission
+  to: LegalPerson
+}
+type _AddCreativeWorkInterfaceCreativeWorkInterfacePayload {
   from: CreativeWorkInterfaced
   to: CreativeWorkInterfaced
 }
+type _AddMediaObjectInterfaceCreativeWorkInterfacePayload {
+  from: MediaObjectInterfaced
+  to: CreativeWorkInterfaced
+}
+type _AddEventComposerPayload {
+  from: Event
+  to: LegalPerson
+}
+type _AddEventPerformerPayload {
+  from: Event
+  to: Performer
+}
+type _AddVideoObjectMusicByPayload {
+  from: VideoObject
+  to: Performer
+}
+type _AddProvenanceEntityInterfaceThingInterfacePayload {
+  from: ProvenanceEntityInterfaced
+  to: ThingInterfaced
+}
+type _AddProvenanceEntityInterfaceWasAttributedToPayload {
+  from: ProvenanceEntityInterfaced
+  to: LegalPerson
+}
+type _AddProvenanceEntityInterfaceWasGeneratedByPayload {
+  from: ProvenanceEntityInterfaced
+  to: ActionInterfaced
+}
+type _AddProvenanceAgentInterfaceLegalPersonPayload {
+  from: ProvenanceAgentInterfaced
+  to: LegalPerson
+}
+type _AddProvenanceActivityInterfaceWasInformedByPayload {
+  from: ProvenanceActivityInterfaced
+  to: ActionInterfaced
+}
+
 
 ###############
 ### Scalars ###
@@ -42,22 +198,137 @@ scalar Value
 
 union LegalPerson = Person | Organization | MusicGroup
 
-union MusicCreator = Person | MusicGroup
+union Performer = Person | MusicGroup
 
-union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject
-
-union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
+# TODO auto generate
+union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience
+# TODO auto generate
+union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
+# TODO auto generate
+union CreativeWorkInterfaced = Product | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
+# TODO auto generate
+union MediaObjectInterfaced = MediaObject | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject
+# TODO auto generate
+union OrganizationInterfaced = Organization | MusicGroup
+# TODO auto generate
+union ActionInterfaced = Action | UpdateAction | ReplaceAction
+# TODO auto generate
+union ProvenanceEntityInterfaced = DigitalDocumentPermission | Action | CreativeWork | Event | Intangible | Organization | Person | Place | Product | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject | MusicGroup | UpdateAction | ReplaceAction
+# TODO auto generate
+union ProvenanceAgentInterfaced = Person | Organization | MusicGroup
+# TODO auto generate
+union ProvenanceActivityInterfaced = Action | UpdateAction | ReplaceAction
 
 #############
 ### enums ###
 
+# TODO auto generate
+enum ThingInterfaceRelationToThingInterface {
+  about
+  mainEntity
+  mentions
+}
+
+# TODO auto generate
+enum ThingInterfaceRelationToCreativeWorkInterface {
+  mainEntityOfPage
+  subjectOf
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToLegalPerson {
+  author
+  copyrightHolder
+  funder
+  producer
+  schema_publisher
+  translator
+}
+
+# TODO auto generate
+enum OrganizationInterfaceRelationToLegalPerson {
+  member
+  funder
+  sponsor
+}
+
+# TODO auto generate
+enum ActionInterfaceRelationToThingInterface {
+  error
+  object
+  result
+}
+
+# TODO auto generate
+enum ActionInterfaceRelationToLegalPerson {
+  agent
+  participant
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
+  citation
+  hasPart
+  isBasedOn
+  isPartOf
+  exampleOfWork
+  workExample
+  translator
+}
+
+# TODO auto generate
+enum MediaObjectInterfaceRelationToCreativeWorkInterface {
+  encodesCreativeWork
+}
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceRelationToThingInterface {
+  wasDerivedFrom
+  used
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceRelationToLegalPersonInterface {
+  wasAssociatedWith
+  actedOnBehalfOf
+}
+
+# TODO auto generate
 enum LegalPersonType {
   Person
   Organization
   MusicGroup
 }
 
-enum MetadataInterfacedType {
+# TODO auto generate
+enum ThingInterfaceType {
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicAlbum
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+  Occupation
+  DigitalDocumentPermission
+  Audience
+}
+
+# TODO auto generate
+enum MetadataInterfaceType {
   Person
   CreativeWork
   Article
@@ -79,7 +350,8 @@ enum MetadataInterfacedType {
   Place
 }
 
-enum CreativeWorkInterfacedType {
+# TODO auto generate
+enum CreativeWorkInterfaceType {
   Product
   CreativeWork
   Article
@@ -91,10 +363,88 @@ enum CreativeWorkInterfacedType {
   Dataset
   ImageObject
   MusicComposition
+  MusicAlbum
   MusicPlaylist
   MusicRecording
   VideoObject
 }
+
+# TODO auto generate
+enum MediaObjectInterfaceType {
+  MediaObject
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+}
+
+# TODO auto generate
+enum OrganizationInterfaceType {
+  Organization
+  MusicGroup
+}
+
+# TODO auto generate
+enum ActionInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
+}
+
+enum ProvenanceActivityInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
+}
+
+# TODO auto generate
+enum PerformerType {
+  Person
+  MusicGroup
+}
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceType {
+  DigitalDocumentPermission
+  Action
+  CreativeWork
+  Event
+  Intangible
+  Organization
+  Person
+  Place
+  Product
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+  MusicGroup
+  UpdateAction
+  ReplaceAction
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceType {
+  Person
+  Organization
+  MusicGroup
+}
+
+
 
 enum AvailableLanguage {
   en
@@ -201,7 +551,7 @@ interface MetadataInterface {
 "https://schema.org/Thing,https://www.w3.org/TR/prov-o/#Entity"
 interface ThingInterface {
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -258,7 +608,7 @@ interface CreativeWorkInterface {
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -291,11 +641,11 @@ interface CreativeWorkInterface {
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -303,10 +653,10 @@ interface CreativeWorkInterface {
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -322,7 +672,7 @@ interface CreativeWorkInterface {
   "https://schema.org/position"
   position: Int
   "https://schema.org/producer"
-  producer: [Person] @relation(name: "PRODUCER", direction: "IN")
+  producer: [LegalPerson] @relation(name: "PRODUCER", direction: "IN")
   #provider:
   #publication:
   "https://schema.org/publisher"
@@ -356,9 +706,9 @@ interface CreativeWorkInterface {
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
 }
 
 "https://schema.org/MediaObject"
@@ -376,7 +726,7 @@ interface MediaObjectInterface {
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/height"
@@ -431,7 +781,7 @@ interface OrganizationInterface {
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -449,7 +799,7 @@ interface OrganizationInterface {
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -465,7 +815,7 @@ interface OrganizationInterface {
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -482,7 +832,7 @@ interface ActionInterface {
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -492,11 +842,11 @@ interface ActionInterface {
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -541,7 +891,7 @@ type Audience implements ThingInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -591,7 +941,7 @@ type Occupation implements ThingInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -652,7 +1002,7 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -702,7 +1052,7 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   ############################################
   ### DigitalDocumentPermission properties ###
   "https://pending.schema.org/grantee"
-  grantee: [Person] @relation(name: "GRANTEE", direction: "IN")
+  grantee: [LegalPerson] @relation(name: "GRANTEE", direction: "IN")
   "https://pending.schema.org/permissionType"
   permissionType: DigitalDocumentPermissionType
 }
@@ -749,7 +1099,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -803,7 +1153,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -813,11 +1163,11 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -863,7 +1213,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -934,7 +1284,7 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -967,11 +1317,11 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -979,10 +1329,10 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -1032,9 +1382,9 @@ type CreativeWork implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
 }
 
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Event"
@@ -1076,7 +1426,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1128,7 +1478,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   attendee: [Person] @relation(name: "ATTENDEE", direction: "IN")
   #audience: Audience
   "https://schema.org/composer"
-  composer: [Person] @relation(name: "COMPOSER", direction: "IN")
+  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "IN")
   #"https://schema.org/contributor"
   #contributor: LegalPerson @relation(name: "CONTRIBUTOR", direction: "IN")
   "https://schema.org/director"
@@ -1140,7 +1490,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   endDate: _Neo4jDateTime
   #eventStatus: EventStatusType
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/inLanguage"
   inLanguage: String
   "https://schema.org/isAccessibleForFree"
@@ -1153,7 +1503,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   "https://schema.org/organizer"
   organizer: [Organization] @relation(name: "ORGANIZER", direction: "IN")
   "https://schema.org/performer"
-  performer: [MusicGroup] @relation(name: "PERFORMER", direction: "IN")
+  performer: [Performer] @relation(name: "PERFORMER", direction: "IN")
   #previousStartDate: _Neo4jDate
   "https://schema.org/recordedIn"
   recordedIn: [CreativeWork] @relation(name: "RECORDED_IN", direction: "OUT")
@@ -1161,7 +1511,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   "https://schema.org/review"
   review: [Review]
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/startDate"
   startDate: _Neo4jDateTime
   "https://schema.org/subEvent"
@@ -1216,7 +1566,7 @@ type Intangible implements MetadataInterface & ThingInterface & ProvenanceEntity
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1298,7 +1648,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1381,7 +1731,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -1399,7 +1749,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -1415,7 +1765,7 @@ type Organization implements MetadataInterface & ThingInterface & ProvenanceEnti
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -1466,7 +1816,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1548,7 +1898,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #"https://schema.org/follows"
   #follows: Person
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/gender"
   gender: Gender
   "https://schema.org/givenName"
@@ -1569,7 +1919,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/jobTitle"
   jobTitle: String
   "https://schema.org/knows"
-  knows: Person @relation(name: "KNOWS", direction: "OUT")
+  knows: [Person] @relation(name: "KNOWS", direction: "OUT")
   "https://schema.org/knowsAbout"
   knowsAbout: ThingInterface @relation(name: "KNOWS_ABOUT", direction: "OUT")
   "https://schema.org/knowsLanguage"
@@ -1594,7 +1944,7 @@ type Person implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/sibling"
   sibling: [Person] @relation(name: "SIBLING", direction: "OUT")
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/spouse"
   spouse: [Person] @relation(name: "SPOUSE", direction: "OUT")
   #taxID
@@ -1646,7 +1996,7 @@ type Place implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1774,7 +2124,7 @@ type Product implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1907,7 +2257,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -1978,7 +2328,7 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2011,11 +2361,11 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2023,10 +2373,10 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2076,9 +2426,9 @@ type Article implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   ##########################
   ### Article properties ###
   "https://schema.org/articleBody"
@@ -2136,7 +2486,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2207,7 +2557,7 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2240,11 +2590,11 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2252,10 +2602,10 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2305,9 +2655,9 @@ type DigitalDocument implements MetadataInterface & ThingInterface & ProvenanceE
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   ##########################
   ### DigitalDocument properties ###
   "https://schema.org/hasDigitalDocumentPermission"
@@ -2353,7 +2703,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2424,7 +2774,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2457,11 +2807,11 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2469,10 +2819,10 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2522,9 +2872,9 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -2540,7 +2890,7 @@ type MediaObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -2596,7 +2946,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2667,7 +3017,7 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2700,11 +3050,11 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2712,10 +3062,10 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2765,9 +3115,9 @@ type Review implements MetadataInterface & ThingInterface & ProvenanceEntityInte
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### Review properties ###
   "https://bib.schema.org/itemReviewed"
@@ -2821,7 +3171,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -2892,7 +3242,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -2925,11 +3275,11 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -2937,10 +3287,10 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -2990,9 +3340,9 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3008,7 +3358,7 @@ type AudioObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3068,7 +3418,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3139,7 +3489,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3172,11 +3522,11 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3184,10 +3534,10 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3237,9 +3587,9 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3255,7 +3605,7 @@ type DataDownload implements MetadataInterface & ThingInterface & ProvenanceEnti
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3321,7 +3671,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   ##################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3392,7 +3742,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3425,11 +3775,11 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3437,10 +3787,10 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3490,9 +3840,9 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3508,7 +3858,7 @@ type Dataset implements MetadataInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3574,7 +3924,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3645,7 +3995,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3678,11 +4028,11 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3690,10 +4040,10 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3743,9 +4093,9 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -3761,7 +4111,7 @@ type ImageObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -3827,7 +4177,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -3899,7 +4249,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -3932,11 +4282,11 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -3944,10 +4294,10 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -3997,9 +4347,10 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workSample: CreativeWorkInterface @cypher(statement:"MATCH (this)-[r:WORK_EXAMPLE]->(c:CreativeWork) RETURN c")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4015,7 +4366,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4033,7 +4384,7 @@ type MusicComposition implements MetadataInterface & ThingInterface & Provenance
   ###################################
   ### MusicComposition properties ###
   "https://schema.org/composer"
-  composer: [Person] @relation(name: "COMPOSER", direction: "OUT")
+  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "OUT")
   "https://schema.org/firstPerformance"
   firstPerformance: Event @relation(name: "FIRST_PERFORMANCE", direction: "OUT")
   "https://schema.org/includedComposition"
@@ -4093,7 +4444,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4164,7 +4515,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4197,11 +4548,11 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4209,10 +4560,10 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4262,9 +4613,9 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4280,7 +4631,7 @@ type MusicAlbum implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4350,7 +4701,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4421,7 +4772,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4454,11 +4805,11 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4466,10 +4817,10 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4519,9 +4870,9 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4537,7 +4888,7 @@ type MusicPlaylist implements MetadataInterface & ThingInterface & ProvenanceEnt
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4599,7 +4950,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4670,7 +5021,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4703,11 +5054,11 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4715,10 +5066,10 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -4768,9 +5119,9 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -4786,7 +5137,7 @@ type MusicRecording implements MetadataInterface & ThingInterface & ProvenanceEn
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -4854,7 +5205,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -4925,7 +5276,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [Article] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -4958,11 +5309,11 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWork] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -4970,10 +5321,10 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWork] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWork @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -5023,9 +5374,9 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/creativeWork"
-  workExample: [CreativeWork] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWork] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -5041,7 +5392,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWork] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -5065,7 +5416,7 @@ type VideoObject implements MetadataInterface & ThingInterface & ProvenanceEntit
   "https://schema.org/director"
   director: [Person] @relation(name: "DIRECTOR", direction: "IN")
   "https://schema.org/musicBy"
-  musicBy: [MusicGroup] @relation(name: "MUSIC_BY", direction: "OUT")
+  musicBy: [Performer] @relation(name: "MUSIC_BY", direction: "OUT")
   "https://schema.org/thumbnail"
   thumbnail: [ImageObject] @relation(name: "THUMBNAIL", direction: "OUT")
   "https://schema.org/transcript"
@@ -5118,7 +5469,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5201,7 +5552,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [Organization] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -5219,7 +5570,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [Person] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -5235,7 +5586,7 @@ type MusicGroup implements MetadataInterface & ThingInterface & ProvenanceEntity
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [Organization] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID
@@ -5297,7 +5648,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5351,7 +5702,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -5361,11 +5712,11 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -5415,7 +5766,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
-  additionalType: String
+  additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
@@ -5469,7 +5820,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [Person] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -5479,11 +5830,11 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [Person] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: [CreativeWork] @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
@@ -5497,7 +5848,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/replacee"
   replacee: CreativeWork @relation(name: "REPLACEE", direction: "OUT")
   "https://schema.org/replacer"
-  replacer: Person @relation(name: "REPLACER", direction: "OUT")
+  replacer: ThingInterface @relation(name: "REPLACER", direction: "OUT")
 }
 
 
