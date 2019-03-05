@@ -2,7 +2,7 @@ import { info } from '../index'
 import { driver } from '../driver'
 import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
 import GetQuery from '../queries/GetQuery'
-import SearchQuery from '../queries/SearchQuery';
+import SearchQuery from '../queries/SearchQuery'
 
 export const queryResolvers = {
   Query: {
@@ -75,15 +75,15 @@ export const queryResolvers = {
     Audience (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
     },
-    searchMetadataText(object, params, context, resolveInfo){
-      const queryGenerator = new SearchQuery(params, resolveInfo);
-      const query = queryGenerator.query;
+    searchMetadataText (object, params, context, resolveInfo) {
+      const queryGenerator = new SearchQuery(params, resolveInfo)
+      const query = queryGenerator.query
       info(`query: ${query}`)
 
       // fetch and process search results
-      let session = driver.session();
+      let session = driver.session()
       return session.run(query, params)
-        .then( result => {
+        .then(result => {
           return result.records.map(
             record => {
               let nodeData = retrieveNodeData(record.get('node'))
