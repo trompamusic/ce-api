@@ -1,5 +1,3 @@
-import { debug } from '../index'
-
 class SearchQuery {
   constructor (params, resolveInfo) {
     this.params = params
@@ -10,7 +8,6 @@ class SearchQuery {
   }
 
   get query () {
-    // compose query
     return [
       `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._getSubStringClause())}")`,
       `YIELD \`node\`, \`score\``,
@@ -50,7 +47,6 @@ class SearchQuery {
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
       const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
-      debug(typeNames);
       // const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
       typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
     }
