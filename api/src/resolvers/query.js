@@ -87,7 +87,7 @@ export const queryResolvers = {
           return result.records.map(
             record => {
               let nodeData = retrieveNodeData(record.get('node'))
-              return hydrateNodeSearchScore(nodeData, record.get('weight'))
+              return hydrateNodeSearchScore(nodeData, record.get('score'))
             })
         })
         .catch(function (error) {

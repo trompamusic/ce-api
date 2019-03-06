@@ -12,25 +12,33 @@ class SearchQuery {
   }
 
   _generateQuery () {
-    // If all metadataInterfaced types AND all metadata textfields need to be evaluated: [substring]~ suffies
-    const subStringClause = `${this.params.substring}~`
-    let indexQueryClause = `${this.params.substring}~`
-
-    // if only a subset of types and/or fields need to be evaluated: build query clause for [substring]~ on all eligible types/fields
+    // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
+    const subStringClause = `'${this.params.substring.replace(/[^A-Za-z0-9]/g,' ')}~'`
+    let indexQueryClause = subStringClause
     if (this.doEvaluateTypeSubset || this.doEvaluateFieldSubset) {
-      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return type.name })
       const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => { return field.name })
       let queryClauses = []
-      typeNames.map(type => {
-        fieldNames.map(field => {
-          queryClauses.push(`${type}.${field}:${subStringClause}`)
-        })
+      fieldNames.map(field => {
+        queryClauses.push(`${field}:${subStringClause}`)
       })
-      // overwrite indexQueryClause with concatenated query clauses
       indexQueryClause = queryClauses.join(' OR ')
     }
 
-    return `CALL apoc.index.search("metadata", "${indexQueryClause}") YIELD \`node\`, \`weight\` RETURN \`node\`, \`weight\` ORDER BY \`weight\` DESC SKIP $offset LIMIT $first`
+    // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
+    let typeClause = '';
+    if (this.doEvaluateTypeSubset) {
+      const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
+      typeClause = `MATCH (n) WHERE HEAD(labels(n)) IN [${typeNames.join(', ')}]`
+    }
+
+    // compose query
+    return [
+      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${indexQueryClause}")`,
+      `YIELD \`node\`, \`score\``,
+      typeClause,
+      `RETURN n as node, HEAD(labels(node)) as \`label\`, \`score\``,
+      `ORDER BY \`score\` DESC`
+    ].join(' ')
   }
 }
 
