@@ -13,7 +13,7 @@ class SearchQuery {
 
   _generateQuery () {
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
-    const subStringClause = `'${this.params.substring.replace(/[^A-Za-z0-9]/g,' ')}~'`
+    const subStringClause = `'${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~'`
     let indexQueryClause = subStringClause
     if (this.doEvaluateTypeSubset || this.doEvaluateFieldSubset) {
       const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => { return field.name })
@@ -25,7 +25,7 @@ class SearchQuery {
     }
 
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
-    let typeClause = '';
+    let typeClause = ''
     if (this.doEvaluateTypeSubset) {
       const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
       typeClause = `MATCH (n) WHERE HEAD(labels(n)) IN [${typeNames.join(', ')}]`
