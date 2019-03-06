@@ -10,16 +10,27 @@ class SearchQuery {
   }
 
   get query () {
-    return this._generateQuery()
+    // compose query
+    return [
+      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._getSubStringClause())}")`,
+      `YIELD \`node\`, \`score\``,
+      this._generateTypeClause(),
+      `RETURN \`node\`, HEAD(labels(node)) as \`label\`, \`score\``,
+      `ORDER BY \`score\` DESC`
+    ].join(' ')
   }
 
-  _generateQuery () {
+  _getSubStringClause () {
     // prepare search substring
     let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
     if (subStringClause.includes(' ')) {
       subStringClause = `'subStringClause'`
     }
 
+    return subStringClause
+  }
+
+  _generateIndexQueryClause (subStringClause) {
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
     let indexQueryClause = subStringClause
     if (this.doEvaluateFieldSubset) {
@@ -31,6 +42,10 @@ class SearchQuery {
       indexQueryClause = queryClauses.join(' OR ')
     }
 
+    return indexQueryClause
+  }
+
+  _generateTypeClause () {
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
@@ -40,14 +55,7 @@ class SearchQuery {
       typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
     }
 
-    // compose query
-    return [
-      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${indexQueryClause}")`,
-      `YIELD \`node\`, \`score\``,
-      typeClause,
-      `RETURN \`node\`, HEAD(labels(node)) as \`label\`, \`score\``,
-      `ORDER BY \`score\` DESC`
-    ].join(' ')
+    return typeClause
   }
 }
 
