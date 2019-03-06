@@ -182,7 +182,7 @@ class GetQuery {
 
     switch (relationDetails['direction'].toString().toUpperCase()) {
       case 'OUT':
-        clause += '>'
+        clause = `${clause}>`
         break
       case 'IN':
         clause = `<${clause}`
