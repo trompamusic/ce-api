@@ -1,3 +1,5 @@
+import { debug } from '../index'
+
 class SearchQuery {
   constructor (params, resolveInfo) {
     this.params = params
@@ -12,10 +14,15 @@ class SearchQuery {
   }
 
   _generateQuery () {
+    // prepare search substring
+    let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
+    if (subStringClause.includes(' ')) {
+      subStringClause = `'subStringClause'`
+    }
+
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
-    const subStringClause = `'${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~'`
     let indexQueryClause = subStringClause
-    if (this.doEvaluateTypeSubset || this.doEvaluateFieldSubset) {
+    if (this.doEvaluateFieldSubset) {
       const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => { return field.name })
       let queryClauses = []
       fieldNames.map(field => {
@@ -27,8 +34,10 @@ class SearchQuery {
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
-      const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
-      typeClause = `MATCH (n) WHERE HEAD(labels(n)) IN [${typeNames.join(', ')}]`
+      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
+      debug(typeNames);
+      // const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
+      typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
     }
 
     // compose query
@@ -36,7 +45,7 @@ class SearchQuery {
       `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${indexQueryClause}")`,
       `YIELD \`node\`, \`score\``,
       typeClause,
-      `RETURN n as node, HEAD(labels(node)) as \`label\`, \`score\``,
+      `RETURN \`node\`, HEAD(labels(node)) as \`label\`, \`score\``,
       `ORDER BY \`score\` DESC`
     ].join(' ')
   }
