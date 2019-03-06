@@ -9,7 +9,7 @@ class SearchQuery {
 
   get query () {
     return [
-      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._getSubStringClause())}")`,
+      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._generateSubStringClause())}")`,
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
       `RETURN \`node\`, HEAD(labels(node)) as \`label\`, \`score\``,
@@ -17,7 +17,7 @@ class SearchQuery {
     ].join(' ')
   }
 
-  _getSubStringClause () {
+  _generateSubStringClause () {
     // prepare search substring
     let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
     if (subStringClause.includes(' ')) {
