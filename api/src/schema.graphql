@@ -448,11 +448,11 @@ enum ProvenanceAgentInterfaceType {
 
 enum AvailableLanguage {
   en
-  es
-  ca
-  nl
-  de
-  fr
+#  es
+#  ca
+#  nl
+#  de
+#  fr
 }
 
 enum AccessMode {
