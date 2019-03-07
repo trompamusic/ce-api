@@ -12,7 +12,7 @@ class SearchQuery {
       `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._generateSubStringClause())}")`,
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
-      `RETURN \`node\`, HEAD(labels(node)) as \`label\`, \`score\``,
+      `RETURN \`node\`, HEAD(labels(node)) as \`_schemaType\`, \`score\``,
       `ORDER BY \`score\` DESC`
     ].join(' ')
   }
@@ -47,7 +47,6 @@ class SearchQuery {
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
       const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
-      // const typeNames = this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
       typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
     }
 
