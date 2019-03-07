@@ -3,29 +3,29 @@
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
   searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
-  Person(identifier: String, offset: Int, first: Int):[Person]
-  CreativeWork(identifier: String, offset: Int, first: Int):[CreativeWork]
-  Article(identifier: String, offset: Int, first: Int):[Article]
-  DigitalDocument(identifier: String, offset: Int, first: Int):[DigitalDocument]
-  MediaObject(identifier: String, offset: Int, first: Int):[MediaObject]
-  Review(identifier: String, offset: Int, first: Int):[Review]
-  AudioObject(identifier: String, offset: Int, first: Int):[AudioObject]
-  DataDownload(identifier: String, offset: Int, first: Int):[DataDownload]
-  Dataset(identifier: String, offset: Int, first: Int):[Dataset]
-  ImageObject(identifier: String, offset: Int, first: Int):[ImageObject]
-  MusicComposition(identifier: String, offset: Int, first: Int):[MusicComposition]
-  MusicPlaylist(identifier: String, offset: Int, first: Int):[MusicPlaylist]
-  MusicAlbum(identifier: String, offset: Int, first: Int):[MusicAlbum]
-  MusicRecording(identifier: String, offset: Int, first: Int):[MusicRecording]
-  VideoObject(identifier: String, offset: Int, first: Int):[VideoObject]
-  Event(identifier: String, offset: Int, first: Int):[Event]
-  Organization(identifier: String, offset: Int, first: Int):[Organization]
-  MusicGroup(identifier: String, offset: Int, first: Int):[MusicGroup]
-  Product(identifier: String, offset: Int, first: Int):[Product]
-  Place(identifier: String, offset: Int, first: Int):[Place]
-  Occupation(identifier: String, offset: Int, first: Int):[Occupation]
-  DigitalDocumentPermission(identifier: String, offset: Int, first: Int):[DigitalDocumentPermission]
-  Audience(identifier: String, offset: Int, first: Int):[Audience]
+  Person(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Person]
+  CreativeWork(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[CreativeWork]
+  Article(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Article]
+  DigitalDocument(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[DigitalDocument]
+  MediaObject(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MediaObject]
+  Review(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Review]
+  AudioObject(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[AudioObject]
+  DataDownload(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[DataDownload]
+  Dataset(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Dataset]
+  ImageObject(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[ImageObject]
+  MusicComposition(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MusicComposition]
+  MusicPlaylist(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MusicPlaylist]
+  MusicAlbum(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MusicAlbum]
+  MusicRecording(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MusicRecording]
+  VideoObject(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[VideoObject]
+  Event(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Event]
+  Organization(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Organization]
+  MusicGroup(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[MusicGroup]
+  Product(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Product]
+  Place(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Place]
+  Occupation(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Occupation]
+  DigitalDocumentPermission(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[DigitalDocumentPermission]
+  Audience(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Audience]
 }
 
 type Mutation {
@@ -448,11 +448,11 @@ enum ProvenanceAgentInterfaceType {
 
 enum AvailableLanguage {
   en
-  es
-  ca
-  nl
-  de
-  fr
+#  es
+#  ca
+#  nl
+#  de
+#  fr
 }
 
 enum AccessMode {
