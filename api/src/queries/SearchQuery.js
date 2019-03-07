@@ -21,7 +21,7 @@ class SearchQuery {
     // prepare search substring
     let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
     if (subStringClause.includes(' ')) {
-      subStringClause = `'subStringClause'`
+      subStringClause = `'${subStringClause}'`
     }
 
     return subStringClause
