@@ -33,6 +33,7 @@ type Query {
 type Mutation {
   addChannel(name: String!): Channel
   addMessage(message: MessageInput!): Message
+  addAsyncProcess(asyncProcess: addAsyncProcessInput!): AsyncProcess
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
@@ -78,6 +79,7 @@ input MessageInput{
 
 type Subscription {
   messageAdded(channelId: ID!): Message
+  asyncProcessStatus(channelId: ID!): AsyncProcessStatus
 }
 
 type Channel {
@@ -90,21 +92,26 @@ type Message {
   text: String
 }
 
+input AsyncProcessInput{
+  channelId: ID!
+  processType: AsyncProcessType!
+}
+
 #type Message {
 #  text: String!
 #}
 
-#type AsyncProcessSubscription {
+#type AsyncProcess {
 #  asyncProcess(processName: String!): AsyncProcessResponse
 #}
 #
-#type AsyncProcessResponse {
-#  identifier: String!
-#  processName: String!
-#  status: AsyncProcessStatus
-#  result: URL
-#  error: String
-#}
+type AsyncProcessStatus {
+  actionIdentifier: String!
+  processType: String!
+  status: AsyncProcessStatus
+  result: URL
+  error: String
+}
 #
 #enum AsyncProcessStatus {
 #  accepted

@@ -6,6 +6,14 @@ let nextId = 3
 
 export const mutationResolvers = {
   Mutation: {
+    addAsyncProcess: (root, { asyncProcess }) => {
+      const channel = channels.find(channel => channel.id === asyncProcess.channelId)
+      if (!channel) {
+        throw new Error('Channel does not exist')
+      }
+
+      const newAsyncProcess = { id: String(nextId++), text: message.text }
+    },
     addMessage: (root, { message }) => {
       const channel = channels.find(channel => channel.id === message.channelId)
       if (!channel) {

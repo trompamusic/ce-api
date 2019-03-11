@@ -5,14 +5,10 @@ import { mutationResolvers } from './resolvers/mutation'
 import { subscriptionResolvers } from './resolvers/subscription'
 import { PubSub } from 'graphql-subscriptions'
 
-export const channels = [{
-  id: '1',
-  name: 'baseball',
-  messages: [{
-    id: '2',
-    text: 'baseball is life'
-  }]
-}]
+export const channels = [
+  { id: '1', name: 'baseball', messages: [{ id: '2', text: 'baseball is life' }] },
+  { id: 'essentia_1234', name: 'Essentia process', messages: [] }
+  ]
 
 export const pubsub = new PubSub()
 
