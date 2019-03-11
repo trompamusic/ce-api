@@ -1,9 +1,24 @@
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
-import { retrieveNodeData } from '../resolvers'
+import { retrieveNodeData, channels, pubsub } from '../resolvers'
+
+let nextId = 3
 
 export const mutationResolvers = {
   Mutation: {
+    addMessage: (root, { message }) => {
+      const channel = channels.find(channel => channel.id === message.channelId)
+      if (!channel) {
+        throw new Error('Channel does not exist')
+      }
+
+      const newMessage = { id: String(nextId++), text: message.text }
+      channel.messages.push(newMessage)
+
+      pubsub.publish('messageAdded', { messageAdded: newMessage, channelId: message.channelId })
+
+      return newMessage
+    },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
       return runAdd(params)
     },
