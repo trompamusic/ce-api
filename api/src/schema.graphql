@@ -35,7 +35,7 @@ type Mutation {
   addChannel(name: String!): Channel
   addMessage(message: MessageInput!): Message
   CreateAsyncProcess(identifier: ID, processName: ProcessType): AsyncProcess
-  CreateControlAction(identifier: ID, target: ProcessType, description: String, object:[String]): ControlAction
+  CreateControlAction(identifier: ID, target: ProcessType, description: String, object:[String]): ThingInterface
   UpdateControlAction(identifier: ID, actionStatus: AsyncProcessStatus): ControlAction
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
