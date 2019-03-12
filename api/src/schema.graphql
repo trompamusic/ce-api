@@ -3,6 +3,7 @@
 type Query {
   channels: [Channel]
   channel(id: ID!): Channel
+  AsyncProcess(processId: String, offset: Int = 0, first: Int = 0): [AsyncProcess]
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
   searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
   Person(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Person]
@@ -33,7 +34,8 @@ type Query {
 type Mutation {
   addChannel(name: String!): Channel
   addMessage(message: MessageInput!): Message
-  addAsyncProcess(asyncProcess: addAsyncProcessInput!): AsyncProcess
+  CreateAsyncProcess(identifier: ID, processName: ProcessType): AsyncProcess
+  CreateControlAction(identifier: ID, target: ProcessType, description: String, object:[String]): ControlAction
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
@@ -79,7 +81,7 @@ input MessageInput{
 
 type Subscription {
   messageAdded(channelId: ID!): Message
-  asyncProcessStatus(channelId: ID!): AsyncProcessStatus
+  asyncProcessStatus(processId: ID!): AsyncProcessStatus
 }
 
 type Channel {
@@ -87,38 +89,30 @@ type Channel {
   name: String
   messages: [Message]!
 }
+
 type Message {
   id: ID!
   text: String
 }
 
-input AsyncProcessInput{
-  channelId: ID!
-  processType: AsyncProcessType!
-}
-
-#type Message {
-#  text: String!
-#}
-
-#type AsyncProcess {
-#  asyncProcess(processName: String!): AsyncProcessResponse
-#}
-#
-type AsyncProcessStatus {
-  actionIdentifier: String!
-  processType: String!
+type AsyncProcess {
+  identifier: ID
+  processName: ProcessType!
   status: AsyncProcessStatus
   result: URL
   error: String
 }
-#
-#enum AsyncProcessStatus {
-#  accepted
-#  running
-#  complete
-#  error
-#}
+
+enum ProcessType {
+  essentia
+}
+
+enum AsyncProcessStatus {
+  accepted
+  running
+  complete
+  error
+}
 
 input _ThingInterfaceInput {
   identifier: String!
@@ -610,7 +604,7 @@ interface ThingInterface {
   "https://schema.org/alternateName"
   alternateName: String
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String!
+  description: String
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
@@ -891,12 +885,12 @@ interface ActionInterface {
   "https://schema.org/error"
   error: [ThingInterface]
   "https://schema.org/instrument"
-  instrument: String
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
-  "https://schema.org/participant"
+#  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
+#  "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
   result: ThingInterface @relation(name: "RESULT", direction: "OUT")
@@ -1212,7 +1206,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/error"
   error: [ThingInterface]
   "https://schema.org/instrument"
-  instrument: String
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
@@ -5761,7 +5755,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   "https://schema.org/error"
   error: [ThingInterface]
   "https://schema.org/instrument"
-  instrument: String
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
@@ -5879,7 +5873,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/error"
   error: [ThingInterface]
   "https://schema.org/instrument"
-  instrument: String
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
@@ -5902,6 +5896,80 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   replacee: CreativeWork @relation(name: "REPLACEE", direction: "OUT")
   "https://schema.org/replacer"
   replacer: ThingInterface @relation(name: "REPLACER", direction: "OUT")
+}
+
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/ControlAction,https://www.w3.org/TR/prov-o/#Activity"
+type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWork] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  ##############################################
+  ### ProvenanceActivityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#startedAtTime"
+  startedAtTime: _Neo4jDateTime
+  "https://www.w3.org/TR/prov-o/#wasInformedBy"
+  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#endedAtTime"
+  endedAtTime: _Neo4jDateTime
+  ##################################
+  ### ActionInterface properties ###
+  "https://schema.org/actionStatus"
+  actionStatus: String
+  "https://schema.org/agent"
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
+  "https://schema.org/endTime"
+  endTime: _Neo4jDateTime
+  "https://schema.org/error"
+  error: [ThingInterface]
+  "https://schema.org/instrument"
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
+  "https://schema.org/location"
+  location: [Place] @relation(name: "LOCATION", direction: "OUT")
+  "https://schema.org/object"
+  object: [String]
+  "https://schema.org/participant"
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
+  "https://schema.org/result"
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
+  "https://schema.org/startTime"
+  startTime: _Neo4jDateTime
+  "https://schema.org/target"
+  target: ProcessType!
 }
 
 

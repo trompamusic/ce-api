@@ -1,18 +1,30 @@
+import { debug, warning } from '../index'
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
-import { retrieveNodeData, channels, pubsub } from '../resolvers'
+import { retrieveNodeData, channels, asyncProcesses, pubsub } from '../resolvers'
+import { neo4jgraphql, cypherMutation } from 'neo4j-graphql-js'
 
 let nextId = 3
 
 export const mutationResolvers = {
   Mutation: {
-    addAsyncProcess: (root, { asyncProcess }) => {
-      const channel = channels.find(channel => channel.id === asyncProcess.channelId)
-      if (!channel) {
-        throw new Error('Channel does not exist')
-      }
+    CreateAsyncProcess (object, params, ctx, resolveInfo) {
+      debug('CreateAsyncProcess')
+      // const retrievedParameters = {identifier: params.asyncProcess.identifier, processType: params.asyncProcess.processType}
+      debug(params)
+      // let query = cypherMutation(params.asyncProcess, ctx, resolveInfo)
+      let query = generateAsyncProcessQuery(params)
+      debug(query)
+      return runQuery(query, 'asyncProcess')
+    },
+    CreateControlAction (object, params, ctx, resolveInfo) {
+      debug('CreateControlAction')
 
-      const newAsyncProcess = { id: String(nextId++), text: message.text }
+      const query = generateControlActionQuery(params)
+      debug(query)
+      return runQuery(query, 'ControlAction')
+
+      // return neo4jgraphql(object, params, ctx, resolveInfo)
     },
     addMessage: (root, { message }) => {
       const channel = channels.find(channel => channel.id === message.channelId)
@@ -187,16 +199,34 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-const runQuery = function (query) {
+const generateAsyncProcessQuery = function (params) {
+  return [
+    `CREATE (\`asyncProcess\`:\`AsyncProcess\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, processName: "${params.processName}"})`,
+    `RETURN \`asyncProcess\` { .identifier, .processName } AS \`_payload\``
+  ].join(' ')
+}
+
+const generateControlActionQuery = function (params) {
+  let objectValues = params.object
+  if (Array.isArray(objectValues) && objectValues.length > 0) {
+    objectValues = `["${objectValues.join('", "')}"]`
+  } else {
+    warning('generateControlActionQuery encountered empty object array')
+    objectValues = null
+  }
+  debug(objectValues)
+  return [
+    `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, description: "${params.description}"})`,
+    `RETURN \`controlAction\` { .identifier, .target, .object, .description } AS \`_payload\``
+  ].join(' ')
+}
+
+const runQuery = function (query, queryType) {
   let session = driver.session()
   let promise = session.run(query)
     .then(result => {
       let rt = result.records.map(record => {
-        const payload = record.get('_payload')
-        return {
-          from: retrieveNodeData(payload.from),
-          to: retrieveNodeData(payload.to)
-        }
+        return retrievePayload(record.get('_payload'), queryType)
       })
       return rt[0]
     })
@@ -205,4 +235,21 @@ const runQuery = function (query) {
     })
 
   return promise
+}
+
+const retrievePayload = function (payload, payloadType) {
+  switch (payloadType) {
+    case 'add':
+    case 'remove':
+      return {
+        from: retrieveNodeData(payload.from),
+        to: retrieveNodeData(payload.to)
+      }
+    case 'asyncProcess':
+      return payload
+    case 'ControlAction':
+      return payload
+    default:
+      warning('Unknown payloadType encountered')
+  }
 }
