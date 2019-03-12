@@ -13,8 +13,13 @@ export const mutationResolvers = {
       return runQuery(query, 'asyncProcess')
     },
     CreateControlAction (object, params, ctx, resolveInfo) {
-      const query = generateControlActionQuery(params)
-      return runQuery(query, 'ControlAction')
+      const query = generateCreateControlActionQuery(params)
+      return runQuery(query, 'CreateControlAction')
+    },
+    UpdateControlAction (object, params, ctx, resolveInfo) {
+      debug('UpdateControlAction')
+      const query = generateUpdateControlActionQuery(params)
+      return runQuery(query, 'UpdateControlAction')
     },
     addMessage: (root, { message }) => {
       const channel = channels.find(channel => channel.id === message.channelId)
@@ -196,7 +201,7 @@ const generateAsyncProcessQuery = function (params) {
   ].join(' ')
 }
 
-const generateControlActionQuery = function (params) {
+const generateCreateControlActionQuery = function (params) {
   if (!Array.isArray(params.object) || params.object.length === 0) {
     throw Error('ControlAction.object cannot be empty')
   }
@@ -205,6 +210,14 @@ const generateControlActionQuery = function (params) {
 
   return [
     `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, description: "${params.description}"})`,
+    `RETURN \`controlAction\` AS \`_payload\``
+  ].join(' ')
+}
+
+const generateUpdateControlActionQuery = function (params) {
+  return [
+    `MATCH (\`controlAction\`:\`ControlAction\`{identifier: "${params.identifier}"})`,
+    `SET \`controlAction\` += {actionStatus:"${params.actionStatus}"}`,
     `RETURN \`controlAction\` AS \`_payload\``
   ].join(' ')
 }
@@ -235,7 +248,9 @@ const retrievePayload = function (payload, payloadType) {
       }
     case 'asyncProcess':
       return payload
-    case 'ControlAction':
+    case 'CreateControlAction':
+      return payload.properties
+    case 'UpdateControlAction':
       return payload.properties
     default:
       warning('Unknown payloadType encountered')

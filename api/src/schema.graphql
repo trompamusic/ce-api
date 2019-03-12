@@ -36,6 +36,7 @@ type Mutation {
   addMessage(message: MessageInput!): Message
   CreateAsyncProcess(identifier: ID, processName: ProcessType): AsyncProcess
   CreateControlAction(identifier: ID, target: ProcessType, description: String, object:[String]): ControlAction
+  UpdateControlAction(identifier: ID, actionStatus: AsyncProcessStatus): ControlAction
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
@@ -74,14 +75,15 @@ type Mutation {
   RemoveProvenanceActivityInterfaceActionInterface(from:_ProvenanceActivityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceActivityInterfaceWasInformedByPayload
 }
 
-input MessageInput{
-  channelId: ID!
-  text: String
-}
-
 type Subscription {
   messageAdded(channelId: ID!): Message
   asyncProcessStatus(processId: ID!): AsyncProcessStatus
+  nodeMutation(identifier: String!): ThingInterface
+}
+
+input MessageInput{
+  channelId: ID!
+  text: String
 }
 
 type Channel {
