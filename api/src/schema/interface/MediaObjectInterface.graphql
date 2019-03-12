@@ -1,0 +1,33 @@
+"https://schema.org/MediaObject"
+interface MediaObjectInterface {
+  "https://schema.org/associatedArticle"
+  associatedArticle: [Article] @relation(name: "ASSOCIATED_ARTICLE", direction: "IN")
+  "https://schema.org/bitrate"
+  bitrate: String
+  "https://schema.org/contentSize"
+  contentSize: String
+  "https://schema.org/contentUrl"
+  contentUrl: URL
+  "https://schema.org/duration"
+  duration: Duration
+  "https://schema.org/embedUrl"
+  embedUrl: URL
+  "https://schema.org/encodesCreativeWork"
+  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  "https://schema.org/encodingFormat"
+  encodingFormat: String
+  "https://schema.org/height"
+  height: Int
+  "https://schema.org/playerType"
+  playerType: String
+  "https://schema.org/productionCompany"
+  productionCompany: [Organization] @relation(name: "PRODUCTION_COMPANY", direction: "IN")
+  "https://schema.org/regionsAllowed"
+  regionsAllowed: [Place] @relation(name: "REGIONS_ALLOWED", direction: "OUT")
+  "https://schema.org/requiresSubscription"
+  requiresSubscription: Boolean
+  "https://schema.org/uploadDate"
+  uploadDate: _Neo4jDate
+  "https://schema.org/width"
+  width: Int
+}

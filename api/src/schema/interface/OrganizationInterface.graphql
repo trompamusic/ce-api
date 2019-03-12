@@ -1,0 +1,81 @@
+"https://schema.org/Organization"
+interface OrganizationInterface {
+  #actionableFeedbackPolicy
+  "https://schema.org/address"
+  address: String
+  #aggregateRating: AggregateRating
+  "https://schema.org/alumni"
+  alumni: [Person] @relation(name: "ALUMNI", direction: "IN")
+  #areaServed
+  "https://schema.org/award"
+  award: String
+  "https://schema.org/brand"
+  brand: Organization @relation(name: "BRAND", direction: "IN")
+  #contactPoint ContactPoint
+  #correctionsPolicy URL
+  #department: OrganizationInterface @relation(name: "DEPARTMENT", direction: "IN")
+  "https://schema.org/dissolutionDate"
+  dissolutionDate: _Neo4jDate
+  #diversityPolicy
+  #diversityStaffingReport
+  #duns	Text
+  "https://schema.org/email"
+  email: String
+  "https://schema.org/employee"
+  employee: [Person] @relation(name: "EMPLOYEE", direction: "IN")
+  #ethicsPolicy
+  "https://schema.org/event"
+  event: [Event] @relation(name: "EVENT", direction: "OUT")
+  #faxNumber	Text
+  "https://schema.org/founder"
+  founder: [Person] @relation(name: "FOUNDER", direction: "IN")
+  "https://schema.org/foundingDate"
+  foundingDate: _Neo4jDate
+  "https://schema.org/foundingLocation"
+  foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
+  "https://schema.org/funder"
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  "https://schema.org/globalLocationNumber"
+  globalLocationNumber: String
+  #hasOfferCatalog: OfferCatalog
+  #hasPOS: Place
+  #isicV4
+  #knowsAbout
+  #knowsLanguage
+  "https://schema.org/legalName"
+  legalName: String!
+  "https://schema.org/leiCode"
+  leiCode: String
+  "https://schema.org/location"
+  location: [Place] @relation(name: "LOCATION", direction: "IN")
+  "https://schema.org/logo"
+  logo: URL
+  #makesOffer
+  "https://schema.org/member"
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
+  "https://schema.org/memberOf"
+  memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
+  #naics
+  "https://schema.org/numberOfEmployees"
+  numberOfEmployees: Int
+  #ownershipFundingInfo: URL
+  #owns
+  "https://schema.org/parentOrganization"
+  parentOrganization: Organization @relation(name: "PARENT_ORGANIZATION", direction: "IN")
+  #"https://schema.org/publishingPrinciples"
+  #publishingPrinciples: URL
+  "https://schema.org/review"
+  review: [Review]
+  #seeks
+  "https://schema.org/sponsor"
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
+  "https://schema.org/subOrganization"
+  subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
+  #taxID
+  #"https://schema.org/telephone"
+  #telephone: String
+  "https://schema.org/unnamedSourcesPolicy"
+  unnamedSourcesPolicy: URL
+  #"https://schema.org/vatID"
+  #vatID: String
+}

@@ -1,0 +1,81 @@
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Intangible"
+type Intangible implements MetadataInterface & ThingInterface & ProvenanceEntityInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  contributor: String!
+  "http://purl.org/dc/elements/1.1/coverage"
+  coverage: String
+  "http://purl.org/dc/elements/1.1/creator"
+  creator: String!
+  "http://purl.org/dc/elements/1.1/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/format"
+  format: String!
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/language"
+  language: AvailableLanguage!
+  "http://purl.org/dc/elements/1.1/publisher"
+  publisher: String
+  "http://purl.org/dc/elements/1.1/relation"
+  relation: String
+  "http://purl.org/dc/elements/1.1/rights"
+  rights: String
+  "http://purl.org/dc/elements/1.1/source"
+  source: String!
+  "http://purl.org/dc/elements/1.1/subject"
+  subject: String!
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  _searchScore: Float
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWork] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [Intangible]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [Intangible]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [Intangible]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [Intangible]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+}

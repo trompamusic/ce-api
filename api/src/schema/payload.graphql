@@ -1,0 +1,89 @@
+type _AddThingInterfaceThingInterfacePayload {
+  from: ThingInterfaced
+  to: ThingInterfaced
+}
+
+type _AddThingInterfaceCreativeWorkInterfacePayload {
+  from: ThingInterfaced
+  to: CreativeWorkInterfaced
+}
+
+type _AddThingInterfacePotentialActionPayload {
+  from: ThingInterfaced
+  to: ActionInterfaced
+}
+
+type _AddCreativeWorkInterfaceLegalPersonPayload {
+  from: CreativeWorkInterfaced
+  to: LegalPerson
+}
+
+type _AddOrganizationInterfaceLegalPersonPayload {
+  from: OrganizationInterfaced
+  to: LegalPerson
+}
+
+type _AddActionInterfaceThingInterfacePayload {
+  from: ActionInterfaced
+  to: ThingInterfaced
+}
+
+type _AddActionInterfaceLegalPersonPayload {
+  from: ActionInterfaced
+  to: LegalPerson
+}
+
+type _AddDigitalDocumentPermissionLegalPersonPayload {
+  from: DigitalDocumentPermission
+  to: LegalPerson
+}
+
+type _AddCreativeWorkInterfaceCreativeWorkInterfacePayload {
+  from: CreativeWorkInterfaced
+  to: CreativeWorkInterfaced
+}
+
+type _AddMediaObjectInterfaceCreativeWorkInterfacePayload {
+  from: MediaObjectInterfaced
+  to: CreativeWorkInterfaced
+}
+
+type _AddEventComposerPayload {
+  from: Event
+  to: LegalPerson
+}
+
+type _AddEventPerformerPayload {
+  from: Event
+  to: Performer
+}
+
+type _AddVideoObjectMusicByPayload {
+  from: VideoObject
+  to: Performer
+}
+
+type _AddProvenanceEntityInterfaceThingInterfacePayload {
+  from: ProvenanceEntityInterfaced
+  to: ThingInterfaced
+}
+
+type _AddProvenanceEntityInterfaceWasAttributedToPayload {
+  from: ProvenanceEntityInterfaced
+  to: LegalPerson
+}
+
+type _AddProvenanceEntityInterfaceWasGeneratedByPayload {
+  from: ProvenanceEntityInterfaced
+  to: ActionInterfaced
+}
+
+type _AddProvenanceAgentInterfaceLegalPersonPayload {
+  from: ProvenanceAgentInterfaced
+  to: LegalPerson
+}
+
+type _AddProvenanceActivityInterfaceWasInformedByPayload {
+  from: ProvenanceActivityInterfaced
+  to: ActionInterfaced
+}

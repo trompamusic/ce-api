@@ -1,16 +1,13 @@
 import { makeAugmentedSchema } from 'neo4j-graphql-js'
 import { resolvers } from './resolvers'
-import fs from 'fs'
-import path from 'path'
+import concatenate from 'concatenate'
+import walkSync from 'walk-sync'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
-const typeDefs = fs
-  .readFileSync(
-    process.env.GRAPHQL_SCHEMA || path.join(__dirname, `schema.graphql`)
-  )
-  .toString('utf-8')
+const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true })
+const typeDefs = concatenate.sync(graphQlFiles)
 
 /*
  * Create an executable GraphQL schema object from GraphQL type definitions
@@ -30,3 +27,5 @@ export const schema = makeAugmentedSchema({
     }
   }
 })
+
+

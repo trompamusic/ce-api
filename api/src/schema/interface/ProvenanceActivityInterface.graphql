@@ -1,0 +1,9 @@
+"http://www.w3.org/ns/prov#Activity"
+interface ProvenanceActivityInterface {
+  "https://www.w3.org/TR/prov-o/#startedAtTime"
+  startedAtTime: _Neo4jDateTime
+  "https://www.w3.org/TR/prov-o/#wasInformedBy"
+  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#endedAtTime"
+  endedAtTime: _Neo4jDateTime
+}

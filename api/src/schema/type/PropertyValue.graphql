@@ -1,0 +1,22 @@
+"https://schema.org/PropertyValue"
+type PropertyValue {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  _searchScore: Float
+  ################################
+  ### PropertyValue properties ###
+  #maxValue: Int
+  #measurementTechnique: String
+  #minValue: Number
+  "https://schema.org/propertyID"
+  propertyID: String
+  #unitCode: String
+  #unitText: String
+  "https://schema.org/value"
+  value: Value
+  "https://schema.org/valueReference"
+  valueReference: ValueReference!
+}

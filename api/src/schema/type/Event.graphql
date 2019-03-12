@@ -1,0 +1,139 @@
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Event"
+type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  contributor: String!
+  "http://purl.org/dc/elements/1.1/coverage"
+  coverage: String
+  "http://purl.org/dc/elements/1.1/creator"
+  creator: String!
+  "http://purl.org/dc/elements/1.1/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/format"
+  format: String!
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/language"
+  language: AvailableLanguage!
+  "http://purl.org/dc/elements/1.1/publisher"
+  publisher: String
+  "http://purl.org/dc/elements/1.1/relation"
+  relation: String
+  "http://purl.org/dc/elements/1.1/rights"
+  rights: String
+  "http://purl.org/dc/elements/1.1/source"
+  source: String!
+  "http://purl.org/dc/elements/1.1/subject"
+  subject: String!
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  _searchScore: Float
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWork] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [Event]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [Event]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [Event]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [Event]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  ########################
+  ### Event properties ###
+  "https://schema.org/about"
+  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
+  "https://schema.org/actor"
+  actor: [Person]  @relation(name: "ACTOR", direction: "IN")
+  #aggregateRating: AggregateRating
+  "https://schema.org/attendee"
+  attendee: [Person] @relation(name: "ATTENDEE", direction: "IN")
+  #audience: Audience
+  "https://schema.org/composer"
+  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "IN")
+  #"https://schema.org/contributor"
+  #contributor: LegalPerson @relation(name: "CONTRIBUTOR", direction: "IN")
+  "https://schema.org/director"
+  director: [Person]  @relation(name: "DIRECTOR", direction: "IN")
+  "https://schema.org/doortime"
+  doorTime: _Neo4jDateTime
+  #duration: Duration
+  "https://schema.org/endDate"
+  endDate: _Neo4jDateTime
+  #eventStatus: EventStatusType
+  "https://schema.org/funder"
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  "https://schema.org/inLanguage"
+  inLanguage: String
+  "https://schema.org/isAccessibleForFree"
+  isAccessibleForFree: Boolean
+  "https://schema.org/location"
+  location: [Place] @relation(name: "LOCATION", direction: "OUT")
+  "https://schema.org/maximumAttendeeCapacity"
+  maximumAttendeeCapacity: Int
+  #offers: Offer
+  "https://schema.org/organizer"
+  organizer: [Organization] @relation(name: "ORGANIZER", direction: "IN")
+  "https://schema.org/performer"
+  performer: [Performer] @relation(name: "PERFORMER", direction: "IN")
+  #previousStartDate: _Neo4jDate
+  "https://schema.org/recordedIn"
+  recordedIn: [CreativeWork] @relation(name: "RECORDED_IN", direction: "OUT")
+  #remainingAttendeeCapacity: Integer
+  "https://schema.org/review"
+  review: [Review]
+  "https://schema.org/sponsor"
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
+  "https://schema.org/startDate"
+  startDate: _Neo4jDateTime
+  "https://schema.org/subEvent"
+  subEvent: Event
+  "https://schema.org/superEvent"
+  superEvent: Event
+  "https://schema.org/translator"
+  translator: [Person] @relation(name: "TRANSLATOR", direction: "IN")
+  #typicalAgeRange: Text
+  "https://schema.org/workFeatured"
+  workFeatured: [CreativeWork] @relation(name: "WORK_FEATURED", direction: "OUT")
+  "https://schema.org/workPerformed"
+  workPerformed: [CreativeWork]  @relation(name: "WORK_PERFORMED", direction: "OUT")
+}
