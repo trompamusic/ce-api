@@ -205,8 +205,6 @@ const generateControlActionQuery = function (params) {
 
   return [
     `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, description: "${params.description}"})`,
-    `WITH DISTINCT keys(\`controlAction\`) AS keys, \`controlAction\``,
-    `UNWIND keys AS keyslisting WITH DISTINCT keyslisting as allfields, \`controlAction\``,
     `RETURN \`controlAction\` AS \`_payload\``
   ].join(' ')
 }
