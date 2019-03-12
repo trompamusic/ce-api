@@ -9,22 +9,12 @@ let nextId = 3
 export const mutationResolvers = {
   Mutation: {
     CreateAsyncProcess (object, params, ctx, resolveInfo) {
-      debug('CreateAsyncProcess')
-      // const retrievedParameters = {identifier: params.asyncProcess.identifier, processType: params.asyncProcess.processType}
-      debug(params)
-      // let query = cypherMutation(params.asyncProcess, ctx, resolveInfo)
       let query = generateAsyncProcessQuery(params)
-      debug(query)
       return runQuery(query, 'asyncProcess')
     },
     CreateControlAction (object, params, ctx, resolveInfo) {
-      debug('CreateControlAction')
-
       const query = generateControlActionQuery(params)
-      debug(query)
       return runQuery(query, 'ControlAction')
-
-      // return neo4jgraphql(object, params, ctx, resolveInfo)
     },
     addMessage: (root, { message }) => {
       const channel = channels.find(channel => channel.id === message.channelId)
@@ -207,17 +197,17 @@ const generateAsyncProcessQuery = function (params) {
 }
 
 const generateControlActionQuery = function (params) {
-  let objectValues = params.object
-  if (Array.isArray(objectValues) && objectValues.length > 0) {
-    objectValues = `["${objectValues.join('", "')}"]`
-  } else {
-    warning('generateControlActionQuery encountered empty object array')
-    objectValues = null
+  if (!Array.isArray(params.object) || params.object.length === 0) {
+    throw Error('ControlAction.object cannot be empty')
   }
-  debug(objectValues)
+
+  const objectValues = `["${params.object.join('", "')}"]`
+
   return [
     `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, description: "${params.description}"})`,
-    `RETURN \`controlAction\` { .identifier, .target, .object, .description } AS \`_payload\``
+    `WITH DISTINCT keys(\`controlAction\`) AS keys, \`controlAction\``,
+    `UNWIND keys AS keyslisting WITH DISTINCT keyslisting as allfields, \`controlAction\``,
+    `RETURN \`controlAction\` AS \`_payload\``
   ].join(' ')
 }
 
@@ -248,7 +238,7 @@ const retrievePayload = function (payload, payloadType) {
     case 'asyncProcess':
       return payload
     case 'ControlAction':
-      return payload
+      return payload.properties
     default:
       warning('Unknown payloadType encountered')
   }
