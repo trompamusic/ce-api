@@ -264,7 +264,6 @@ enum OrganizationInterfaceRelationToLegalPerson {
 
 # TODO auto generate
 enum ActionInterfaceRelationToThingInterface {
-  error
   object
   result
 }
