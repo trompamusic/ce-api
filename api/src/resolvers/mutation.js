@@ -1,17 +1,10 @@
-import { debug, warning } from '../index'
+import {debug, info, warning} from '../index'
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
-import { retrieveNodeData, channels, asyncProcesses, pubsub } from '../resolvers'
-import { neo4jgraphql, cypherMutation } from 'neo4j-graphql-js'
-
-let nextId = 3
+import { retrieveNodeData, pubsub } from '../resolvers'
 
 export const mutationResolvers = {
   Mutation: {
-    CreateAsyncProcess (object, params, ctx, resolveInfo) {
-      let query = generateAsyncProcessQuery(params)
-      return runQuery(query, 'asyncProcess')
-    },
     CreateControlAction (object, params, ctx, resolveInfo) {
       const query = generateCreateControlActionQuery(params)
       return runQuery(query, 'CreateControlAction')
@@ -20,19 +13,6 @@ export const mutationResolvers = {
       debug('UpdateControlAction')
       const query = generateUpdateControlActionQuery(params)
       return runQuery(query, 'UpdateControlAction')
-    },
-    addMessage: (root, { message }) => {
-      const channel = channels.find(channel => channel.id === message.channelId)
-      if (!channel) {
-        throw new Error('Channel does not exist')
-      }
-
-      const newMessage = { id: String(nextId++), text: message.text }
-      channel.messages.push(newMessage)
-
-      pubsub.publish('messageAdded', { messageAdded: newMessage, channelId: message.channelId })
-
-      return newMessage
     },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
       return runAdd(params)
@@ -194,13 +174,6 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-const generateAsyncProcessQuery = function (params) {
-  return [
-    `CREATE (\`asyncProcess\`:\`AsyncProcess\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, processName: "${params.processName}"})`,
-    `RETURN \`asyncProcess\` { .identifier, .processName } AS \`_payload\``
-  ].join(' ')
-}
-
 const generateCreateControlActionQuery = function (params) {
   if (!Array.isArray(params.object) || params.object.length === 0) {
     throw Error('ControlAction.object cannot be empty')
@@ -224,6 +197,7 @@ const generateUpdateControlActionQuery = function (params) {
 
 const runQuery = function (query, queryType) {
   let session = driver.session()
+  info(`query: ${query}`)
   let promise = session.run(query)
     .then(result => {
       let rt = result.records.map(record => {

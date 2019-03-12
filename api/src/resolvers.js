@@ -11,10 +11,10 @@ export const channels = [
 ]
 
 // export const asyncProcesses = [
-//   { actionIdentifier: '1', processType: 'essentia', status: 'error', result: null, error: 'nope, did not go well' },
-//   { actionIdentifier: '2', processType: 'essentia', status: 'complete', result: 'https://s3.path.to/result', error: null },
-//   { actionIdentifier: '3', processType: 'essentia', status: 'running', result: null, error: null },
-//   { actionIdentifier: '4', processType: 'essentia', status: 'accepted', result: null, error: null }
+//   { actionIdentifier: '1', ControlActionType: 'essentia', status: 'error', result: null, error: 'nope, did not go well' },
+//   { actionIdentifier: '2', ControlActionType: 'essentia', status: 'complete', result: 'https://s3.path.to/result', error: null },
+//   { actionIdentifier: '3', ControlActionType: 'essentia', status: 'running', result: null, error: null },
+//   { actionIdentifier: '4', ControlActionType: 'essentia', status: 'accepted', result: null, error: null }
 // ]
 
 export const pubsub = new PubSub()

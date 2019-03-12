@@ -1,17 +1,11 @@
 import { info } from '../index'
 import { driver } from '../driver'
-import { retrieveNodeData, hydrateNodeSearchScore, channels, asyncProcesses } from '../resolvers'
+import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
 import GetQuery from '../queries/GetQuery'
 import SearchQuery from '../queries/SearchQuery'
 
 export const queryResolvers = {
   Query: {
-    AsyncProcess (object, params, context, resolveInfo) {
-      return getQuery(params, resolveInfo)
-    },
-    channel: (root, { id }) => {
-      return channels.find(channel => channel.id === id)
-    },
     Person (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
     },
