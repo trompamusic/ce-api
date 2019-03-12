@@ -16,6 +16,7 @@ export const subscriptionResolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator('nodeMutation'),
         (payload, variables) => {
+          debug(payload)
           return payload.identifier === variables.identifier
         }
       )

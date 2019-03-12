@@ -78,7 +78,7 @@ type Mutation {
 type Subscription {
   messageAdded(channelId: ID!): Message
   asyncProcessStatus(processId: ID!): AsyncProcessStatus
-  nodeMutation(identifier: String!): ThingInterface
+  nodeMutation(identifier: String!): ControlAction
 }
 
 input MessageInput{

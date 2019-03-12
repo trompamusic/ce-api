@@ -229,7 +229,11 @@ const runQuery = function (query, queryType) {
       let rt = result.records.map(record => {
         return retrievePayload(record.get('_payload'), queryType)
       })
-      return rt[0]
+      const returnValue = rt[0]
+      if (typeof returnValue.identifier === 'string') {
+        pubsub.publish('nodeMutation', { nodeMutation: returnValue, identifier: returnValue.identifier })
+      }
+      return returnValue
     })
     .catch(function (error) {
       throw Error(error.toString())
@@ -249,8 +253,10 @@ const retrievePayload = function (payload, payloadType) {
     case 'asyncProcess':
       return payload
     case 'CreateControlAction':
+      // TODO [WK] publish nodeMutation
       return payload.properties
     case 'UpdateControlAction':
+      // TODO [WK] publish nodeMutation
       return payload.properties
     default:
       warning('Unknown payloadType encountered')
