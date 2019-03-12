@@ -6,7 +6,7 @@ import walkSync from 'walk-sync'
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
-const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true })
+const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true, globs: ['**/**/*.graphql'] })
 const typeDefs = concatenate.sync(graphQlFiles)
 
 /*
