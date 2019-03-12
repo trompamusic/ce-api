@@ -3,6 +3,7 @@
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
   searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = 0): [MetadataInterfaced]
+  ControlAction(identifier: String): [ControlAction]
   Person(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Person]
   CreativeWork(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[CreativeWork]
   Article(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Article]
@@ -30,7 +31,7 @@ type Query {
 
 type Mutation {
   CreateControlAction(identifier: ID, target: ControlActionType, description: String, object:[String]): ControlAction
-  UpdateControlAction(identifier: ID, actionStatus: ControlActionStatus): ControlAction
+  UpdateControlAction(identifier: ID, actionStatus: ControlActionStatus!, error: String): ControlAction
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   AddCreativeWorkInterfaceLegalPerson(from:_CreativeWorkInterfaceInput, to:_LegalPersonInput, field:CreativeWorkInterfaceRelationToLegalPerson): _AddCreativeWorkInterfaceLegalPersonPayload
@@ -71,7 +72,7 @@ type Mutation {
 
 ### Subscriptions
 type Subscription {
-  nodeMutation(identifier: String!): ControlAction
+  ControlActionMutation(identifier: String!): ControlAction
 }
 
 ### Inputs ###
@@ -856,7 +857,7 @@ interface ActionInterface {
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
-  error: [ThingInterface]
+  error: String
   "https://schema.org/instrument"
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
@@ -1177,7 +1178,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
-  error: [ThingInterface]
+  error: String
   "https://schema.org/instrument"
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
@@ -5726,7 +5727,7 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
-  error: [ThingInterface]
+  error: String
   "https://schema.org/instrument"
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
@@ -5844,7 +5845,7 @@ type ReplaceAction implements MetadataInterface & ThingInterface & ActionInterfa
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
-  error: [ThingInterface]
+  error: String
   "https://schema.org/instrument"
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
@@ -5922,13 +5923,13 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   ##################################
   ### ActionInterface properties ###
   "https://schema.org/actionStatus"
-  actionStatus: String
+  actionStatus: ControlActionStatus
   "https://schema.org/agent"
   agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
-  error: [ThingInterface]
+  error: String
   "https://schema.org/instrument"
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"

@@ -6,6 +6,9 @@ import SearchQuery from '../queries/SearchQuery'
 
 export const queryResolvers = {
   Query: {
+    ControlAction (object, params, context, resolveInfo) {
+      return getQuery(params, resolveInfo)
+    },
     Person (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
     },

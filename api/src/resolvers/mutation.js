@@ -6,11 +6,11 @@ import { retrieveNodeData, pubsub } from '../resolvers'
 export const mutationResolvers = {
   Mutation: {
     CreateControlAction (object, params, ctx, resolveInfo) {
+      params.actionStatus = 'accepted'
       const query = generateCreateControlActionQuery(params)
       return runQuery(query, 'CreateControlAction')
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
-      debug('UpdateControlAction')
       const query = generateUpdateControlActionQuery(params)
       return runQuery(query, 'UpdateControlAction')
     },
@@ -182,15 +182,19 @@ const generateCreateControlActionQuery = function (params) {
   const objectValues = `["${params.object.join('", "')}"]`
 
   return [
-    `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, description: "${params.description}"})`,
+    `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, actionStatus: "${params.actionStatus}", description: "${params.description}"})`,
     `RETURN \`controlAction\` AS \`_payload\``
   ].join(' ')
 }
 
 const generateUpdateControlActionQuery = function (params) {
+  let setPropertyClauses = [];
+  Object.entries(params).forEach(([key, value]) => {
+    setPropertyClauses.push(`${key}: "${value}"`)
+  })
   return [
     `MATCH (\`controlAction\`:\`ControlAction\`{identifier: "${params.identifier}"})`,
-    `SET \`controlAction\` += {actionStatus:"${params.actionStatus}"}`,
+    `SET \`controlAction\` += {${setPropertyClauses.join(', ')}}`,
     `RETURN \`controlAction\` AS \`_payload\``
   ].join(' ')
 }
@@ -205,7 +209,7 @@ const runQuery = function (query, queryType) {
       })
       const returnValue = rt[0]
       if (typeof returnValue.identifier === 'string') {
-        pubsub.publish('nodeMutation', { nodeMutation: returnValue, identifier: returnValue.identifier })
+        pubsub.publish('ControlActionMutation', { ControlActionMutation: returnValue, identifier: returnValue.identifier })
       }
       return returnValue
     })
@@ -227,10 +231,8 @@ const retrievePayload = function (payload, payloadType) {
     case 'asyncProcess':
       return payload
     case 'CreateControlAction':
-      // TODO [WK] publish nodeMutation
       return payload.properties
     case 'UpdateControlAction':
-      // TODO [WK] publish nodeMutation
       return payload.properties
     default:
       warning('Unknown payloadType encountered')

@@ -3,9 +3,9 @@ import { withFilter } from 'graphql-subscriptions'
 
 export const subscriptionResolvers = {
   Subscription: {
-    nodeMutation: {
+    ControlActionMutation: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator('nodeMutation'),
+        () => pubsub.asyncIterator('ControlActionMutation'),
         (payload, variables) => {
           return payload.identifier === variables.identifier
         }
