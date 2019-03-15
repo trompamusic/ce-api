@@ -1,0 +1,26 @@
+"https://schema.org/Property"
+type Property {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  ########################
+  ### Thing properties ###
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/image"
+  image: URL
+  ################################
+  ### Property properties ###
+#  "https://meta.schema.org/domainIncludes"
+#  domainIncludes: [ValidPropertyType]
+  "https://meta.schema.org/inverseOf"
+  inverseOf: Property
+  "https://meta.schema.org/rangeIncludes"
+  rangeIncludes: [ValidPropertyType]
+#  "https://meta.schema.org/supersededBy"
+#  supersededBy: ValidPropertyType
+}

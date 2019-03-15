@@ -295,3 +295,36 @@ enum ControlActionStatus {
   complete
   error
 }
+
+enum ValidPropertyType {
+  String
+  Int
+  Float
+  Boolean
+  Enum
+  _Neo4jDate
+  _Neo4jDateTime
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicAlbum
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+  Occupation
+  DigitalDocumentPermission
+  Audience
+}

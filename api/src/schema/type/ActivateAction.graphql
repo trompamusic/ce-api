@@ -1,0 +1,73 @@
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/ActivateAction,https://www.w3.org/TR/prov-o/#Activity"
+type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWork] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  ##############################################
+  ### ProvenanceActivityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#startedAtTime"
+  startedAtTime: _Neo4jDateTime
+  "https://www.w3.org/TR/prov-o/#wasInformedBy"
+  wasInformedBy: [Action] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#endedAtTime"
+  endedAtTime: _Neo4jDateTime
+  ##################################
+  ### ActionInterface properties ###
+  "https://schema.org/actionStatus"
+  actionStatus: ControlActionStatus
+  "https://schema.org/agent"
+  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
+  "https://schema.org/endTime"
+  endTime: _Neo4jDateTime
+  "https://schema.org/error"
+  error: String
+  "https://schema.org/instrument"
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
+  "https://schema.org/location"
+  location: [Place] @relation(name: "LOCATION", direction: "OUT")
+  "https://schema.org/object"
+  object: [String]
+  "https://schema.org/participant"
+  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
+  "https://schema.org/result"
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
+  "https://schema.org/startTime"
+  startTime: _Neo4jDateTime
+  "https://schema.org/target"
+  target: ControlActionTargetType!
+}
