@@ -87,3 +87,8 @@ type _AddProvenanceActivityInterfaceWasInformedByPayload {
   from: ProvenanceActivityInterfaced
   to: ActionInterfaced
 }
+
+type _AddSoftwareApplicationSoftwareHelpPayload {
+  from: SoftwareApplication
+  to: CreativeWorkInterfaced
+}

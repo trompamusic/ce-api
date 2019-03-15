@@ -10,6 +10,14 @@ export const subscriptionResolvers = {
           return payload.identifier === variables.identifier
         }
       )
-    }
+    },
+    // ActivateActionImplementation: {
+    //   subscribe: withFilter(
+    //     () => pubsub.asyncIterator('ActivateActionImplementation'),
+    //     (payload, variables) => {
+    //       return payload.identifier === variables.identifier
+    //     }
+    //   )
+    // }
   }
 }

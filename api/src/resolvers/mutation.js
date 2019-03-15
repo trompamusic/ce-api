@@ -143,6 +143,12 @@ export const mutationResolvers = {
     },
     RemoveProvenanceActivityInterfaceActionInterface (object, params, ctx, resolveInfo) {
       return runRemove(params, 'DELETE')
+    },
+    AddSoftwareApplicationSoftwareHelp (object, params, ctx, resolveInfo) {
+      return runAdd(params, 'CREATE')
+    },
+    RemoveSoftwareApplicationSoftwareHelp (object, params, ctx, resolveInfo) {
+      return runRemove(params, 'DELETE')
     }
   }
 }
