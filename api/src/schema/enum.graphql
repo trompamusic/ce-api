@@ -107,6 +107,9 @@ enum ThingInterfaceType {
   ControlAction
   EntryPoint
   SoftwareApplication
+  Property
+  PropertyValue
+  PropertyValueSpecification
 }
 
 # TODO auto generate

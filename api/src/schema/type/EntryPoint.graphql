@@ -71,7 +71,7 @@ type EntryPoint implements MetadataInterface & ThingInterface & ProvenanceEntity
   "https://schema.org/actionApplication"
   actionApplication: SoftwareApplication @relation(name: "ACTION_APPLICATION", direction: "OUT")
   "https://schema.org/actionPlatform"
-  actionPlatform: [String]
+  actionPlatform: String
   "https://schema.org/contentType"
   contentType: [String]
   "https://schema.org/encodingType"

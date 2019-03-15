@@ -25,4 +25,5 @@ type Query {
   Occupation(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Occupation]
   DigitalDocumentPermission(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[DigitalDocumentPermission]
   Audience(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Audience]
+  EntryPoint(identifier: String, title: String, actionPlatform: String, offset: Int, first: Int):[EntryPoint]
 }

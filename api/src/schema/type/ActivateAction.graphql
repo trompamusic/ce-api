@@ -89,7 +89,7 @@ type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEnti
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterface]
+  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
