@@ -15,7 +15,7 @@ type PropertyValue {
   #unitCode: String
   #unitText: String
   "https://schema.org/value"
-  value: Value
+  value: Value # any Scalar type or the identifier of the node
   "https://schema.org/valueReference"
   valueReference: ValueReference!
 }

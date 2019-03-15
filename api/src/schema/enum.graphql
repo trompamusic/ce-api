@@ -274,8 +274,12 @@ enum ValueReference {
   Int
   Float
   Boolean
-  Enum
-  ValidAdditionalPropertyNodeValueType
+  URL
+  Duration
+  _Neo4jDate
+  _Neo4jDateTime
+  NodeID
+#  Enum
 }
 
 enum SearchableMetadataFields {
@@ -301,7 +305,8 @@ enum ValidAdditionalPropertyNodeValueType {
   Int
   Float
   Boolean
-  Enum
+  URL
+  Duration
   _Neo4jDate
   _Neo4jDateTime
   Person

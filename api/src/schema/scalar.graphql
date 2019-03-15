@@ -2,5 +2,5 @@
 scalar Duration
 "https://schema.org/URL"
 scalar URL
-"https://schema.org/Value"
+"https://schema.org/value"
 scalar Value
