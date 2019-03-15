@@ -100,6 +100,13 @@ enum ThingInterfaceType {
   Occupation
   DigitalDocumentPermission
   Audience
+  Action
+  UpdateAction
+  ReplaceAction
+  ActivateAction
+  ControlAction
+  EntryPoint
+  SoftwareApplication
 }
 
 # TODO auto generate
@@ -169,6 +176,8 @@ enum ActionInterfaceType {
   Action
   UpdateAction
   ReplaceAction
+  ActivateAction
+  ControlAction
 }
 
 enum ProvenanceActivityInterfaceType {

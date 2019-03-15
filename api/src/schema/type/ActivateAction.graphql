@@ -1,5 +1,39 @@
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/ActivateAction,https://www.w3.org/TR/prov-o/#Activity"
 type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  contributor: String!
+  "http://purl.org/dc/elements/1.1/coverage"
+  coverage: String
+  "http://purl.org/dc/elements/1.1/creator"
+  creator: String!
+  "http://purl.org/dc/elements/1.1/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/format"
+  format: String!
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/language"
+  language: AvailableLanguage!
+  "http://purl.org/dc/elements/1.1/publisher"
+  publisher: String
+  "http://purl.org/dc/elements/1.1/relation"
+  relation: String
+  "http://purl.org/dc/elements/1.1/rights"
+  rights: String
+  "http://purl.org/dc/elements/1.1/source"
+  source: String!
+  "http://purl.org/dc/elements/1.1/subject"
+  subject: String!
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  _searchScore: Float
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -8,20 +42,14 @@ type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEnti
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
-  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String
   "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: String
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
-  identifier: ID
-  "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
   mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://pending.schema.org/subjectOf"
@@ -61,7 +89,7 @@ type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEnti
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [String]
+  object: [ThingInterface]
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
@@ -69,5 +97,5 @@ type ActivateAction implements ThingInterface & ActionInterface & ProvenanceEnti
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   "https://schema.org/target"
-  target: ControlActionTargetType!
+  target: EntryPoint
 }

@@ -53,3 +53,8 @@ input _CreateControlActionInput {
   targetApplication: ControlActionTargetType!
   objectIdentifiers: [String!]
 }
+
+input _ActionInterfaceInput {
+  identifier: String!
+  type: ActionInterfaceType!
+}

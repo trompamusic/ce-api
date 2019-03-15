@@ -21,7 +21,7 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [Action] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://pending.schema.org/subjectOf"
@@ -61,7 +61,7 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [String]
+  object: [ThingInterface]
   "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"

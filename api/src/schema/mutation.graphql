@@ -39,4 +39,5 @@ type Mutation {
   RemoveProvenanceActivityInterfaceActionInterface(from:_ProvenanceActivityInterfaceInput, to:_ActionInterfaceInput): _AddProvenanceActivityInterfaceWasInformedByPayload
   AddSoftwareApplicationSoftwareHelp(from:_SoftwareApplicationInput, to:_CreativeWorkInterfaceInput): _AddSoftwareApplicationSoftwareHelpPayload
   RemoveSoftwareApplicationSoftwareHelp(from:_SoftwareApplicationInput, to:_CreativeWorkInterfaceInput): _AddSoftwareApplicationSoftwareHelpPayload
+#  AddThingInterfacePotentialAction(from:_ThingInterfaceInput, to:_ActionInterfaceInput): _addThingInterfacePotentialActionPayload
 }

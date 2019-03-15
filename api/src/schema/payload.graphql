@@ -92,3 +92,8 @@ type _AddSoftwareApplicationSoftwareHelpPayload {
   from: SoftwareApplication
   to: CreativeWorkInterfaced
 }
+
+type _addEntryPointPotentialActionPayload {
+  from: EntryPoint
+  to: ActionInterfaced
+}

@@ -3,7 +3,7 @@ union LegalPerson = Person | Organization | MusicGroup
 union Performer = Person | MusicGroup
 
 # TODO auto generate
-union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience
+union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience | EntryPoint | Action | UpdateAction | ReplaceAction | ActivateAction | ControlAction | SoftwareApplication
 # TODO auto generate
 union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
 # TODO auto generate
@@ -13,7 +13,7 @@ union MediaObjectInterfaced = MediaObject | AudioObject | DataDownload | Dataset
 # TODO auto generate
 union OrganizationInterfaced = Organization | MusicGroup
 # TODO auto generate
-union ActionInterfaced = Action | UpdateAction | ReplaceAction
+union ActionInterfaced = Action | UpdateAction | ReplaceAction | ActivateAction | ControlAction
 # TODO auto generate
 union ProvenanceEntityInterfaced = DigitalDocumentPermission | Action | CreativeWork | Event | Intangible | Organization | Person | Place | Product | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicAlbum | MusicPlaylist | MusicRecording | VideoObject | MusicGroup | UpdateAction | ReplaceAction
 # TODO auto generate
