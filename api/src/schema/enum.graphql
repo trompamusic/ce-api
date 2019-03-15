@@ -275,7 +275,7 @@ enum ValueReference {
   Float
   Boolean
   Enum
-  StructuredValue
+  ValidAdditionalPropertyNodeValueType
 }
 
 enum SearchableMetadataFields {
@@ -296,7 +296,7 @@ enum ControlActionStatus {
   error
 }
 
-enum ValidPropertyType {
+enum ValidAdditionalPropertyNodeValueType {
   String
   Int
   Float

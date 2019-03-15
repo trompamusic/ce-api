@@ -16,11 +16,11 @@ type Property {
   ################################
   ### Property properties ###
 #  "https://meta.schema.org/domainIncludes"
-#  domainIncludes: [ValidPropertyType]
+#  domainIncludes: [ValidAdditionalPropertyNodeValueType]
   "https://meta.schema.org/inverseOf"
   inverseOf: Property
   "https://meta.schema.org/rangeIncludes"
-  rangeIncludes: [ValidPropertyType]
+  rangeIncludes: [ValidAdditionalPropertyNodeValueType]
 #  "https://meta.schema.org/supersededBy"
-#  supersededBy: ValidPropertyType
+#  supersededBy: ValidAdditionalPropertyNodeValueType
 }
