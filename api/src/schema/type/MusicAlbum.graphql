@@ -47,7 +47,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWork] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
@@ -55,7 +55,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/sameAs"
   sameAs: URL
   "https://pending.schema.org/subjectOf"
-  subjectOf: [CreativeWork] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://pending.schema.org/url"
   url: URL
   #######################
@@ -73,17 +73,17 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [Action] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [Person]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
   ###############################
   ### CreativeWork properties ###
   "https://schema.org/about"
-  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
   #"https://schema.org/accessMode"
   #accessMode: AccessMode
   #"https://schema.org/accessModeSufficient"
@@ -99,7 +99,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/alternativeHeadline"
   alternativeHeadline: String
   "https://schema.org/associatedMedia"
-  associatedMedia: [MediaObject] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
+  associatedMedia: [MediaObjectInterfaced] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
   #audience: Audience
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
@@ -120,7 +120,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   #contentReferenceTime: _Neo4jDateTime
   #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
-  copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
+  copyrightHolder: [LegalPerson] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
@@ -135,7 +135,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   #educationalAlignment
   #educationalUse
   "https://schema.org/encoding"
-  encoding: [MediaObject] @relation(name: "ENCODING", direction: "IN")
+  encoding: [MediaObjectInterfaced] @relation(name: "ENCODING", direction: "IN")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
@@ -166,15 +166,15 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   license: URL
   #locationCreated
   "https://schema.org/mainEntity"
-  mainEntity: ThingInterface @relation(name: "MAIN_ENTITY", direction: "IN")
+  mainEntity: ThingInterfaced @relation(name: "MAIN_ENTITY", direction: "IN")
   #material
   "https://schema.org/mentions"
-  mentions: [ThingInterface] @relation(name: "MENTIONS", direction: "OUT")
+  mentions: [ThingInterfaced] @relation(name: "MENTIONS", direction: "OUT")
   #offers:
   "https://schema.org/position"
   position: Int
   "https://schema.org/producer"
-  producer: [Person] @relation(name: "PRODUCER", direction: "IN")
+  producer: [LegalPerson] @relation(name: "PRODUCER", direction: "IN")
   #provider:
   #publication:
   "https://schema.org/publisher"
@@ -201,7 +201,7 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   thumbnailUrl: URL
   #timeRequired:
   "https://schema.org/translator"
-  translator: [Person] @relation(name: "TRANSLATOR", direction: "IN")
+  translator: [LegalPerson] @relation(name: "TRANSLATOR", direction: "IN")
   #typicalAgeRange:
   "https://schema.org/version"
   version: String

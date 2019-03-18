@@ -1,7 +1,7 @@
 "https://schema.org/CreativeWork"
 interface CreativeWorkInterface {
   "https://schema.org/about"
-  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
   #"https://schema.org/accessMode"
   #accessMode: AccessMode
   #"https://schema.org/accessModeSufficient"
@@ -17,7 +17,7 @@ interface CreativeWorkInterface {
   "https://schema.org/alternativeHeadline"
   alternativeHeadline: String
   "https://schema.org/associatedMedia"
-  associatedMedia: [MediaObject] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
+  associatedMedia: [MediaObjectInterfaced] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
   #audience: Audience
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
@@ -38,7 +38,7 @@ interface CreativeWorkInterface {
   #contentReferenceTime: _Neo4jDateTime
   #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
-  copyrightHolder: [Person] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
+  copyrightHolder: [LegalPerson] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
@@ -53,7 +53,7 @@ interface CreativeWorkInterface {
   #educationalAlignment
   #educationalUse
   "https://schema.org/encoding"
-  encoding: [MediaObject] @relation(name: "ENCODING", direction: "IN")
+  encoding: [MediaObjectInterfaced] @relation(name: "ENCODING", direction: "IN")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
@@ -84,10 +84,10 @@ interface CreativeWorkInterface {
   license: URL
   #locationCreated
   "https://schema.org/mainEntity"
-  mainEntity: ThingInterface @relation(name: "MAIN_ENTITY", direction: "IN")
+  mainEntity: ThingInterfaced @relation(name: "MAIN_ENTITY", direction: "IN")
   #material
   "https://schema.org/mentions"
-  mentions: [ThingInterface] @relation(name: "MENTIONS", direction: "OUT")
+  mentions: [ThingInterfaced] @relation(name: "MENTIONS", direction: "OUT")
   #offers:
   "https://schema.org/position"
   position: Int
@@ -119,7 +119,7 @@ interface CreativeWorkInterface {
   thumbnailUrl: URL
   #timeRequired:
   "https://schema.org/translator"
-  translator: [Person] @relation(name: "TRANSLATOR", direction: "IN")
+  translator: [LegalPerson] @relation(name: "TRANSLATOR", direction: "IN")
   #typicalAgeRange:
   "https://schema.org/version"
   version: String

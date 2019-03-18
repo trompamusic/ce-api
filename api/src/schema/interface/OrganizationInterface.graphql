@@ -68,7 +68,7 @@ interface OrganizationInterface {
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "IN")
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "OUT")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID

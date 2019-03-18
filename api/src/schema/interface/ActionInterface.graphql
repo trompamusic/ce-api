@@ -9,15 +9,15 @@ interface ActionInterface {
   "https://schema.org/error"
   error: String
   "https://schema.org/instrument"
-  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
+  instrument: [ThingInterfaced] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  #  object: ThingInterface @relation(name: "OBJECT", direction: "OUT")
+  #  object: [ThingInterfaced] @relation(name: "OBJECT", direction: "OUT")
   #  "https://schema.org/participant"
   participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterfaced @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"

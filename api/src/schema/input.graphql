@@ -50,7 +50,7 @@ input _ProvenanceActivityInterfaceInput {
 
 input _CreateControlActionInput {
   description: String!
-targetApplication: ControlActionTargetType!
+  targetApplication: ControlActionTargetType!
   objectIdentifiers: [String!]
 }
 
