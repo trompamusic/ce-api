@@ -7,8 +7,8 @@ interface ThingInterface {
   "https://schema.org/alternateName"
   alternateName: String
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String
-  "https://schema.org/disambiguatingDescription"
+  description: String!
+"https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID

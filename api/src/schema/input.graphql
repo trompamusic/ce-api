@@ -49,8 +49,8 @@ input _ProvenanceActivityInterfaceInput {
 }
 
 input _CreateControlActionInput {
-  description: String
-  targetApplication: ControlActionTargetType!
+  description: String!
+targetApplication: ControlActionTargetType!
   objectIdentifiers: [String!]
 }
 
