@@ -1,4 +1,4 @@
-import { warning } from '../index'
+import { debug, warning } from '../index'
 import StringHelper from '../helpers/StringHelper'
 import SchemaHelper from '../helpers/SchemaHelper'
 
@@ -178,6 +178,7 @@ class GetQuery {
   }
 
   _relationClause (relationDetails) {
+    debug(relationDetails)
     let clause = `-[:\`${relationDetails['name']}\`]-`
 
     switch (relationDetails['direction'].toString().toUpperCase()) {

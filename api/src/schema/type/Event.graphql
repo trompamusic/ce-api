@@ -1,5 +1,5 @@
 "http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Event"
-type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInterface {
+type Event implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
@@ -33,6 +33,8 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   title: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
+  ####################################
+  ### SearchableInterface property ###
   _searchScore: Float
   ########################
   ### ThingInterface properties ###
@@ -49,7 +51,7 @@ type Event implements MetadataInterface & ThingInterface & ProvenanceEntityInter
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://pending.schema.org/subjectOf"

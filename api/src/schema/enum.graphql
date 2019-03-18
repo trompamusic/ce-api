@@ -103,7 +103,6 @@ enum ThingInterfaceType {
   Action
   UpdateAction
   ReplaceAction
-  ActivateAction
   ControlAction
   EntryPoint
   SoftwareApplication
@@ -179,7 +178,6 @@ enum ActionInterfaceType {
   Action
   UpdateAction
   ReplaceAction
-  ActivateAction
   ControlAction
 }
 
