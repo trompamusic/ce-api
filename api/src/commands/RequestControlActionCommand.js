@@ -1,6 +1,4 @@
 import { debug, info, warning } from '../index'
-// import StringHelper from '../helpers/StringHelper'
-// import SchemaHelper from '../helpers/SchemaHelper'
 import QueryHelper from '../helpers/SchemaHelper'
 import { driver } from '../driver'
 import { pubsub } from "../resolvers";
@@ -17,57 +15,56 @@ class RequestControlActionCommand {
 
   get create () {
     const payload = this._retrievePayload()
-    const potentialActionIdentifier = payload.potentialActionIdentifier
-    const potentialActionQuery = this._generateTemplateQuery(potentialActionIdentifier)
-    //this._getSession()
+    // const potentialActionIdentifier = payload.potentialActionIdentifier
+    const potentialActionQuery = this._generateTemplateQuery(payload)
     debug(potentialActionQuery)
-    // retrieve template ControlAction
+
     return this.session.run(potentialActionQuery)
+      // retrieve template ControlAction
       .then(result => {
-        // let template = {}
-        result.records.map(record => {
+        debug('retrieve template ControlAction:')
+        return result.records.map(record => {
           let templateResult = result.records.map(record => {
             return record.get('_payload')
           })
           const template = templateResult[0]
-          if (typeof template.identifier !== 'string' || template.identifier !== potentialActionIdentifier) {
-            throw Error(`potentialAction with identifier ${potentialActionIdentifier} not found`)
+          if (typeof template.identifier !== 'string' || template.identifier !== payload.potentialActionIdentifier) {
+            throw Error(`potentialAction with identifier ${payload.potentialActionIdentifier} not found`)
           }
-          debug('template:')
-          debug(template)
 
-          // validate payload against template specifications
-          this._validatePayload(template, payload)
-
-          // create new ControlAction
-          const controlAction = this._createControlAction(template, payload)
-
-          return controlAction
+          return template
         })
+      })
+      // validate payload against template
+      .then(template => {
+        debug('validate payload against template:')
+        debug(template)
+        this._validatePayload(template, payload)
+        return template
+      })
+      // create ControlAction
+      .then(template => {
+        debug('create ControlAction:')
+        debug(payload)
+        return this._createControlAction(template, payload)
       })
       .catch(function (error) {
         throw Error(error.toString())
       })
-
-    // return promise
-    //
-    // debug(this.session)
-    // //debug(payload)
-
   }
 
   _retrievePayload () {
     const payload = this.params.controlAction
-    if (typeof payload !== 'object' || typeof payload.potentialActionIdentifier !== 'string') {
-      throw Error('Payload error: either empty or missing `potentialActionIdentifier` parameter')
+    if (typeof payload !== 'object' || typeof payload.entryPointIdentifier !== 'string' || typeof payload.potentialActionIdentifier !== 'string') {
+      throw Error('Payload error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
     }
 
     return payload
   }
 
-  _generateTemplateQuery (identifier) {
+  _generateTemplateQuery (payload) {
     return [
-      `MATCH (\`controlActionTemplate\`:\`ControlAction\` {\`identifier\`:"${identifier}"})`,
+      `MATCH (\`controlActionTemplate\`:\`ControlAction\` {\`identifier\`:"${payload.potentialActionIdentifier}"})<-[\`potentialAction\`:\`POTENTIAL_ACTION\`]-(\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${payload.entryPointIdentifier}"})`,
       `WITH \`controlActionTemplate\``,
       `RETURN \`controlActionTemplate\``,
       `{\`identifier\`:\`controlActionTemplate\`.\`identifier\`, \`name\`:\`controlActionTemplate\`.\`name\`,`,
@@ -80,13 +77,20 @@ class RequestControlActionCommand {
     // return `MATCH (pa:${type} {identifier:"${identifier}"}) RETURN pa AS _payload`
   }
 
+  _generateCreateControlActionQuery (template, payload) {
+
+  }
+
   _validatePayload (template, payload) {
     debug('_validatePayload')
+    // throw Error('Payload validation error: there was a problem with the payload')
     return true
   }
 
   _createControlAction (template, payload) {
     debug('_createControlAction')
+    //const createControlActionQuery = this._generateCreateControlActionQuery(template, payload)
+    return { 'ok': true }
   }
 }
 

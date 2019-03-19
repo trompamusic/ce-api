@@ -54,17 +54,18 @@ input _ActionInterfaceInput {
 }
 
 input _RequestControlActionInput {
+  entryPointIdentifier: String!
   potentialActionIdentifier: String!
-  objectProperty: [_PropertyInput]
-  objectPropertyValue: [_PropertyValueInput]
+  propertyObject: [_PropertyInput]
+  propertyValueObject: [_PropertyValueInput]
 }
 
 input _PropertyValueInput {
-  propertyValueSpecificationIdentifier: String!
+  potentialActionPropertyValueSpecificationIdentifier: String!
   value: String
 }
 
 input _PropertyInput {
-  propertyIdentifier: String!
-  valueNodeIdentifier: String!
+  potentialActionPropertyIdentifier: String!
+  nodeIdentifier: String!
 }
