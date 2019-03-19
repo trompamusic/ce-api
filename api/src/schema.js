@@ -23,7 +23,7 @@ export const schema = makeAugmentedSchema({
   config: {
     query: false,
     mutation: {
-      exclude: ['Subscription', 'ControlAction']
+      exclude: ['Subscription']
     }
   }
 })

@@ -48,13 +48,23 @@ input _ProvenanceActivityInterfaceInput {
   type: ProvenanceActivityInterfaceType!
 }
 
-input _CreateControlActionInput {
-  description: String!
-  targetApplication: ControlActionTargetType!
-  objectIdentifiers: [String!]
-}
-
 input _ActionInterfaceInput {
   identifier: String!
   type: ActionInterfaceType!
+}
+
+input _RequestControlActionInput {
+  potentialActionIdentifier: String!
+  objectProperty: [_PropertyInput]
+  objectPropertyValue: [_PropertyValueInput]
+}
+
+input _PropertyValueInput {
+  propertyValueSpecificationIdentifier: String!
+  value: String
+}
+
+input _PropertyInput {
+  propertyIdentifier: String!
+  valueNodeIdentifier: String!
 }

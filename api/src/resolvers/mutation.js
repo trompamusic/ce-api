@@ -1,14 +1,25 @@
-import {debug, info, warning} from '../index'
+import { debug, info, warning } from '../index'
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
 import { retrieveNodeData, pubsub } from '../resolvers'
+import RequestControlActionCommand from '../commands/RequestControlActionCommand'
 
 export const mutationResolvers = {
   Mutation: {
-    CreateControlAction (object, params, ctx, resolveInfo) {
-      params.actionStatus = 'accepted'
-      const query = generateCreateControlActionQuery(params)
-      return runQuery(query, 'CreateControlAction')
+    RequestControlAction (object, params, ctx, resolveInfo) {
+      info('RequestControlAction')
+      const command = new RequestControlActionCommand(params)
+      return command.create
+
+      // return handleRequestControlActionRequest(params.controlAction)
+
+      // const queryGenerator = new RequestControlActionQuery(params, resolveInfo)
+      // const query = queryGenerator.query
+      // info(`query: ${query}`)
+
+      // params.actionStatus = 'accepted'
+      // const query = generateRequestControlActionQuery(params)
+      // return runQuery(query, 'RequestControlAction')
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const query = generateUpdateControlActionQuery(params)
@@ -161,6 +172,10 @@ const runRemove = function (params) {
   return runQuery(generateRemoveQuery(params))
 }
 
+const runSimpleGet = function (params) {
+  return runQuery(generateSimpleGetQuery(params))
+}
+
 const generateAddQuery = function (params) {
   return [
     `MATCH (\`node_from\`:\`${params.from.type}\` {identifier: "${params.from.identifier}"})`,
@@ -180,7 +195,7 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-const generateCreateControlActionQuery = function (params) {
+const generateRequestControlActionQuery = function (params) {
   if (!Array.isArray(params.object) || params.object.length === 0) {
     throw Error('ControlAction.object cannot be empty')
   }
@@ -206,8 +221,8 @@ const generateUpdateControlActionQuery = function (params) {
 }
 
 const runQuery = function (query, queryType) {
-  let session = driver.session()
   info(`query: ${query}`)
+  let session = driver.session()
   let promise = session.run(query)
     .then(result => {
       let rt = result.records.map(record => {
@@ -236,11 +251,35 @@ const retrievePayload = function (payload, payloadType) {
       }
     case 'asyncProcess':
       return payload
-    case 'CreateControlAction':
+    case 'RequestControlAction':
       return payload.properties
     case 'UpdateControlAction':
+      return payload.properties
+    case 'simpleGet':
       return payload.properties
     default:
       warning('Unknown payloadType encountered')
   }
+}
+
+const handleRequestControlActionRequest = function (payload) {
+  info('validateRequestControlActionRequest payload:')
+  debug(payload)
+  const potentialActionIdentifier = payload.potentialActionIdentifier
+  if (typeof potentialActionIdentifier !== 'string') {
+    throw Error('Missing parameter: potentialActionIdentifier')
+  }
+
+  const potentialAction = runQuery(generateSimpleGetQuery('ControlAction', potentialActionIdentifier), 'simpleGet')
+  potentialAction
+    .then(result => {
+      debug(result)
+      debug(typeof result)
+      if (typeof result !== 'object') {
+        return
+      }
+      const queryGenerator = new RequestControlActionQuery(payload)
+      const query = queryGenerator.query
+      info(`query: ${query}`)
+    })
 }

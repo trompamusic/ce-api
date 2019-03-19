@@ -1,5 +1,5 @@
 type Mutation {
-  CreateControlAction(identifier: ID, target: ControlActionTargetType, description: String, object:[String]): ControlAction
+  RequestControlAction(identifier: ID, controlAction: _RequestControlActionInput): ControlAction
   UpdateControlAction(identifier: ID, actionStatus: ControlActionStatus!, error: String): ControlAction
   AddThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload
   RemoveThingInterfaceThingInterface(from:_ThingInterfaceInput, to:_ThingInterfaceInput, field:ThingInterfaceRelationToThingInterface): _AddThingInterfaceThingInterfacePayload

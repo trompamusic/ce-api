@@ -102,5 +102,5 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   "https://schema.org/target"
-  target: ControlActionTargetType!
+  target: EntryPoint @relation(name: "TARGET", direction: "OUT")
 }
