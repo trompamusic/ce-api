@@ -8,7 +8,7 @@ export const mutationResolvers = {
   Mutation: {
     RequestControlAction (object, params, ctx, resolveInfo) {
       info('RequestControlAction')
-      const command = new RequestControlActionCommand(params)
+      const command = new RequestControlActionCommand(params, resolveInfo)
       return command.create
 
       // return handleRequestControlActionRequest(params.controlAction)

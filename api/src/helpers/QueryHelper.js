@@ -91,7 +91,6 @@ class QueryHelper {
   }
 
   static relationClause (relationDetails) {
-    debug(relationDetails)
     let clause = `-[:\`${relationDetails['name']}\`]-`
 
     switch (relationDetails['direction'].toString().toUpperCase()) {
@@ -109,6 +108,16 @@ class QueryHelper {
     }
 
     return clause
+  }
+
+  static schemaTypeClause (alias) {
+    return `\`_schemaType\`:HEAD(labels(\`${alias}\`))`
+  }
+
+  static propertySetClause (alias, properties) {
+    return properties.map(property => {
+      return `\`${alias}\`:\`${alias}\`.\`${property}\``
+    }).join(', ')
   }
 }
 

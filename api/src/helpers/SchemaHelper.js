@@ -42,7 +42,6 @@ class SchemaHelper {
     let relationDetails = {}
 
     const directives = propertyType.astNode.directives
-    debug(directives)
     if (directives instanceof Array === false) {
       throw Error('Type property directives could not be retrieved from schema')
     }
