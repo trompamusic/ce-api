@@ -90,8 +90,17 @@ class QueryHelper {
     return clause
   }
 
-  static relationClause (relationDetails) {
-    let clause = `-[:\`${relationDetails['name']}\`]-`
+  generateRelationClause (type, propertyName, alias) {
+    return QueryHelper.relationClause(
+      SchemaHelper.retrievePropertyTypeRelationDetails(
+        this.schemaHelper.findPropertyType(type, propertyName)
+      ),
+      alias
+    )
+  }
+
+  static relationClause (relationDetails, alias) {
+    let clause = `-[${(typeof alias === 'string') ? `\`${alias}\`` : ``}:\`${relationDetails['name']}\`]-`
 
     switch (relationDetails['direction'].toString().toUpperCase()) {
       case 'OUT':

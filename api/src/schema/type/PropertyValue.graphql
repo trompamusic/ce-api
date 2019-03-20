@@ -15,7 +15,9 @@ type PropertyValue {
   #unitCode: String
   #unitText: String
   "https://schema.org/value"
-  value: Value # any Scalar type or the identifier of the node
+  value: String # any Scalar type or the identifier of the node
+  "TROMPA specific extension to allow value to be scalar or a node"
+  nodeValue: ThingInterfaced @relation(name: "NODE_VALUE", direction: "OUT")
   "https://schema.org/valueReference"
   valueReference: ValueReference!
 }

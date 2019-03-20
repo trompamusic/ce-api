@@ -279,7 +279,7 @@ enum MusicAlbumProductionType {
   studioAlbum
 }
 
-enum ValueDataType {
+enum ValuePattern {
   String
   Int
   Float
@@ -290,6 +290,35 @@ enum ValueDataType {
   _Neo4jDateTime
 }
 
+enum ValueType {
+  Action
+  Article
+  Audience
+  AudioObject
+  CreativeWork
+  DataDownload
+  Dataset
+  DigitalDocument
+  DigitalDocumentPermission
+  Event
+  ImageObject
+  MediaObject
+  MusicAlbum
+  MusicComposition
+  MusicGroup
+  MusicPlaylist
+  MusicRecording
+  Occupation
+  Organization
+  Person
+  Place
+  Product
+  Review
+  SoftwareApplication
+  VideoObject
+}
+
+# TODO auto-generate -> ValueReference = ValuePattern + ValueType
 enum ValueReference {
   String
   Int
@@ -299,8 +328,31 @@ enum ValueReference {
   Duration
   _Neo4jDate
   _Neo4jDateTime
-#  NodeID
-#  Enum
+  Action
+  Article
+  Audience
+  AudioObject
+  CreativeWork
+  DataDownload
+  Dataset
+  DigitalDocument
+  DigitalDocumentPermission
+  Event
+  ImageObject
+  MediaObject
+  MusicAlbum
+  MusicComposition
+  MusicGroup
+  MusicPlaylist
+  MusicRecording
+  Occupation
+  Organization
+  Person
+  Place
+  Product
+  Review
+  SoftwareApplication
+  VideoObject
 }
 
 enum SearchableMetadataFields {

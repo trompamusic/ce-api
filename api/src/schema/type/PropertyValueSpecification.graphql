@@ -18,7 +18,7 @@ type PropertyValueSpecification {
   "https://schema.org/alternateName"
   alternateName: String
   "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: ValueDataType
+  disambiguatingDescription: String
   "https://schema.org/image"
   image: URL
 #  "https://schema.org/mainEntityOfPage"
@@ -54,7 +54,7 @@ type PropertyValueSpecification {
   "https://schema.org/valueName"
   valueName: String
   "https://schema.org/valuePattern"
-  valuePattern: String
+  valuePattern: ValuePattern
   "https://schema.org/valueRequired"
   valueRequired: Boolean
 }

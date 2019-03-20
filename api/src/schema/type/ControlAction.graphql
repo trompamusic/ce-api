@@ -61,6 +61,10 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://pending.schema.org/url"
   url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: ControlAction  @relation(name: "RELATED_MATCH", direction: "OUT")
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
