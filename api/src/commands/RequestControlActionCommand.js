@@ -71,6 +71,17 @@ class RequestControlActionCommand {
       throw Error('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
     }
 
+    // hydrate propertyObject aliases
+    if (Array.isArray(requestInput.propertyObject)) {
+      let nodeCounter = 1
+      requestInput.propertyObject = requestInput.propertyObject.map(node => {
+        node.alias = `node_${nodeCounter}`
+        nodeCounter++
+
+        return node
+      })
+    }
+
     return requestInput
   }
 
@@ -82,9 +93,9 @@ class RequestControlActionCommand {
   _generateTemplateQuery (requestInput) {
     return [
       `MATCH (sa:SoftwareApplication)<-[:ACTION_APPLICATION]-(ep:EntryPoint {identifier:"${requestInput.entryPointIdentifier}"})-[:POTENTIAL_ACTION]->(ca:ControlAction {identifier:"${requestInput.potentialActionIdentifier}"})`,
-      `RETURN ep {_schemaType:HEAD(labels(ep)), identifier:ep.identifier, name:ep.name,`,
+      `RETURN ep {_schemaType:HEAD(labels(ep)), identifier:ep.identifier, name:ep.name, contributor:ep.contributor, title:ep.title, creator:ep.creator, source:ep.source, subject:ep.subject, format:ep.format, language:ep.language,`,
       `actionApplication:sa,`,
-      `potentialAction:{_schemaType:HEAD(labels(ca)), identifier:ca.identifier, name:ca.name,`,
+      `potentialAction:{_schemaType:HEAD(labels(ca)), identifier:ca.identifier, name:ca.name, contributor:ca.contributor, title:ca.title, creator:ca.creator, source:ca.source, subject:ca.subject, format:ca.format, language:ca.language,`,
       `object:[(\`controlActionTemplate\`)-[:\`OBJECT\`]->(\`controlActionTemplate_property\`:\`Property\`) | { \`_schemaType\`:HEAD(labels(\`controlActionTemplate_property\`)), \`identifier\`:\`controlActionTemplate_property\`.\`identifier\`, \`title\`:\`controlActionTemplate_property\`.\`title\`, \`description\`:\`controlActionTemplate_property\`.\`description\`, \`rangeIncludes\`:\`controlActionTemplate_property\`.\`rangeIncludes\` }]`,
       `+ [(\`controlActionTemplate\`)-[:\`OBJECT\`]->(\`controlActionTemplate_propertyValueSpecification\`:\`PropertyValueSpecification\`) | { \`_schemaType\`:HEAD(labels(\`controlActionTemplate_propertyValueSpecification\`)), \`identifier\`:\`controlActionTemplate_propertyValueSpecification\`.\`identifier\`, \`title\`:\`controlActionTemplate_propertyValueSpecification\`.\`title\`, \`name\`:\`controlActionTemplate_propertyValueSpecification\`.\`name\`,\`valueName\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueName\`, \`valueRequired\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueRequired\`, \`defaultValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`defaultValue\`, \`stepValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`stepValue\`, \`disambiguatingDescription\`:\`controlActionTemplate_propertyValueSpecification\`.\`disambiguatingDescription\`, \`minValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`maxValue\`, \`multipleValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`multipleValue\`, \`readonlyValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`readonlyValue\`, \`valueMaxLength\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueMaxLength\`, \`valueMinLength\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueMinLength\`, \`valuePattern\`:\`controlActionTemplate_propertyValueSpecification\`.\`valuePattern\`, \`valueRequired\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueRequired\` }]`,
       `}} AS _payload`
@@ -98,13 +109,13 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreateQuery (template, requestInput) {
-
+    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => { return `\`${object.alias}\`` }).join(', ')}` : ``
 
     return [
       `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"}),`,
       this._generateMatchPropertyNodes(requestInput),
-      `WITH \`entryPoint\`, \`potentialControlAction\`, \`node_1\``,
-      `CREATE (\`entryPoint\`)<-[:\`TARGET\`]-(\`controlAction\`:\`ControlAction\` {\`identifier\`: apoc.create.uuid(),\`name\`:"Mock algorithm"})-[:\`RELATED_MATCH\`]->(\`potentialControlAction\`)`,
+      `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
+      `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)})-[:\`RELATED_MATCH\`]->(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`, \`node_1\``,
       `CREATE (\`controlAction\`)-[:\`OBJECT\`]->(\`propertyValue_1\`:\`PropertyValue\` {\`identifier\`: apoc.create.uuid(), \`propertyID\`:"d9bfd6cb-4773-4991-ae4f-7767e513abda", \`name\`:"volume", \`title\`:"Volume", \`value\`:"6", \`valueReference\`:"Int"}),`,
       `(\`controlAction\`)-[:\`OBJECT\`]->(\`propertyValue_2\`:\`PropertyValue\` {\`identifier\`: apoc.create.uuid(), \`propertyID\`:"7c67dded-f370-4878-b1a8-bb718aab6c56", \`name\`:"pitch", \`title\`:"Pitch", \`value\`:"0.6", \`valueReference\`:"Float"}),`,
@@ -116,34 +127,6 @@ class RequestControlActionCommand {
       `\`object\`:[\`propertyValue_1\`, \`propertyValue_2\`, \`propertyValue_3\`, \`node_1\`]`,
       `} AS _payload`
     ].join(' ')
-
-    // const controlActionProperties =
-
-    // debug('relationDetails')
-    // debug(relationDetails)
-
-    return [
-      `MATCH (\`entryPoint\` {identifier: "${requestInput.entryPointIdentifier}"})`,
-      `WITH \`entryPoint\``,
-      `CREATE (\`controlAction\`:\`ControlAction\` ${this._generateControlActionPropertyClause(template.potentialAction)})${targetRelationClause}(\`entryPoint\`)`,
-      `WITH \`entryPoint\`, \`controlAction\``,
-      this._generateCreatePropertiesClause(template.potentialAction.object),
-      this._generateReturnClause(template.potentialAction)
-      // `RETURN \`controlAction\` {${QueryHelper.schemaTypeClause('controlAction')}, \`identifier\`:\`controlAction\`.\`identifier\`, \`title\`:\`controlAction\`.\`title\`, \`target\`:{${QueryHelper.schemaTypeClause('entryPoint')}, \`identifier\`:\`entryPoint\`.\`identifier\`, \`title\`:\`entryPoint\`.\`title\`}} AS _payLoad`
-    ].join(' ')
-
-    // MATCH (`entryPoint` {identifier: "8b621203-0824-4b72-9015-3311bd11197d"})
-    // WITH `entryPoint`
-    // CREATE (`entryPoint`)<-[:`TARGET`]-(`controlAction`:`ControlAction` {`identifier`: apoc.create.uuid(), `title`:`entryPoint`.`title`})
-    // WITH `entryPoint`, `controlAction`
-    // CREATE (`controlAction`)-[:OBJECT]->(`propertyValueSpecification_1`:`PropertyValueSpecification` {`identifier`: apoc.create.uuid(), `title`:"Volume", `valueName`:"volume", `valueRequired`:false, `description`:"This is a numeric value that should be between 0 and 10", `defaultValue`:5, `disambiguatingDescription`:"Int"}),
-    // (`controlAction`)-[:OBJECT]->(`property_1`:`Property` {`identifier`: apoc.create.uuid(), `title`:"A music recording", `description`:"This should be an existing TROMPA reference of a VideoObject or AudioObject type", `rangeIncludes`:["AudioObject","VideoObject"]})
-    // RETURN `controlAction` {`_schemaType`:HEAD(labels(`controlAction`)), `identifier`:`controlAction`.`identifier`, `title`:`controlAction`.`title`,
-    //   `target`:{`_schemaType`:HEAD(labels(`entryPoint`)), `identifier`:`entryPoint`.`identifier`, `title`:`entryPoint`.`title`},
-    //   `object`:[
-    //     {`_schemaType`:HEAD(labels(`propertyValueSpecification_1`)), `identifier`:`propertyValueSpecification_1`.identifier},
-    //   {`_schemaType`:HEAD(labels(`property_1`)), `identifier`:`property_1`.identifier}
-    // ]} AS _payLoad
   }
 
   /**
@@ -218,6 +201,10 @@ class RequestControlActionCommand {
       })
   }
 
+  _hydrateInputAliases (requestInput) {
+
+  }
+
   /**
    * Creates a subselection from the template (PotentialAction) properties, for the create query of a ControlAction
    * Includes a generated unique identifier property
@@ -268,10 +255,8 @@ class RequestControlActionCommand {
       return
     }
 
-    let nodeCounter = 0
     return requestInput.propertyObject.map(node => {
-      nodeCounter++
-      return `(\`node_${nodeCounter}\`:\`${node.nodeType}\` {\`identifier\`:"${node.nodeIdentifier}"})`
+      return `(\`${node.alias}\`:\`${node.nodeType}\` {\`identifier\`:"${node.nodeIdentifier}"})`
     }).join(', ')
   }
 
