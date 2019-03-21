@@ -8,7 +8,8 @@ services:
       - 7474:7474
       - 7687:7687
     environment:
-      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_unmanaged_extension_classes=org.neo4j.graphql=/graphql
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*,graphql.*
       - NEO4J_apoc_import_file_enabled=true
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_dbms_shell_enabled=true
@@ -18,7 +19,7 @@ services:
     ports:
       - 4000:4000
     environment:
-      NEO4J_URI: "bolt://127.0.0.1:7687"
+      NEO4J_URI: "bolt://neo4j:7687"
       NEO4J_USER: "neo4j"
       NEO4J_PASSWORD: "letmein"
       GRAPHQL_LISTEN_PORT: 4000
@@ -26,3 +27,5 @@ services:
 #      DEBUG: info
     volumes:
       - ./api:/app
+    links:
+      - neo4j
