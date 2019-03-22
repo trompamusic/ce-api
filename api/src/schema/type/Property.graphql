@@ -7,7 +7,7 @@ type Property implements ThingInterface {
   title: String!
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
   description: String!
-"http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
   #################################
   ### ThingInterface properties ###

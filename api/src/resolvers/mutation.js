@@ -172,9 +172,9 @@ const runRemove = function (params) {
   return runQuery(generateRemoveQuery(params))
 }
 
-const runSimpleGet = function (params) {
-  return runQuery(generateSimpleGetQuery(params))
-}
+// const runSimpleGet = function (params) {
+//   return runQuery(generateSimpleGetQuery(params))
+// }
 
 const generateAddQuery = function (params) {
   return [
@@ -249,14 +249,14 @@ const retrievePayload = function (payload, payloadType) {
         from: retrieveNodeData(payload.from),
         to: retrieveNodeData(payload.to)
       }
-    case 'asyncProcess':
-      return payload
+    // case 'asyncProcess':
+    //   return payload
     case 'RequestControlAction':
       return payload.properties
     case 'UpdateControlAction':
       return payload.properties
-    case 'simpleGet':
-      return payload.properties
+    // case 'simpleGet':
+    //   return payload.properties
     default:
       warning('Unknown payloadType encountered')
   }

@@ -128,7 +128,7 @@ class RequestControlActionCommand {
       `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)}})-[:\`RELATED_MATCH\`]->(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
-      this._generateNodeValueRelationsClause(template.potentialAction.object),
+      this._generateNodeValueRelationsClause(requestInput.propertyObject),
       // `CREATE (\`propertyValue_3\`)-[:\`NODE_VALUE\`]->(\`node_1\`)`,
       `RETURN \`controlAction\` {\`_schemaType\`:HEAD(labels(\`controlAction\`)), \`identifier\`:\`controlAction\`.\`identifier\`,`,
       `\`target\`:\`entryPoint\`,`,
@@ -305,11 +305,10 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreatePropertyValuesClause (template, requestInput) {
-    if (Array.isArray(template.potentialAction.object === false || template.potentialAction.object.length <= 1)) {
+    if (Array.isArray(template.potentialAction.object) === false || template.potentialAction.object.length <= 1) {
       return ''
     }
 
-    // generate relation clause for ControlAction.object
     const objectRelationClause = this.queryHelper.generateRelationClause('ControlAction', 'object')
 
     const segments = template.potentialAction.object.map(templateProperty => {
@@ -353,13 +352,32 @@ class RequestControlActionCommand {
           warning('Unknown potentialAction template object encountered')
       }
     })
-
     if (segments.length <= 0) {
       return ''
     }
-    segments.unshift(`CREATE`)
 
-    return segments.join(', ')
+    return `CREATE ${segments.join(', ')}`
+  }
+
+  _generateNodeValueRelationsClause (requestProperties) {
+    debug('requestProperties:')
+    debug(requestProperties)
+    if (!Array.isArray(requestProperties) || requestProperties.length <= 0) {
+      return ''
+    }
+    // debug('requestProperties:')
+    // debug(requestProperties)
+
+    const relationClause = this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')
+
+    let segments = requestProperties.map(requestProperty => {
+      return `(\`${requestProperty.propertyValueAlias}\`)${relationClause}(\`${requestProperty.alias}\`)`
+    })
+    if (segments.length <= 0) {
+      return ''
+    }
+
+    return `CREATE ${segments.join(', ')}`
   }
 
   _generateReturnClause (template) {

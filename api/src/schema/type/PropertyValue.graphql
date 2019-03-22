@@ -3,8 +3,36 @@ type PropertyValue {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
+  #################################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  #  "https://schema.org/additionalProperty"
+  #  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  #  "https://schema.org/disambiguatingDescription"
+  #  disambiguatingDescription: String
+  "https://schema.org/image"
+  image: URL
+  #  "https://schema.org/mainEntityOfPage"
+  #  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  #  "https://schema.org/potentialAction"
+  #  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  #  "https://schema.org/sameAs"
+  #  sameAs: URL
+  #  "https://pending.schema.org/subjectOf"
+  #  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  #  "https://pending.schema.org/url"
+  #  url: URL
   ################################
   ### PropertyValue properties ###
   #maxValue: Int
@@ -15,9 +43,9 @@ type PropertyValue {
   #unitCode: String
   #unitText: String
   "https://schema.org/value"
-  value: String # any Scalar type or the identifier of the node
-  "TROMPA specific extension to allow value to be scalar or a node"
+  value: String # string, that can be validated/cast according to value of `valueReference` property
+  "TROMPA specific extension to mitigate Apollo limitation, and allow `value` to be scalar or a node"
   nodeValue: ThingInterfaced @relation(name: "NODE_VALUE", direction: "OUT")
   "https://schema.org/valueReference"
-  valueReference: ValueReference!
+  valueReference: ValueReference! # contains either a valid scalar or valid schema-type
 }
