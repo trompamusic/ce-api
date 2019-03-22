@@ -3,10 +3,27 @@
   "author": "Wim Klerkx",
   "license": "Apache-2.0",
   "devDependencies": {
-    "conventional-changelog-cli": "^2.0.11"
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.1",
+    "@types/jest": "^24.0.11",
+    "apollo-link": "^1.2.11",
+    "apollo-link-http": "^1.5.14",
+    "babel-jest": "^24.5.0",
+    "conventional-changelog-cli": "^2.0.11",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "jest": "^24.5.0",
+    "node-fetch": "^2.3.0"
   },
   "scripts": {
-    "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
+    "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md",
+    "test": "jest tests/helpers.js tests --coverage"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "lcov"
+    ]
   },
   "private": true
 }

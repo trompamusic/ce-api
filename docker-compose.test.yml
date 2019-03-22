@@ -3,6 +3,7 @@ version: '3'
 services:
 
   neo4j:
+    container_name: neo4j-test
     build: ./neo4j
     ports:
       - 7474:7474
@@ -15,6 +16,7 @@ services:
       - NEO4J_dbms_shell_enabled=true
 
   api:
+    container_name: api-test
     build: ./api
     ports:
       - 4000:4000
@@ -27,5 +29,13 @@ services:
 #      DEBUG: info
     volumes:
       - ./api:/app
+    links:
+      - neo4j
+
+  data:
+    container_name: data-test
+    build: ./data
+    depends_on:
+      - neo4j
     links:
       - neo4j
