@@ -1,4 +1,4 @@
-import { debug } from '../index'
+import {debug, warning} from '../index'
 import { schema as defaultSchema } from '../schema'
 import SchemaHelper from './SchemaHelper'
 
@@ -8,6 +8,39 @@ class QueryHelper {
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
     this.schemaHelper = new SchemaHelper(this.schema)
+  }
+
+  selectedPropertiesClause (parentType, parentAlias, selectionSet) {
+    let propertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
+
+    if (selectionSet.kind !== 'SelectionSet') {
+      throw Error('Property clause generation needs a selectionSet')
+    }
+
+    selectionSet.selections.map(selection => {
+      switch (selection.kind) {
+        case 'Field':
+          const nodeClause = this.selectedPropertyClause(parentType, parentAlias, selection)
+          if (typeof nodeClause === 'string') {
+            propertyClauses.push(nodeClause)
+          }
+          break
+        case 'InlineFragment':
+          if (selection.typeCondition.kind === 'NamedType' && selection.typeCondition.name.value === parentType) {
+            selection.selectionSet.selections.map(namedTypeSelection => {
+              const nodeClause = this.selectedPropertyClause(parentType, parentAlias, namedTypeSelection)
+              if (typeof nodeClause === 'string') {
+                propertyClauses.push(nodeClause)
+              }
+            })
+          }
+          break
+        default:
+          warning('unknown selection kind encountered: ' + selection.kind)
+      }
+    })
+
+    return propertyClauses.join(`, `)
   }
 
   selectedPropertyClause (parentType, parentAlias, selection) {
@@ -67,9 +100,9 @@ class QueryHelper {
       clause += representsMultipleTypes.map(propertyTypeName => {
         return [
           `[(\`${parentAlias}\`)`,
-          this.relationClause(relationDetails),
+          QueryHelper.relationClause(relationDetails),
           `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
-          this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
+          this.selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
           `}]`
         ].join(' ')
       }).join(' + ')
@@ -77,9 +110,9 @@ class QueryHelper {
       // if root-type: generate only one sub-query
       clause += [
         `[(\`${parentAlias}\`)`,
-        this.relationClause(relationDetails),
+        QueryHelper.relationClause(relationDetails),
         `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
-        this._selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
+        this.selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
         `}]`
       ].join(' ')
     }

@@ -1,21 +1,21 @@
 import { debug, info, warning } from '../index'
-import SchemaHelper from '../helpers/SchemaHelper'
+// import SchemaHelper from '../helpers/SchemaHelper'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
-import StringHelper from "../helpers/StringHelper";
+// import StringHelper from "../helpers/StringHelper";
 // import { pubsub } from "../resolvers";
 
 class RequestControlActionCommand {
 
   /**
    * @param params
+   * @param resolveInfo
    */
-  constructor (params) {
+  constructor (params, resolveInfo) {
     this.params = params
-    // this.driver = driver
+    this.resolveInfo = resolveInfo
     this.session = driver.session()
-
-    this.schemaHelper = new SchemaHelper()
+    // this.schemaHelper = new SchemaHelper()
     this.queryHelper = new QueryHelper()
   }
 
@@ -71,8 +71,8 @@ class RequestControlActionCommand {
       throw Error('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
     }
 
-    // hydrate propertyObject aliases
     let nodeCounter = 1
+    // hydrate propertyObject aliases
     if (Array.isArray(requestInput.propertyObject)) {
       requestInput.propertyObject = requestInput.propertyObject.map(node => {
         node.alias = `node_${nodeCounter}`
@@ -82,7 +82,7 @@ class RequestControlActionCommand {
         return node
       })
     }
-    // hydrate propertyObject aliases
+    // hydrate propertyValueObject aliases
     if (Array.isArray(requestInput.propertyValueObject)) {
       requestInput.propertyValueObject = requestInput.propertyValueObject.map(node => {
         node.propertyValueAlias = `propertyValue_${nodeCounter}`
@@ -125,16 +125,11 @@ class RequestControlActionCommand {
       `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"}),`,
       this._generateMatchPropertyNodes(requestInput),
       `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
-      `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)}})-[:\`RELATED_MATCH\`]->(\`potentialControlAction\`)`,
+      `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
       this._generateNodeValueRelationsClause(requestInput.propertyObject),
-      // `CREATE (\`propertyValue_3\`)-[:\`NODE_VALUE\`]->(\`node_1\`)`,
-      `RETURN \`controlAction\` {\`_schemaType\`:HEAD(labels(\`controlAction\`)), \`identifier\`:\`controlAction\`.\`identifier\`,`,
-      `\`target\`:\`entryPoint\`,`,
-      `\`relatedMatch\`:\`potentialControlAction\`,`,
-      `\`object\`:[\`propertyValue_1\`, \`propertyValue_2\`, \`propertyValue_3\`, \`node_1\`]`,
-      `} AS _payload`
+      this._generateReturnClause(template, requestInput)
     ].join(' ')
   }
 
@@ -177,20 +172,8 @@ class RequestControlActionCommand {
    * @private
    */
   _createControlAction (template, requestInput) {
-    debug('template:')
-    debug(template)
-
-    debug('template.potentialAction:')
-    debug(template.potentialAction)
-
-    debug('requestInput:')
-    debug(requestInput)
-
     const createQuery = this._generateCreateQuery(template, requestInput)
-    debug('createQuery')
     debug(createQuery)
-
-    return
 
     return this.session.run(createQuery)
     // retrieve ControlAction return
@@ -203,9 +186,6 @@ class RequestControlActionCommand {
         if (typeof createdControlAction !== 'object') {
           return Promise.reject(new Error('Failed to create ControlAction'))
         }
-
-        debug('createdControlAction:')
-        debug(createdControlAction)
 
         return createdControlAction
       })
@@ -236,58 +216,51 @@ class RequestControlActionCommand {
   }
 
   /**
-   * Combine template and request input to set ControlAction property values
+   * Assemble a PropertyValue for a Property (relation to node) by combining template and request-input data
    * @param templateProperty
    * @param requestProperty
+   * @returns {string}
    * @private
    */
   _composeControlActionPropertyClause (templateProperty, requestProperty) {
-    let segments = [`\`identifier\`: apoc.create.uuid()`]
-    segments.push(`\`propertyID\`:"${templateProperty.identifier}"`)
-    segments.push(`\`description\`:"${templateProperty.description}"`)
-    segments.push(`\`title\`:"${templateProperty.title}"`)
-    segments.push(`\`name\`:"${templateProperty.title}"`)
-    segments.push(`\`valueReference\`:"${requestProperty.nodeType}"`)
+    let segments = [
+      `\`identifier\`: apoc.create.uuid()`,
+      `\`propertyID\`:"${templateProperty.identifier}"`,
+      `\`description\`:"${templateProperty.description}"`,
+      `\`title\`:"${templateProperty.title}"`,
+      `\`name\`:"${templateProperty.title}"`,
+      `\`valueReference\`:"${requestProperty.nodeType}"`
+    ]
 
     return segments.join(', ')
   }
 
+  /**
+   * Assemble a PropertyValue by combining template and request-input data
+   * @param templateProperty
+   * @param requestPropertyValue
+   * @returns {string}
+   * @private
+   */
   _composeControlActionPropertyValueClause (templateProperty, requestPropertyValue) {
-    let segments = [`\`identifier\`: apoc.create.uuid()`]
-    segments.push(`\`propertyID\`:"${templateProperty.identifier}"`)
-    segments.push(`\`description\`:"${templateProperty.description}"`)
-    segments.push(`\`title\`:"${templateProperty.title}"`)
-    segments.push(`\`name\`:"${templateProperty.valueName}"`)
-    segments.push(`\`valueReference\`:"${requestPropertyValue.valuePattern}"`)
-    segments.push(`\`value\`:"${requestPropertyValue.value}"`)
+    let segments = [
+      `\`identifier\`: apoc.create.uuid()`,
+      `\`propertyID\`:"${templateProperty.identifier}"`,
+      `\`description\`:"${templateProperty.description}"`,
+      `\`title\`:"${templateProperty.title}"`,
+      `\`name\`:"${templateProperty.valueName}"`,
+      `\`valueReference\`:"${requestPropertyValue.valuePattern}"`,
+      `\`value\`:"${requestPropertyValue.value}"`
+    ]
 
     return segments.join(', ')
   }
 
-  _generateReturnPropertiesClause (alias, templateObject) {
-    //let segments = [`{\`_schemaType\`:HEAD(labels(\`${alias}\`))`]
-
-    // iterate the template object
-    let segmentCounter = 1
-    const segments = Object.keys(templateObject)
-      // detect template properties to ignore
-      .filter(key => {
-        return (['identifier', '_schemaType'].indexOf(key) === -1)
-      })
-      .map(key => {
-        // handle properties containing an object recursively
-        if (typeof templateObject[key] !== 'object') {
-          return false
-        }
-      })
-
-    // complete the clause at front and end
-    segments.unshift(`{\`_schemaType\`:HEAD(labels(\`${alias}\`))`)
-    segments.push(`}`)
-
-    return segments.join(', ')
-  }
-
+  /**
+   * @param requestInput
+   * @returns {string}
+   * @private
+   */
   _generateMatchPropertyNodes (requestInput) {
     if (!Array.isArray(requestInput.propertyObject) || !requestInput.propertyObject.length > 0) {
       return
@@ -359,39 +332,37 @@ class RequestControlActionCommand {
     return `CREATE ${segments.join(', ')}`
   }
 
+  /**
+   * @param requestProperties
+   * @returns {string}
+   * @private
+   */
   _generateNodeValueRelationsClause (requestProperties) {
-    debug('requestProperties:')
-    debug(requestProperties)
     if (!Array.isArray(requestProperties) || requestProperties.length <= 0) {
       return ''
     }
-    // debug('requestProperties:')
-    // debug(requestProperties)
-
-    const relationClause = this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')
 
     let segments = requestProperties.map(requestProperty => {
-      return `(\`${requestProperty.propertyValueAlias}\`)${relationClause}(\`${requestProperty.alias}\`)`
+      return `(\`${requestProperty.propertyValueAlias}\`)${this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')}(\`${requestProperty.alias}\`)`
     })
-    if (segments.length <= 0) {
-      return ''
-    }
 
     return `CREATE ${segments.join(', ')}`
   }
 
-  _generateReturnClause (template) {
-    let segments = [`RETURN \`controlAction\``]
+  /**
+   * @param template
+   * @param requestInput
+   * @returns {string}
+   * @private
+   */
+  _generateReturnClause (template, requestInput) {
+    let segments = [
+      `RETURN \`controlAction\` {`,
+      this.queryHelper.selectedPropertiesClause('ControlAction', 'controlAction', this.resolveInfo.fieldNodes[0].selectionSet),
+      `} AS _payload`
+    ]
 
-
-    return [
-      `RETURN \`controlAction\` {\`_schemaType\`:HEAD(labels(\`controlAction\`)), \`identifier\`:\`controlAction\`.\`identifier\`, \`title\`:\`controlAction\`.\`title\`,`,
-      `\`target\`:{\`_schemaType\`:HEAD(labels(\`entryPoint\`)), \`identifier\`:\`entryPoint\`.\`identifier\`, \`title\`:\`entryPoint\`.\`title\`},`,
-      `\`object\`:[`,
-      `{\`_schemaType\`:HEAD(labels(\`propertyValueSpecification_1\`)), \`identifier\`:\`propertyValueSpecification_1\`.identifier},`,
-      `{\`_schemaType\`:HEAD(labels(\`property_1\`)), \`identifier\`:\`property_1\`.identifier}`,
-      `]} AS _payLoad`
-    ].join(' ')
+    return segments.join(' ')
   }
 }
 
