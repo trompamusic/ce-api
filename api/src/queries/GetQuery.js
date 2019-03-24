@@ -178,7 +178,6 @@ class GetQuery {
   }
 
   _relationClause (relationDetails) {
-    debug(relationDetails)
     let clause = `-[:\`${relationDetails['name']}\`]-`
 
     switch (relationDetails['direction'].toString().toUpperCase()) {

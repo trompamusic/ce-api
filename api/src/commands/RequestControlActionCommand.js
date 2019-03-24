@@ -30,8 +30,6 @@ class RequestControlActionCommand {
       // retrieve template ControlAction
       .then(result => {
         const payloads = result.records.map(record => {
-          // debug('record.get(\'_payload\')')
-          // debug(record.get('_payload'))
           return record.get('_payload')
         })
 
@@ -181,7 +179,7 @@ class RequestControlActionCommand {
         const payloads = result.records.map(record => {
           return record.get('_payload')
         })
-
+        debug(payloads[0].object)
         const createdControlAction = payloads[0]
         if (typeof createdControlAction !== 'object') {
           return Promise.reject(new Error('Failed to create ControlAction'))

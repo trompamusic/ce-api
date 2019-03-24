@@ -1,4 +1,3 @@
-import { debug } from '../index'
 import { retrieveSchemaType } from '../resolvers'
 
 export const interfaceResolvers = {
@@ -9,7 +8,6 @@ export const interfaceResolvers = {
   },
   ThingInterface: {
     __resolveType (obj, context, info) {
-      debug('ThingInterface')
       return retrieveSchemaType(obj)
     }
   },
