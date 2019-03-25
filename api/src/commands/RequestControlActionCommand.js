@@ -48,12 +48,6 @@ class RequestControlActionCommand {
       }, reason => {
         throw reason
       })
-      // create ControlAction
-      // .then(template => {
-      //   debug('create ControlAction:')
-      //   debug(payload)
-      //   return this._createControlAction(template, payload)
-      // })
       .catch(function (error) {
         throw Error(error.toString())
       })
@@ -138,28 +132,32 @@ class RequestControlActionCommand {
    * @private
    */
   _validateRequestInput (template, requestInput) {
-    // debug('_validateRequestInput, template:')
-    // debug(template)
-    // debug('_validateRequestInput, payload:')
-    // debug(payload)
+    // check request propertyObjects against template properties
+    let requestPropertyValidity = requestInput.propertyObject.map(requestProperty => {
+      return template.potentialAction.object.some(templateProperty => {
+        if (
+          templateProperty._schemaType === 'Property' && requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
+        ) {
+          return true
+        }
+      })
+    })
+    if (requestPropertyValidity.includes(false)) {
+      throw Error('Request error: one or more passed propertyObjects do not match potential action properties')
+    }
 
-    // iterate through template properties and check against payload properties
-    // template.property.map(templateProperty => {
-    //   debug('template property:')
-    //   debug(templateProperty)
-    //   if (typeof payload.propertyObject === 'undefined') {
-    //     throw Error('Payload error: missing propertyObject(s)')
-    //   }
-    //   let valid = false
-    //   payload.propertyObject.map(payloadPoperty => {
-    //     if (propertyObject.potentialActionPropertyIdentifier === templateProperty.identifier) {
-    //
-    //     }
-    //   })
-    // })
+    // check request propertyObjects against template properties
+    let requestPropertyValueValidity = requestInput.propertyValueObject.map(requestProperty => {
+      return template.potentialAction.object.some(templateProperty => {
+        if (templateProperty._schemaType === 'PropertyValueSpecification' && requestProperty.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier) {
+          return true
+        }
+      })
+    })
+    if (requestPropertyValueValidity.includes(false)) {
+      throw Error('Request error: one or more passed propertyValueObjects do not match potential action properties')
+    }
 
-
-    // throw Error('Payload validation error: there was a problem with the payload')
     return true
   }
 
