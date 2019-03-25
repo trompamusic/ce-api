@@ -227,8 +227,6 @@ const retrievePayload = function (payload, payloadType) {
       return payload.properties
     case 'UpdateControlAction':
       return payload.properties
-    // case 'simpleGet':
-    //   return payload.properties
     default:
       warning('Unknown payloadType encountered')
   }
