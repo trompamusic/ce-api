@@ -97,3 +97,9 @@ type _addEntryPointPotentialActionPayload {
   from: EntryPoint
   to: ActionInterfaced
 }
+
+#type ControlActionRequestResponse {
+#  payload: ControlAction,
+#  identifier: String!,
+#  entryPointIdentifier: String!
+#}

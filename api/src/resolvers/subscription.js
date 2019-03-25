@@ -8,6 +8,10 @@ export const subscriptionResolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator('ControlActionRequest'),
         (payload, variables) => {
+          debug('payload:')
+          debug(payload)
+          debug('variables')
+          debug(variables)
           return payload.entryPointIdentifier === variables.entryPointIdentifier
         }
       )

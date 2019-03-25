@@ -178,7 +178,11 @@ class RequestControlActionCommand {
         if (typeof createdControlAction !== 'object') {
           return Promise.reject(new Error('Failed to create ControlAction'))
         }
-        pubsub.publish('ControlActionRequest', { payload: createdControlAction, identifier: createdControlAction.identifier, entryPointIdentifier: template.identifier })
+        // createdControlAction.entryPointIdentifier = template.identifier
+        debug('createdControlAction:')
+        debug(createdControlAction)
+        pubsub.publish('ControlActionRequest',{ payload: createdControlAction, entryPointIdentifier: template.identifier })
+        //pubsub.publish('ControlActionRequest', { payload: createdControlAction })
 
         return createdControlAction
       })
