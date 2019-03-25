@@ -1,8 +1,17 @@
 import { pubsub } from '../resolvers'
 import { withFilter } from 'graphql-subscriptions'
+import { debug } from '../index'
 
 export const subscriptionResolvers = {
   Subscription: {
+    ControlActionRequest: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('ControlActionRequest'),
+        (payload, variables) => {
+          return payload.entryPointIdentifier === variables.entryPointIdentifier
+        }
+      )
+    },
     ControlActionMutation: {
       subscribe: withFilter(
         () => pubsub.asyncIterator('ControlActionMutation'),
@@ -10,14 +19,6 @@ export const subscriptionResolvers = {
           return payload.identifier === variables.identifier
         }
       )
-    },
-    // ActivateActionImplementation: {
-    //   subscribe: withFilter(
-    //     () => pubsub.asyncIterator('ActivateActionImplementation'),
-    //     (payload, variables) => {
-    //       return payload.identifier === variables.identifier
-    //     }
-    //   )
-    // }
+    }
   }
 }

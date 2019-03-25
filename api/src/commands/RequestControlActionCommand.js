@@ -1,12 +1,9 @@
 import { debug, info, warning } from '../index'
-// import SchemaHelper from '../helpers/SchemaHelper'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
-// import StringHelper from "../helpers/StringHelper";
-// import { pubsub } from "../resolvers";
+import { pubsub } from '../resolvers'
 
 class RequestControlActionCommand {
-
   /**
    * @param params
    * @param resolveInfo
@@ -177,11 +174,11 @@ class RequestControlActionCommand {
         const payloads = result.records.map(record => {
           return record.get('_payload')
         })
-        debug(payloads[0].object)
         const createdControlAction = payloads[0]
         if (typeof createdControlAction !== 'object') {
           return Promise.reject(new Error('Failed to create ControlAction'))
         }
+        pubsub.publish('ControlActionRequest', { payload: createdControlAction, identifier: createdControlAction.identifier, entryPointIdentifier: template.identifier })
 
         return createdControlAction
       })

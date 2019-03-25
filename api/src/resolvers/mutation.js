@@ -7,23 +7,12 @@ import RequestControlActionCommand from '../commands/RequestControlActionCommand
 export const mutationResolvers = {
   Mutation: {
     RequestControlAction (object, params, ctx, resolveInfo) {
-      info('RequestControlAction')
       const command = new RequestControlActionCommand(params, resolveInfo)
       return command.create
-
-      // return handleRequestControlActionRequest(params.controlAction)
-
-      // const queryGenerator = new RequestControlActionQuery(params, resolveInfo)
-      // const query = queryGenerator.query
-      // info(`query: ${query}`)
-
-      // params.actionStatus = 'accepted'
-      // const query = generateRequestControlActionQuery(params)
-      // return runQuery(query, 'RequestControlAction')
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const query = generateUpdateControlActionQuery(params)
-      return runQuery(query, 'UpdateControlAction')
+      return runQuery(query, 'ControlActionMutation', 'ControlActionMutation')
     },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
       return runAdd(params)
@@ -165,16 +154,12 @@ export const mutationResolvers = {
 }
 
 const runAdd = function (params) {
-  return runQuery(generateAddQuery(params))
+  return runQuery(generateAddQuery(params), 'add')
 }
 
 const runRemove = function (params) {
-  return runQuery(generateRemoveQuery(params))
+  return runQuery(generateRemoveQuery(params), 'remove')
 }
-
-// const runSimpleGet = function (params) {
-//   return runQuery(generateSimpleGetQuery(params))
-// }
 
 const generateAddQuery = function (params) {
   return [
@@ -195,18 +180,18 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-const generateRequestControlActionQuery = function (params) {
-  if (!Array.isArray(params.object) || params.object.length === 0) {
-    throw Error('ControlAction.object cannot be empty')
-  }
-
-  const objectValues = `["${params.object.join('", "')}"]`
-
-  return [
-    `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, actionStatus: "${params.actionStatus}", description: "${params.description}"})`,
-    `RETURN \`controlAction\` AS \`_payload\``
-  ].join(' ')
-}
+// const generateRequestControlActionQuery = function (params) {
+//   if (!Array.isArray(params.object) || params.object.length === 0) {
+//     throw Error('ControlAction.object cannot be empty')
+//   }
+//
+//   const objectValues = `["${params.object.join('", "')}"]`
+//
+//   return [
+//     `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, actionStatus: "${params.actionStatus}", description: "${params.description}"})`,
+//     `RETURN \`controlAction\` AS \`_payload\``
+//   ].join(' ')
+// }
 
 const generateUpdateControlActionQuery = function (params) {
   let setPropertyClauses = [];
@@ -220,7 +205,7 @@ const generateUpdateControlActionQuery = function (params) {
   ].join(' ')
 }
 
-const runQuery = function (query, queryType) {
+const runQuery = function (query, queryType, publishChannel) {
   info(`query: ${query}`)
   let session = driver.session()
   let promise = session.run(query)
@@ -229,8 +214,8 @@ const runQuery = function (query, queryType) {
         return retrievePayload(record.get('_payload'), queryType)
       })
       const returnValue = rt[0]
-      if (typeof returnValue.identifier === 'string') {
-        pubsub.publish('ControlActionMutation', { ControlActionMutation: returnValue, identifier: returnValue.identifier })
+      if (typeof publishChannel === 'string' && typeof returnValue.identifier === 'string') {
+        pubsub.publish(publishChannel, { payload: returnValue, identifier: returnValue.identifier })
       }
       return returnValue
     })
