@@ -179,10 +179,7 @@ class RequestControlActionCommand {
           return Promise.reject(new Error('Failed to create ControlAction'))
         }
         // createdControlAction.entryPointIdentifier = template.identifier
-        debug('createdControlAction:')
-        debug(createdControlAction)
-        pubsub.publish('ControlActionRequest',{ payload: createdControlAction, entryPointIdentifier: template.identifier })
-        //pubsub.publish('ControlActionRequest', { payload: createdControlAction })
+        pubsub.publish('ControlActionRequest', { ControlActionRequest: createdControlAction, entryPointIdentifier: template.identifier })
 
         return createdControlAction
       })

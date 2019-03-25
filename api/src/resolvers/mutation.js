@@ -12,8 +12,6 @@ export const mutationResolvers = {
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const query = generateUpdateControlActionQuery(params)
-      debug('mutation.js UpdateControlAction query:')
-      debug(query)
       return runQuery(query, 'UpdateControlAction', 'ControlActionMutation')
     },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
