@@ -1,4 +1,4 @@
-import { debug, info, warning } from '../index'
+import { info, warning } from '../index'
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
 import { retrieveNodeData, pubsub } from '../resolvers'
@@ -180,21 +180,8 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-// const generateRequestControlActionQuery = function (params) {
-//   if (!Array.isArray(params.object) || params.object.length === 0) {
-//     throw Error('ControlAction.object cannot be empty')
-//   }
-//
-//   const objectValues = `["${params.object.join('", "')}"]`
-//
-//   return [
-//     `CREATE (\`controlAction\`:\`ControlAction\` {identifier: ${(typeof params.identifier === 'string') ? `"${params.identifier}"` : `randomUUID()`}, target: "${params.target}" , object: ${objectValues}, actionStatus: "${params.actionStatus}", description: "${params.description}"})`,
-//     `RETURN \`controlAction\` AS \`_payload\``
-//   ].join(' ')
-// }
-
 const generateUpdateControlActionQuery = function (params) {
-  let setPropertyClauses = [];
+  let setPropertyClauses = []
   Object.entries(params).forEach(([key, value]) => {
     setPropertyClauses.push(`${key}: "${value}"`)
   })
@@ -227,8 +214,6 @@ const runQuery = function (query, queryType, publishChannel) {
 }
 
 const retrievePayload = function (payload, payloadType) {
-  debug('retrievePayload payloadType:')
-  debug(payloadType)
   switch (payloadType) {
     case 'add':
     case 'remove':
@@ -247,26 +232,4 @@ const retrievePayload = function (payload, payloadType) {
     default:
       warning('Unknown payloadType encountered')
   }
-}
-
-const handleRequestControlActionRequest = function (payload) {
-  info('validateRequestControlActionRequest payload:')
-  debug(payload)
-  const potentialActionIdentifier = payload.potentialActionIdentifier
-  if (typeof potentialActionIdentifier !== 'string') {
-    throw Error('Missing parameter: potentialActionIdentifier')
-  }
-
-  const potentialAction = runQuery(generateSimpleGetQuery('ControlAction', potentialActionIdentifier), 'simpleGet')
-  potentialAction
-    .then(result => {
-      debug(result)
-      debug(typeof result)
-      if (typeof result !== 'object') {
-        return
-      }
-      const queryGenerator = new RequestControlActionQuery(payload)
-      const query = queryGenerator.query
-      info(`query: ${query}`)
-    })
 }

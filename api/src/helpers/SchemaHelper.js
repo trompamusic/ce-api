@@ -1,4 +1,3 @@
-import { debug } from '../index'
 import { schema as defaultSchema } from '../schema'
 
 class SchemaHelper {

@@ -1,6 +1,5 @@
 import { pubsub } from '../resolvers'
 import { withFilter } from 'graphql-subscriptions'
-import { debug } from '../index'
 
 export const subscriptionResolvers = {
   Subscription: {

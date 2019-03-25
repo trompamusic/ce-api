@@ -1,4 +1,4 @@
-import { debug, info, warning } from '../index'
+import { info, warning } from '../index'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
 import { pubsub } from '../resolvers'
@@ -22,7 +22,7 @@ class RequestControlActionCommand {
   get create () {
     const requestInput = this._retrieveRequestInput()
     const entryPointQuery = this._generateTemplateQuery(requestInput)
-    debug(entryPointQuery)
+    info(entryPointQuery)
     return this.session.run(entryPointQuery)
       // retrieve template ControlAction
       .then(result => {
@@ -166,7 +166,7 @@ class RequestControlActionCommand {
    */
   _createControlAction (template, requestInput) {
     const createQuery = this._generateCreateQuery(template, requestInput)
-    debug(createQuery)
+    info(createQuery)
 
     return this.session.run(createQuery)
     // retrieve ControlAction return
