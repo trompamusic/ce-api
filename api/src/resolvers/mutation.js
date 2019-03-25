@@ -12,7 +12,9 @@ export const mutationResolvers = {
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const query = generateUpdateControlActionQuery(params)
-      return runQuery(query, 'ControlActionMutation', 'ControlActionMutation')
+      debug('mutation.js UpdateControlAction query:')
+      debug(query)
+      return runQuery(query, 'UpdateControlAction', 'ControlActionMutation')
     },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
       return runAdd(params)
@@ -215,7 +217,7 @@ const runQuery = function (query, queryType, publishChannel) {
       })
       const returnValue = rt[0]
       if (typeof publishChannel === 'string' && typeof returnValue.identifier === 'string') {
-        pubsub.publish(publishChannel, { payload: returnValue, identifier: returnValue.identifier })
+        pubsub.publish(publishChannel, { ControlActionMutation: returnValue, identifier: returnValue.identifier })
       }
       return returnValue
     })
@@ -227,6 +229,8 @@ const runQuery = function (query, queryType, publishChannel) {
 }
 
 const retrievePayload = function (payload, payloadType) {
+  debug('retrievePayload payloadType:')
+  debug(payloadType)
   switch (payloadType) {
     case 'add':
     case 'remove':
