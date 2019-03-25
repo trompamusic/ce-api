@@ -1,4 +1,4 @@
-import {debug, warning} from '../index'
+import { debug, warning } from '../index'
 import { schema as defaultSchema } from '../schema'
 import SchemaHelper from './SchemaHelper'
 
