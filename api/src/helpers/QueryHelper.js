@@ -3,6 +3,7 @@ import { schema as defaultSchema } from '../schema'
 import SchemaHelper from './SchemaHelper'
 
 const bracketRegExString = '^\\[.*?\\]$'
+const paginationParameters = { 'offset': 'SKIP', 'first': 'LIMIT' }
 
 class QueryHelper {
   constructor (schema) {
@@ -155,6 +156,33 @@ class QueryHelper {
 
   static schemaTypeClause (alias) {
     return `\`_schemaType\`:HEAD(labels(\`${alias}\`))`
+  }
+
+  generateConditionalClause (params) {
+    let conditionalClause = ''
+
+    // process all parameters, except pagination parameters
+    for (let param in params) {
+      // ignore pagination parameters
+      if (param in paginationParameters) {
+        continue
+      }
+      conditionalClause += `\`${param}\`:"${params[param]}"`
+    }
+
+    return conditionalClause
+  }
+
+  generatePaginationClause (params) {
+    let paginationClause = ''
+
+    for (let paginationParam in paginationParameters) {
+      if (paginationParam in params) {
+        paginationClause += ` ${paginationParameters[paginationParam]} ${params[paginationParam]}`
+      }
+    }
+
+    return paginationClause
   }
 
   static propertySetClause (alias, properties) {
