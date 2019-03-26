@@ -368,6 +368,7 @@ enum ControlActionTargetType {
 
 enum ControlActionStatus {
   requested
+  received
   accepted
   starting
   running
