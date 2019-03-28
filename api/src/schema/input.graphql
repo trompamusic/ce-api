@@ -1,0 +1,73 @@
+input _ThingInterfaceInput {
+  identifier: String!
+  type: ThingInterfaceType!
+}
+
+input _LegalPersonInput {
+  identifier: String!
+  type: LegalPersonType!
+}
+
+input _OrganizationInterfaceInput {
+  identifier: String!
+  type: OrganizationInterfaceType!
+}
+
+input _CreativeWorkInterfaceInput {
+  identifier: String!
+  type: CreativeWorkInterfaceType!
+}
+
+input _MediaObjectInterfaceInput {
+  identifier: String!
+  type: MediaObjectInterfaceType!
+}
+
+input _ActionInterfaceInput {
+  identifier: String!
+  type: ActionInterfaceType!
+}
+
+input _PerformerInput {
+  identifier: String!
+  type: PerformerType!
+}
+
+input _ProvenanceEntityInterfaceInput {
+  identifier: String!
+  type: ProvenanceEntityInterfaceType!
+}
+
+input _ProvenanceAgentInterfaceInput {
+  identifier: String!
+  type: ProvenanceAgentInterfaceType!
+}
+
+input _ProvenanceActivityInterfaceInput {
+  identifier: String!
+  type: ProvenanceActivityInterfaceType!
+}
+
+input _ActionInterfaceInput {
+  identifier: String!
+  type: ActionInterfaceType!
+}
+
+input _RequestControlActionInput {
+  entryPointIdentifier: String!
+  potentialActionIdentifier: String!
+  propertyObject: [_PropertyInput]
+  propertyValueObject: [_PropertyValueInput]
+}
+
+input _PropertyValueInput {
+  potentialActionPropertyValueSpecificationIdentifier: String!
+  value: String!
+  valuePattern: ValuePattern!
+}
+
+input _PropertyInput {
+  potentialActionPropertyIdentifier: String!
+  nodeIdentifier: String!
+  nodeType: ValueType!
+}

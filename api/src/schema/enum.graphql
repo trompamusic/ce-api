@@ -1,0 +1,412 @@
+# TODO auto generate
+enum ThingInterfaceRelationToThingInterface {
+  about
+  mainEntity
+  mentions
+}
+
+# TODO auto generate
+enum ThingInterfaceRelationToCreativeWorkInterface {
+  mainEntityOfPage
+  subjectOf
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToLegalPerson {
+  author
+  copyrightHolder
+  funder
+  producer
+  schema_publisher
+  translator
+}
+
+# TODO auto generate
+enum OrganizationInterfaceRelationToLegalPerson {
+  member
+  funder
+  sponsor
+}
+
+# TODO auto generate
+enum ActionInterfaceRelationToThingInterface {
+  object
+  result
+}
+
+# TODO auto generate
+enum ActionInterfaceRelationToLegalPerson {
+  agent
+  participant
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceRelationToCreativeWorkInterface {
+  citation
+  hasPart
+  isBasedOn
+  isPartOf
+  exampleOfWork
+  workExample
+  translator
+}
+
+# TODO auto generate
+enum MediaObjectInterfaceRelationToCreativeWorkInterface {
+  encodesCreativeWork
+}
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceRelationToThingInterface {
+  wasDerivedFrom
+  used
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceRelationToLegalPersonInterface {
+  wasAssociatedWith
+  actedOnBehalfOf
+}
+
+# TODO auto generate
+enum LegalPersonType {
+  Person
+  Organization
+  MusicGroup
+}
+
+# TODO auto generate
+enum ThingInterfaceType {
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicAlbum
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+  Occupation
+  DigitalDocumentPermission
+  Audience
+  Action
+  UpdateAction
+  ReplaceAction
+  ControlAction
+  EntryPoint
+  SoftwareApplication
+  Property
+  PropertyValue
+  PropertyValueSpecification
+}
+
+# TODO auto generate
+enum MetadataInterfaceType {
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+}
+
+# TODO auto generate
+enum CreativeWorkInterfaceType {
+  Product
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+}
+
+# TODO auto generate
+enum MediaObjectInterfaceType {
+  MediaObject
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+}
+
+# TODO auto generate
+enum OrganizationInterfaceType {
+  Organization
+  MusicGroup
+}
+
+# TODO auto generate
+enum ActionInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
+  ControlAction
+}
+
+enum ProvenanceActivityInterfaceType {
+  Action
+  UpdateAction
+  ReplaceAction
+}
+
+# TODO auto generate
+enum PerformerType {
+  Person
+  MusicGroup
+}
+
+# TODO auto generate
+enum ProvenanceEntityInterfaceType {
+  DigitalDocumentPermission
+  Action
+  CreativeWork
+  Event
+  Intangible
+  Organization
+  Person
+  Place
+  Product
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicAlbum
+  MusicPlaylist
+  MusicRecording
+  VideoObject
+  MusicGroup
+  UpdateAction
+  ReplaceAction
+}
+
+# TODO auto generate
+enum ProvenanceAgentInterfaceType {
+  Person
+  Organization
+  MusicGroup
+}
+
+
+
+enum AvailableLanguage {
+  en
+  #  es
+  #  ca
+  #  nl
+  #  de
+  #  fr
+}
+
+enum AccessMode {
+  auditory
+  tactile
+  textual
+  visual
+  colorDependent
+  chartOnVisual
+  chemOnVisual
+  diagramOnVisual
+  mathOnVisual
+  musicOnVisual
+  textOnVisual
+}
+
+enum AudienceType {
+  scholars
+  orchestras
+  instrumentPlayers
+  singers
+  musicEnthusiasts
+}
+
+enum DigitalDocumentPermissionType {
+  permissionType1
+  permissionType2
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum MusicAlbumProductionType {
+  soundtrack
+  liveAlbum
+  studioAlbum
+}
+
+enum ValuePattern {
+  String
+  Int
+  Float
+  Boolean
+  URL
+  Duration
+  _Neo4jDate
+  _Neo4jDateTime
+}
+
+enum ValueType {
+  Action
+  Article
+  Audience
+  AudioObject
+  CreativeWork
+  DataDownload
+  Dataset
+  DigitalDocument
+  DigitalDocumentPermission
+  Event
+  ImageObject
+  MediaObject
+  MusicAlbum
+  MusicComposition
+  MusicGroup
+  MusicPlaylist
+  MusicRecording
+  Occupation
+  Organization
+  Person
+  Place
+  Product
+  Review
+  SoftwareApplication
+  VideoObject
+}
+
+# TODO auto-generate -> ValueReference = ValuePattern + ValueType
+enum ValueReference {
+  String
+  Int
+  Float
+  Boolean
+  URL
+  Duration
+  _Neo4jDate
+  _Neo4jDateTime
+  Action
+  Article
+  Audience
+  AudioObject
+  CreativeWork
+  DataDownload
+  Dataset
+  DigitalDocument
+  DigitalDocumentPermission
+  Event
+  ImageObject
+  MediaObject
+  MusicAlbum
+  MusicComposition
+  MusicGroup
+  MusicPlaylist
+  MusicRecording
+  Occupation
+  Organization
+  Person
+  Place
+  Product
+  Review
+  SoftwareApplication
+  VideoObject
+}
+
+enum SearchableMetadataFields {
+  title
+  creator
+  description
+  subject
+}
+
+enum ControlActionTargetType {
+  essentia
+}
+
+enum ControlActionStatus {
+  requested
+  received
+  accepted
+  starting
+  running
+  stopping
+  complete
+  error
+}
+
+enum ValidAdditionalPropertyNodeValueType {
+  String
+  Int
+  Float
+  Boolean
+  URL
+  Duration
+  _Neo4jDate
+  _Neo4jDateTime
+  Person
+  CreativeWork
+  Article
+  DigitalDocument
+  MediaObject
+  Review
+  AudioObject
+  DataDownload
+  Dataset
+  ImageObject
+  MusicComposition
+  MusicPlaylist
+  MusicAlbum
+  MusicRecording
+  VideoObject
+  Event
+  Organization
+  MusicGroup
+  Product
+  Place
+  Occupation
+  DigitalDocumentPermission
+  Audience
+}

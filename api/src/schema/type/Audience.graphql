@@ -1,0 +1,49 @@
+"https://schema.org/Thing,https://schema.org/Intangible,https://schema.org/Audience"
+type Audience implements ThingInterface {
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [Audience]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [Audience]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [Audience]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [Audience]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  ################################
+  ### Audience properties ###
+  "https://pending.schema.org/audienceType"
+  audienceType: [AudienceType]
+  "https://pending.schema.org/geographicArea"
+  geographicArea: [Place] @relation(name: "GEOGRAPHIC_AREA", direction: "IN")
+}

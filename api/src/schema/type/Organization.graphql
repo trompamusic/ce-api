@@ -1,0 +1,169 @@
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Organization,https://www.w3.org/TR/prov-o/#Agent"
+type Organization implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  contributor: String!
+  "http://purl.org/dc/elements/1.1/coverage"
+  coverage: String
+  "http://purl.org/dc/elements/1.1/creator"
+  creator: String!
+  "http://purl.org/dc/elements/1.1/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/format"
+  format: String!
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/language"
+  language: AvailableLanguage!
+  "http://purl.org/dc/elements/1.1/publisher"
+  publisher: String
+  "http://purl.org/dc/elements/1.1/relation"
+  relation: String
+  "http://purl.org/dc/elements/1.1/rights"
+  rights: String
+  "http://purl.org/dc/elements/1.1/source"
+  source: String!
+  "http://purl.org/dc/elements/1.1/subject"
+  subject: String!
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  ####################################
+  ### SearchableInterface property ###
+  _searchScore: Float
+  ########################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [Organization]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [Organization]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [Organization]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [Organization]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  ###########################################
+  ### ProvenanceAgentInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
+  wasAssociatedWith: [LegalPerson] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
+  actedOnBehalfOf: [LegalPerson] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+  ###############################
+  ### Organization properties ###
+  #actionableFeedbackPolicy
+  "https://schema.org/address"
+  address: String
+  #aggregateRating: AggregateRating
+  "https://schema.org/alumni"
+  alumni: [Person] @relation(name: "ALUMNI", direction: "IN")
+  #areaServed
+  "https://schema.org/award"
+  award: String
+  "https://schema.org/brand"
+  brand: Organization @relation(name: "BRAND", direction: "IN")
+  #contactPoint ContactPoint
+  #correctionsPolicy URL
+  #department: OrganizationInterface @relation(name: "DEPARTMENT", direction: "IN")
+  "https://schema.org/dissolutionDate"
+  dissolutionDate: _Neo4jDate
+  #diversityPolicy
+  #diversityStaffingReport
+  #duns	Text
+  "https://schema.org/email"
+  email: String
+  "https://schema.org/employee"
+  employee: [Person] @relation(name: "EMPLOYEE", direction: "IN")
+  #ethicsPolicy
+  "https://schema.org/event"
+  event: [Event] @relation(name: "EVENT", direction: "OUT")
+  #faxNumber	Text
+  "https://schema.org/founder"
+  founder: [Person] @relation(name: "FOUNDER", direction: "IN")
+  "https://schema.org/foundingDate"
+  foundingDate: _Neo4jDate
+  "https://schema.org/foundingLocation"
+  foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
+  "https://schema.org/funder"
+  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  "https://schema.org/globalLocationNumber"
+  globalLocationNumber: String
+  #hasOfferCatalog: OfferCatalog
+  #hasPOS: Place
+  #isicV4
+  #knowsAbout
+  #knowsLanguage
+  "https://schema.org/legalName"
+  legalName: String!
+  "https://schema.org/leiCode"
+  leiCode: String
+  "https://schema.org/location"
+  location: [Place] @relation(name: "LOCATION", direction: "IN")
+  "https://schema.org/logo"
+  logo: URL
+  #makesOffer
+  "https://schema.org/member"
+  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
+  "https://schema.org/memberOf"
+  memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
+  #naics
+  "https://schema.org/numberOfEmployees"
+  numberOfEmployees: Int
+  #ownershipFundingInfo: URL
+  #owns
+  "https://schema.org/parentOrganization"
+  parentOrganization: Organization @relation(name: "PARENT_ORGANIZATION", direction: "IN")
+  #"https://schema.org/publishingPrinciples"
+  #publishingPrinciples: URL
+  "https://schema.org/review"
+  review: [Review]
+  #seeks
+  "https://schema.org/sponsor"
+  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "OUT")
+  "https://schema.org/subOrganization"
+  subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
+  #taxID
+  "https://schema.org/telephone"
+  telephone: String
+  "https://schema.org/unnamedSourcesPolicy"
+  unnamedSourcesPolicy: URL
+  "https://schema.org/vatID"
+  vatID: String
+}
