@@ -1,0 +1,5 @@
+interface SearchableInterface {
+####################################
+  ### SearchableInterface property ###
+  _searchScore: Float
+}

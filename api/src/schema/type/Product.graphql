@@ -1,0 +1,131 @@
+"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Product"
+type Product implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  contributor: String!
+  "http://purl.org/dc/elements/1.1/coverage"
+  coverage: String
+  "http://purl.org/dc/elements/1.1/creator"
+  creator: String!
+  "http://purl.org/dc/elements/1.1/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/format"
+  format: String!
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/language"
+  language: AvailableLanguage!
+  "http://purl.org/dc/elements/1.1/publisher"
+  publisher: String
+  "http://purl.org/dc/elements/1.1/relation"
+  relation: String
+  "http://purl.org/dc/elements/1.1/rights"
+  rights: String
+  "http://purl.org/dc/elements/1.1/source"
+  source: String!
+  "http://purl.org/dc/elements/1.1/subject"
+  subject: String!
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  ####################################
+  ### SearchableInterface property ###
+  _searchScore: Float
+  #################################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [Product]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [Product]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [Product]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [Product]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  ############################################
+  ### ProvenanceEntityInterface properties ###
+  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  "https://www.w3.org/TR/prov-o/#used"
+  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  ##########################
+  ### Product properties ###
+  #"https://schema.org/aggregateRating"
+  #aggregateRating: AggregateRating
+  "https://schema.org/audience"
+  audience: [Audience]
+  "https://schema.org/award"
+  award: String
+  "https://schema.org/brand"
+  brand: Organization @relation(name: "BRAND", direction: "IN")
+  "https://schema.org/category"
+  category: String
+  #color
+  #depth
+  #gtin12
+  #gtin13
+  #gtin14
+  #gtin8
+  #height
+  #isAccessoryOrSparePartFor: Product @relation(name: "IS_ACCESSORY_OR_SPARE_FOR", direction: "OUT")
+  #isConsumableFor
+  "https://schema.org/isRelatedTo"
+  isRelatedTo: [Product] @relation(name: "IS_RELATED_TO", direction: "OUT")
+  "https://schema.org/isSimilarTo"
+  isSimilarTo: [Product] @relation(name: "IS_SIMILAR_TO", direction: "OUT")
+  #itemCondition
+  "https://schema.org/logo"
+  logo: URL
+  "https://schema.org/manufacturer"
+  manufacturer: [Organization] @relation(name: "MANUFACTURER", direction: "OUT")
+  "https://schema.org/material"
+  material: String
+  "https://schema.org/model"
+  model: String
+  #mpn
+  #offers
+  #productID
+  "https://schema.org/productionDate"
+  productionDate: _Neo4jDate
+  "https://schema.org/purchaseDate"
+  purchaseDate: _Neo4jDate
+  "https://schema.org/releaseDate"
+  releaseDate: _Neo4jDate
+  "https://schema.org/review"
+  review: [Review] @relation(name: "REVIEW", direction: "IN")
+  #sku
+  #weight
+  #width
+}

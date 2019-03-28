@@ -1,0 +1,4 @@
+type Subscription {
+  ControlActionRequest(entryPointIdentifier: String!): ControlAction
+  ControlActionMutation(identifier: String!): ControlAction
+}

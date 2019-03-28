@@ -1,6 +1,5 @@
 # TROMPA Contributor Environment - GraphQL API
 
-
 ## Quick Start
 
 #### System requirements
@@ -9,7 +8,7 @@ The CE api runs in [Node.js](https://nodejs.org/en/) v10
 
 #### Install dependencies:
 
-in `\api` folder:
+In the `./api` folder:
 
 ```
 npm install
@@ -34,6 +33,11 @@ export GRAPHQL_URI="http://localhost:4000"
 
 Download and install [Neo4j Desktop](https://neo4j.com/download/). Follow the [manual](https://neo4j.com/developer/neo4j-desktop/#_installing_and_starting_neo4j_desktop) to create a new database using the example configuration values.
 
+Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
+
+```
+CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
+```
 
 #### Start the GraphQL service:
 
@@ -45,6 +49,7 @@ This will start the GraphQL service (by default on localhost:4000) where you can
 ![GraphQL Playground](img/graphql-playground.png)
 
 Check if the database connection works by entering the following query in the left section of the interface:
+
 ```
 {
   __schema {
@@ -55,14 +60,18 @@ Check if the database connection works by entering the following query in the le
 }
 ```
 
-
-
 ## Run with docker
 
 Run the CE-api docker container from the CE-api root folder:
-```
-docker-compose up
-```
-This docker container includes a Neo4j instance.
 
-Default configuration values are included in the `docker-compose.yml` file
+```
+docker-compose up --build
+```
+
+This docker container includes a preconfigured Neo4j instance.
+
+Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
+
+```
+CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
+```

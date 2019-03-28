@@ -1,9 +1,19 @@
+import { info, warning } from '../index'
 import { driver } from '../driver'
 import snakeCase from 'lodash/snakeCase'
-import { retrieveNodeData } from '../resolvers'
+import { retrieveNodeData, pubsub } from '../resolvers'
+import RequestControlActionCommand from '../commands/RequestControlActionCommand'
 
 export const mutationResolvers = {
   Mutation: {
+    RequestControlAction (object, params, ctx, resolveInfo) {
+      const command = new RequestControlActionCommand(params, resolveInfo)
+      return command.create
+    },
+    UpdateControlAction (object, params, ctx, resolveInfo) {
+      const query = generateUpdateControlActionQuery(params)
+      return runQuery(query, 'UpdateControlAction', 'ControlActionMutation')
+    },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
       return runAdd(params)
     },
@@ -133,16 +143,22 @@ export const mutationResolvers = {
     },
     RemoveProvenanceActivityInterfaceActionInterface (object, params, ctx, resolveInfo) {
       return runRemove(params, 'DELETE')
+    },
+    AddSoftwareApplicationSoftwareHelp (object, params, ctx, resolveInfo) {
+      return runAdd(params, 'CREATE')
+    },
+    RemoveSoftwareApplicationSoftwareHelp (object, params, ctx, resolveInfo) {
+      return runRemove(params, 'DELETE')
     }
   }
 }
 
 const runAdd = function (params) {
-  return runQuery(generateAddQuery(params))
+  return runQuery(generateAddQuery(params), 'add')
 }
 
 const runRemove = function (params) {
-  return runQuery(generateRemoveQuery(params))
+  return runQuery(generateRemoveQuery(params), 'remove')
 }
 
 const generateAddQuery = function (params) {
@@ -164,22 +180,54 @@ const generateRemoveQuery = function (params) {
   ].join(' ')
 }
 
-const runQuery = function (query) {
+const generateUpdateControlActionQuery = function (params) {
+  let setPropertyClauses = []
+  Object.entries(params).forEach(([key, value]) => {
+    setPropertyClauses.push(`${key}: "${value}"`)
+  })
+  return [
+    `MATCH (\`controlAction\`:\`ControlAction\`{identifier: "${params.identifier}"})`,
+    `SET \`controlAction\` += {${setPropertyClauses.join(', ')}}`,
+    `RETURN \`controlAction\` AS \`_payload\``
+  ].join(' ')
+}
+
+const runQuery = function (query, queryType, publishChannel) {
+  info(`query: ${query}`)
   let session = driver.session()
   let promise = session.run(query)
     .then(result => {
       let rt = result.records.map(record => {
-        const payload = record.get('_payload')
-        return {
-          from: retrieveNodeData(payload.from),
-          to: retrieveNodeData(payload.to)
-        }
+        return retrievePayload(record.get('_payload'), queryType)
       })
-      return rt[0]
+      const returnValue = rt[0]
+      if (typeof publishChannel === 'string' && typeof returnValue.identifier === 'string') {
+        pubsub.publish(publishChannel, { ControlActionMutation: returnValue, identifier: returnValue.identifier })
+      }
+      return returnValue
     })
     .catch(function (error) {
       throw Error(error.toString())
     })
 
   return promise
+}
+
+const retrievePayload = function (payload, payloadType) {
+  switch (payloadType) {
+    case 'add':
+    case 'remove':
+      return {
+        from: retrieveNodeData(payload.from),
+        to: retrieveNodeData(payload.to)
+      }
+    // case 'asyncProcess':
+    //   return payload
+    case 'RequestControlAction':
+      return payload.properties
+    case 'UpdateControlAction':
+      return payload.properties
+    default:
+      warning('Unknown payloadType encountered')
+  }
 }

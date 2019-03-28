@@ -2,6 +2,10 @@ import { queryResolvers } from './resolvers/query'
 import { interfaceResolvers } from './resolvers/interface'
 import { unionResolvers } from './resolvers/union'
 import { mutationResolvers } from './resolvers/mutation'
+import { subscriptionResolvers } from './resolvers/subscription'
+import { PubSub } from 'graphql-subscriptions'
+
+export const pubsub = new PubSub()
 
 /*
  * Concatenate resolvers
@@ -18,6 +22,10 @@ for (let key in unionResolvers) {
 
 for (let key in mutationResolvers) {
   if (mutationResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = mutationResolvers[key]
+}
+
+for (let key in subscriptionResolvers) {
+  if (subscriptionResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = subscriptionResolvers[key]
 }
 
 export const resolvers = aggregatedResolvers

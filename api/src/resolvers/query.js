@@ -6,6 +6,15 @@ import SearchQuery from '../queries/SearchQuery'
 
 export const queryResolvers = {
   Query: {
+    PropertyValue (object, params, context, resolveInfo) {
+      return getQuery(params, resolveInfo)
+    },
+    EntryPoint (object, params, context, resolveInfo) {
+      return getQuery(params, resolveInfo)
+    },
+    ControlAction (object, params, context, resolveInfo) {
+      return getQuery(params, resolveInfo)
+    },
     Person (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
     },

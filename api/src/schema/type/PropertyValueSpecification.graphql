@@ -1,0 +1,60 @@
+"https://schema.org/PropertyValue"
+type PropertyValueSpecification {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  #################################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+#  "https://schema.org/additionalProperty"
+#  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+#  "https://schema.org/disambiguatingDescription"
+#  disambiguatingDescription: String
+  "https://schema.org/image"
+  image: URL
+#  "https://schema.org/mainEntityOfPage"
+#  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+#  "https://schema.org/potentialAction"
+#  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+#  "https://schema.org/sameAs"
+#  sameAs: URL
+#  "https://pending.schema.org/subjectOf"
+#  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+#  "https://pending.schema.org/url"
+#  url: URL
+  ################################
+  ### PropertyValueSpecification properties ###
+  "https://schema.org/defaultValue"
+  defaultValue: String
+  "https://schema.org/maxValue"
+  maxValue: Float
+  "https://schema.org/minValue"
+  minValue: Float
+  "https://schema.org/multipleValues"
+  multipleValues: Boolean
+  "https://schema.org/readonlyValue"
+  readonlyValue: Boolean
+  "https://schema.org/stepValue"
+  stepValue: Float
+  "https://schema.org/valueMaxLength"
+  valueMaxLength: Int
+  "https://schema.org/valueMinLength"
+  valueMinLength: Int
+  "https://schema.org/valueName"
+  valueName: String
+  "https://schema.org/valuePattern"
+  valuePattern: ValuePattern
+  "https://schema.org/valueRequired"
+  valueRequired: Boolean
+}
