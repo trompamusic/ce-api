@@ -176,6 +176,12 @@ const runRemove = function (params) {
   return runQuery(queryGenerator.query, 'remove')
 }
 
+/**
+ * @param query
+ * @param queryType
+ * @param publishChannel
+ * @returns {Promise<{from, to} | never>}
+ */
 const runQuery = function (query, queryType, publishChannel) {
   info(`query: ${query}`)
   let session = driver.session()
@@ -197,6 +203,11 @@ const runQuery = function (query, queryType, publishChannel) {
   return promise
 }
 
+/**
+ * @param payload
+ * @param payloadType
+ * @returns {*}
+ */
 const retrievePayload = function (payload, payloadType) {
   switch (payloadType) {
     case 'add':
@@ -205,8 +216,6 @@ const retrievePayload = function (payload, payloadType) {
         from: retrieveNodeData(payload.from),
         to: retrieveNodeData(payload.to)
       }
-    // case 'asyncProcess':
-    //   return payload
     case 'RequestControlAction':
       return payload.properties
     case 'UpdateControlAction':
