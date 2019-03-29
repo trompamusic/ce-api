@@ -1,9 +1,9 @@
 import { info, warning } from '../index'
 import { driver } from '../driver'
-import snakeCase from 'lodash/snakeCase'
 import { retrieveNodeData, pubsub } from '../resolvers'
 import RequestControlActionCommand from '../commands/RequestControlActionCommand'
 import AddQuery from '../queries/AddQuery'
+import RemoveQuery from '../queries/RemoveQuery'
 
 /**
  * @type {{Mutation: {AddActionInterfaceThingInterface(*, *=, *, *): *, RemoveDigitalDocumentPermissionGrantee(*, *=, *, *): *, AddDigitalDocumentPermissionGrantee(*, *=, *, *): *, AddProvenanceActivityInterfaceActionInterface(*, *=, *, *): *, AddEventPerformer(*, *=, *, *): *, RemoveProvenanceEntityInterfaceThingInterface(*, *=, *, *): *, AddVideoObjectMusicBy(*, *=, *, *): *, RemoveOrganizationInterfaceLegalPerson(*, *=, *, *): *, AddMediaObjectInterfaceCreativeWorkInterface(*, *=, *, *): *, AddOrganizationInterfaceLegalPerson(*, *=, *, *): *, RemoveEventPerformer(*, *=, *, *): *, AddEventComposer(*, *=, *, *): *, RemoveProvenanceEntityInterfaceWasGeneratedBy(*, *=, *, *): *, RemoveThingInterfacePotentialAction(*, *=, *, *): *, RemoveActionInterfaceThingInterface(*, *=, *, *): *, AddThingInterfacePotentialAction(*, *=, *, *): *, RemoveProvenanceActivityInterfaceActionInterface(*, *=, *, *): *, RemoveThingInterfaceThingInterface(*, *=, *, *): *, RemoveEventComposer(*, *=, *, *): *, RemoveCreativeWorkInterfaceCreativeWorkInterface(*, *=, *, *): *, RequestControlAction(*, *=, *, *=): *, AddProvenanceAgentInterfaceLegalPerson(*, *=, *, *): *, UpdateControlAction(*, *=, *, *): *, AddThingInterfaceThingInterface(*, *=, *, *): *, RemoveThingInterfaceCreativeWorkInterface(*, *=, *, *): *, RemoveProvenanceEntityInterfaceWasAttributedTo(*, *=, *, *): *, AddActionInterfaceLegalPerson(*, *=, *, *): *, AddProvenanceEntityInterfaceWasAttributedTo(*, *=, *, *): *, AddCreativeWorkInterfaceLegalPerson(*, *=, *, *): *, RemoveMediaObjectInterfaceCreativeWorkInterface(*, *=, *, *): *, AddThingInterfaceCreativeWorkInterface(*, *=, *, *): *, RemoveVideoObjectMusicBy(*, *=, *, *): *, AddProvenanceEntityInterfaceWasGeneratedBy(*, *=, *, *): *, AddSoftwareApplicationSoftwareHelp(*, *=, *, *): *, AddProvenanceEntityInterfaceThingInterface(*, *=, *, *): *, RemoveSoftwareApplicationSoftwareHelp(*, *=, *, *): *, RemoveCreativeWorkInterfaceLegalPerson(*, *=, *, *): *, AddCreativeWorkInterfaceCreativeWorkInterface(*, *=, *, *): *, RemoveActionInterfaceLegalPerson(*, *=, *, *): *, RemoveProvenanceAgentInterfaceLegalPerson(*, *=, *, *): *}}}
@@ -166,18 +166,13 @@ const runAdd = function (params) {
   return runQuery(queryGenerator.query, 'add')
 }
 
+/**
+ * @param params
+ * @returns {Promise<{from, to} | never>}
+ */
 const runRemove = function (params) {
-  return runQuery(generateRemoveQuery(params), 'remove')
-}
-
-const generateRemoveQuery = function (params) {
-  return [
-    `MATCH (\`node_from\`:\`${params.from.type}\` {\`identifier\`: "${params.from.identifier}"})`,
-    `-[\`relation\`:${snakeCase(params.field).toUpperCase()}]->`,
-    `(\`node_to\`: \`${params.to.type}\` {\`identifier\`: "${params.to.identifier}"})`,
-    `DELETE \`relation\``,
-    `RETURN { from: \`node_from\` ,to: \`node_to\` } AS \`_payload\`;`
-  ].join(' ')
+  const queryGenerator = new RemoveQuery(params)
+  return runQuery(queryGenerator.query, 'remove')
 }
 
 const generateUpdateControlActionQuery = function (params) {
