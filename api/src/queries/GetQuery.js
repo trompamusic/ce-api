@@ -2,6 +2,10 @@ import StringHelper from '../helpers/StringHelper'
 import QueryHelper from '../helpers/QueryHelper'
 
 class GetQuery {
+  /**
+   * @param params
+   * @param resolveInfo
+   */
   constructor (params, resolveInfo) {
     this.params = params
     this.resolveInfo = resolveInfo
@@ -11,10 +15,17 @@ class GetQuery {
     this.baseType = this.baseNode.name.value
   }
 
+  /**
+   * @returns {*}
+   */
   get query () {
     return this._generateQuery()
   }
 
+  /**
+   * @returns {string}
+   * @private
+   */
   _generateQuery () {
     // retrieve constants from parameters
     const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName)
