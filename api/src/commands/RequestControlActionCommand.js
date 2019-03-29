@@ -12,7 +12,6 @@ class RequestControlActionCommand {
     this.params = params
     this.resolveInfo = resolveInfo
     this.session = driver.session()
-    // this.schemaHelper = new SchemaHelper()
     this.queryHelper = new QueryHelper()
   }
 

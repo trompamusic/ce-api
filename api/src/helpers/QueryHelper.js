@@ -6,11 +6,20 @@ const bracketRegExString = '^\\[.*?\\]$'
 const paginationParameters = { 'offset': 'SKIP', 'first': 'LIMIT' }
 
 class QueryHelper {
+  /**
+   * @param schema
+   */
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
     this.schemaHelper = new SchemaHelper(this.schema)
   }
 
+  /**
+   * @param parentType
+   * @param parentAlias
+   * @param selectionSet
+   * @returns {string}
+   */
   selectedPropertiesClause (parentType, parentAlias, selectionSet) {
     let propertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
 
@@ -44,6 +53,12 @@ class QueryHelper {
     return propertyClauses.join(`, `)
   }
 
+  /**
+   * @param parentType
+   * @param parentAlias
+   * @param selection
+   * @returns {*}
+   */
   selectedPropertyClause (parentType, parentAlias, selection) {
     let propertyClause = null
 
@@ -61,6 +76,12 @@ class QueryHelper {
     return propertyClause
   }
 
+  /**
+   * @param parentType
+   * @param parentAlias
+   * @param selection
+   * @returns {string}
+   */
   selectionSetNodeClause (parentType, parentAlias, selection) {
     const propertyName = selection.name.value
     const propertyType = this.schemaHelper.findPropertyType(parentType, propertyName)
@@ -124,6 +145,13 @@ class QueryHelper {
     return clause
   }
 
+  /**
+   * @param type
+   * @param propertyName
+   * @param alias
+   * @param invert
+   * @returns {string}
+   */
   generateRelationClause (type, propertyName, alias, invert) {
     return QueryHelper.relationClause(
       SchemaHelper.retrievePropertyTypeRelationDetails(
@@ -134,6 +162,47 @@ class QueryHelper {
     )
   }
 
+  /**
+   * @param params
+   * @returns {string}
+   */
+  generatePaginationClause (params) {
+    let paginationClause = ''
+
+    for (let paginationParam in paginationParameters) {
+      if (paginationParam in params) {
+        paginationClause += ` ${paginationParameters[paginationParam]} ${params[paginationParam]}`
+      }
+    }
+
+    return paginationClause
+  }
+
+  /**
+   * @param params
+   * @returns {string}
+   */
+  generateConditionalClause (params) {
+    let conditionalClause = ''
+
+    // process all parameters, except pagination parameters
+    for (let param in params) {
+      // ignore pagination parameters
+      if (param in paginationParameters) {
+        continue
+      }
+      conditionalClause += `\`${param}\`:"${params[param]}"`
+    }
+
+    return conditionalClause
+  }
+
+  /**
+   * @param relationDetails
+   * @param alias
+   * @param invert
+   * @returns {string}
+   */
   static relationClause (relationDetails, alias, invert) {
     let clause = `-[${(typeof alias === 'string') ? `\`${alias}\`` : ``}:\`${relationDetails['name']}\`]-`
 
@@ -154,37 +223,19 @@ class QueryHelper {
     return clause
   }
 
+  /**
+   * @param alias
+   * @returns {string}
+   */
   static schemaTypeClause (alias) {
     return `\`_schemaType\`:HEAD(labels(\`${alias}\`))`
   }
 
-  generateConditionalClause (params) {
-    let conditionalClause = ''
-
-    // process all parameters, except pagination parameters
-    for (let param in params) {
-      // ignore pagination parameters
-      if (param in paginationParameters) {
-        continue
-      }
-      conditionalClause += `\`${param}\`:"${params[param]}"`
-    }
-
-    return conditionalClause
-  }
-
-  generatePaginationClause (params) {
-    let paginationClause = ''
-
-    for (let paginationParam in paginationParameters) {
-      if (paginationParam in params) {
-        paginationClause += ` ${paginationParameters[paginationParam]} ${params[paginationParam]}`
-      }
-    }
-
-    return paginationClause
-  }
-
+  /**
+   * @param alias
+   * @param properties
+   * @returns {*}
+   */
   static propertySetClause (alias, properties) {
     return properties.map(property => {
       return `\`${alias}\`:\`${alias}\`.\`${property}\``
