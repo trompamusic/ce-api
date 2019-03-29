@@ -71,3 +71,7 @@ input _PropertyInput {
   nodeIdentifier: String!
   nodeType: ValueType!
 }
+
+input _TargetInput {
+  identifier: String
+}

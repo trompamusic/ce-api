@@ -1,6 +1,7 @@
 import { info } from '../index'
 import { driver } from '../driver'
 import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
+import GetControlActionByTargetQuery from '../queries/GetControlActionByTargetQuery';
 import GetQuery from '../queries/GetQuery'
 import SearchQuery from '../queries/SearchQuery'
 
@@ -13,7 +14,7 @@ export const queryResolvers = {
       return getQuery(params, resolveInfo)
     },
     ControlAction (object, params, context, resolveInfo) {
-      return getQuery(params, resolveInfo)
+      return getQuery(params, resolveInfo, params.target ? GetControlActionByTargetQuery : GetQuery)
     },
     Person (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
@@ -106,8 +107,8 @@ export const queryResolvers = {
   }
 }
 
-const getQuery = function (params, resolveInfo) {
-  const queryGenerator = new GetQuery(params, resolveInfo)
+const getQuery = function (params, resolveInfo, QueryBuilder = GetQuery) {
+  const queryGenerator = new QueryBuilder(params, resolveInfo)
   const query = queryGenerator.query
   info(`query: ${query}`)
 
