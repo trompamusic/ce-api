@@ -18,8 +18,14 @@ class SearchQuery {
   }
 
   _generateSubStringClause () {
+    // empty substring
+    if (!this.params.substring) {
+      return '/.*/'
+    }
+
     // prepare search substring
     let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
+
     if (subStringClause.includes(' ')) {
       subStringClause = `'${subStringClause}'`
     }
