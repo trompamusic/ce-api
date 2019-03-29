@@ -5,6 +5,11 @@ class SchemaHelper {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
   }
 
+  /**
+   * @param parentType
+   * @param propertyName
+   * @returns {GraphQLField<*, *>|GraphQLInputField}
+   */
   findPropertyType (parentType, propertyName) {
     const typeMap = this.schema._typeMap[parentType]
     if (typeof typeMap === 'undefined') {
@@ -19,6 +24,10 @@ class SchemaHelper {
     return propertyType
   }
 
+  /**
+   * @param interfaceName
+   * @returns {*}
+   */
   findInterfaceImplementingTypes (interfaceName) {
     const implementations = this.schema._implementations[interfaceName]
     if (implementations instanceof Array === false || !implementations.length) {
@@ -28,6 +37,10 @@ class SchemaHelper {
     return implementations.map(implementation => { return implementation.toString() })
   }
 
+  /**
+   * @param unionName
+   * @returns {*}
+   */
   findPossibleTypes (unionName) {
     const possibleTypes = this.schema._possibleTypeMap[unionName]
     if (typeof possibleTypes !== 'object') {
@@ -37,6 +50,9 @@ class SchemaHelper {
     return Object.keys(possibleTypes)
   }
 
+  /**
+   * @param propertyType
+   */
   static retrievePropertyTypeRelationDetails (propertyType) {
     let relationDetails = {}
 

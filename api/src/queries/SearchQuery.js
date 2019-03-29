@@ -1,4 +1,8 @@
 class SearchQuery {
+  /**
+   * @param params
+   * @param resolveInfo
+   */
   constructor (params, resolveInfo) {
     this.params = params
     this.resolveInfo = resolveInfo
@@ -7,6 +11,9 @@ class SearchQuery {
     this.doEvaluateFieldSubset = !(!(this.params.onFields instanceof Array) || this.params.onFields.length === 0 || this.params.onFields.length === this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.length)
   }
 
+  /**
+   * @returns {string}
+   */
   get query () {
     return [
       `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._generateSubStringClause())}")`,
@@ -17,6 +24,10 @@ class SearchQuery {
     ].join(' ')
   }
 
+  /**
+   * @returns {string}
+   * @private
+   */
   _generateSubStringClause () {
     // prepare search substring
     let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
@@ -27,6 +38,11 @@ class SearchQuery {
     return subStringClause
   }
 
+  /**
+   * @param subStringClause
+   * @returns {*|string}
+   * @private
+   */
   _generateIndexQueryClause (subStringClause) {
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
     let indexQueryClause = subStringClause
@@ -42,6 +58,10 @@ class SearchQuery {
     return indexQueryClause
   }
 
+  /**
+   * @returns {string}
+   * @private
+   */
   _generateTypeClause () {
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
     let typeClause = ''
