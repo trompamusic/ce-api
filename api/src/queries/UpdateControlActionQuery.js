@@ -1,9 +1,15 @@
+import QueryHelper from '../helpers/QueryHelper'
+
 class UpdateControlActionQuery {
   /**
    * @param params
    */
-  constructor (params) {
+  constructor (params, resolveInfo) {
     this.params = params
+    this.queryHelper = new QueryHelper()
+
+    this.baseNode = resolveInfo.fieldNodes[0]
+    this.baseType = this.baseNode.name.value
   }
 
   /**
@@ -14,10 +20,15 @@ class UpdateControlActionQuery {
     Object.entries(this.params).forEach(([key, value]) => {
       setPropertyClauses.push(`${key}: "${value}"`)
     })
+
+    const alias = `controlAction`
+
     return [
-      `MATCH (\`controlAction\`:\`ControlAction\`{identifier: "${this.params.identifier}"})`,
-      `SET \`controlAction\` += {${setPropertyClauses.join(', ')}}`,
-      `RETURN \`controlAction\` AS \`_payload\``
+      `MATCH (\`${alias}\`:\`ControlAction\`{identifier: "${this.params.identifier}"})`,
+      `SET \`${alias}\` += {${setPropertyClauses.join(', ')}}`,
+      `RETURN \`${alias}\` {`,
+      this.queryHelper.selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet),
+      `} AS \`_payload\``
     ].join(' ')
   }
 }

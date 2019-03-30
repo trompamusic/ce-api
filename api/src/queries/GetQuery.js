@@ -35,7 +35,7 @@ class GetQuery {
       `MATCH (\`${alias}\`:\`${this.baseType}\` {`,
       this.queryHelper.generateConditionalClause(this.params),
       `})`,
-      `WITH \`${alias}\`, HEAD(labels(\`${alias}\`)) as _schemaType`,
+      `WITH \`${alias}\``,
       `RETURN \`${alias}\` {`,
       this.queryHelper.selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet),
       `}`,
