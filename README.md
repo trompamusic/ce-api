@@ -4,11 +4,33 @@
 
 #### System requirements
 
-The CE api runs in [Node.js](https://nodejs.org/en/) v10 
+Docker should be installed on your local machine.
+
+The easiest way to start the CE API including a Neo4j database, is by using Docker compose. By running the following command, two docker containers will be created locally and started locally.
+
+```
+docker-compose up --build
+```
+
+#### Search indexes
+
+In order to enable Neo4j search queries, we need to create a node index. Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
+
+```
+CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
+```
+
+TODO: this should be added to the startup process eventually.
+
+## Development
+
+#### System requirements
+
+The CE api runs in [Node.js](https://nodejs.org/en/) v10
 
 #### Install dependencies:
 
-In the `./api` folder:
+Run the following command to install all dependencies:
 
 ```
 npm install
@@ -60,18 +82,22 @@ Check if the database connection works by entering the following query in the le
 }
 ```
 
-## Run with docker
+## Contributing
 
-Run the CE-api docker container from the CE-api root folder:
+The CE API is an open source project which is being developed for the [TROMPA](https://trompamusic.eu/) project. If you would like to contribute to this project, please make sure you've read the following sections:
 
-```
-docker-compose up --build
-```
+### Branches
 
-This docker container includes a preconfigured Neo4j instance.
+The CE API repository is using two branches; the **staging** branch which is being used for Pull Requests and testing. Whenever a new version is released, the staging branch gets merged into the **master** branch. Commits should not be pushed directly to the master branch.
 
-Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
+### Code style
 
-```
-CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
-```
+The CE API project implements the [Standard JS](https://standardjs.com/) code style. Before each commit, all changes will be linted and fixed whenever possible. It's also possible to manually run the linter by using the following command: `$ npm start lint`.
+
+### Commits
+
+Commits must validate to the [Angular Commit Guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines). This helps us, amongst others, to auto-generate the [CHANGELOG](CHANGELOG.md).   
+
+### Pull request
+
+If you would like to submit a proposal/change/fix, submit a Pull request to the [trompamusic/ce-api](https://github.com/trompamusic/ce-api) repository.

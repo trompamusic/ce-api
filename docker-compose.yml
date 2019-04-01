@@ -15,7 +15,7 @@ services:
       - NEO4J_dbms_shell_enabled=true
 
   api:
-    build: ./api
+    build: ./
     ports:
       - 4000:4000
     environment:
@@ -26,6 +26,6 @@ services:
       GRAPHQL_URI: "http://localhost:4000"
 #      DEBUG: info
     volumes:
-      - ./api:/app
+      - ./src:/app/src
     links:
       - neo4j
