@@ -1,3 +1,26 @@
+## <small>0.3.1 (2019-04-01)</small>
+
+* feat(project): allow querying ControlAction by target property ([01dc3ac](https://bitbucket.org/videodock/ce-api/commits/01dc3ac))
+* feat(project): make code style project wide ([106902b](https://bitbucket.org/videodock/ce-api/commits/106902b))
+* feat(project): restructure directories ([232a07a](https://bitbucket.org/videodock/ce-api/commits/232a07a))
+* feat(project): update babel dependencies ([be480e7](https://bitbucket.org/videodock/ce-api/commits/be480e7))
+* style(project): lint babel config ([e59588e](https://bitbucket.org/videodock/ce-api/commits/e59588e))
+* chore(api): update default neo4j password ([d54c032](https://bitbucket.org/videodock/ce-api/commits/d54c032))
+* chore(project): add eslint ignore and lint script ([d3a715d](https://bitbucket.org/videodock/ce-api/commits/d3a715d))
+* chore(project): fix package vulnerabilities ([766d07c](https://bitbucket.org/videodock/ce-api/commits/766d07c))
+* refactor(project): use targetIdentifier in ControlAction query ([33e5de5](https://bitbucket.org/videodock/ce-api/commits/33e5de5))
+* add docblocks ([b4a982c](https://bitbucket.org/videodock/ce-api/commits/b4a982c))
+* add docblocks to Get and SearchQuery ([c70176e](https://bitbucket.org/videodock/ce-api/commits/c70176e))
+* clean up ([322eb82](https://bitbucket.org/videodock/ce-api/commits/322eb82))
+* improve UpdateControlAction by honouring resolveInfo ([1be6677](https://bitbucket.org/videodock/ce-api/commits/1be6677))
+* refactor add query ([354c2c5](https://bitbucket.org/videodock/ce-api/commits/354c2c5))
+* refactor remove relation query ([058b923](https://bitbucket.org/videodock/ce-api/commits/058b923))
+* refactor UpdateControlAction query ([596cfb9](https://bitbucket.org/videodock/ce-api/commits/596cfb9))
+* v0.3.0 ([9480230](https://bitbucket.org/videodock/ce-api/commits/9480230))
+* fix(search): fix parse error when using an empty string ([6fc6508](https://bitbucket.org/videodock/ce-api/commits/6fc6508))
+
+
+
 ## 0.3.0 (2019-03-28)
 
 * Action.error is a String ([2e414b2](https://github.com/trompamusic/ce-api/commits/2e414b2))
