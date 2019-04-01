@@ -20,7 +20,7 @@ class GetControlActionByTargetQuery {
     const alias = StringHelper.lowercaseFirstCharacter(this.resolveInfo.fieldName)
 
     // split the params into targetParams and baseParams
-    const { target: targetParams, ...baseParams } = this.params
+    const { targetIdentifier, ...baseParams } = this.params
 
     // compose query string
     return [
@@ -29,7 +29,7 @@ class GetControlActionByTargetQuery {
       `})`,
       this.queryHelper.generateRelationClause(this.baseType, 'target'),
       `(\`entryPoint\`:\`EntryPoint\` {`,
-      this.queryHelper.generateConditionalClause(targetParams),
+      this.queryHelper.generateConditionalClause({ identifier: targetIdentifier }),
       `})`,
       `WITH \`${alias}\`, HEAD(labels(\`${alias}\`)) as _schemaType`,
       `RETURN \`${alias}\` {`,

@@ -14,7 +14,7 @@ export const queryResolvers = {
       return getQuery(params, resolveInfo)
     },
     ControlAction (object, params, context, resolveInfo) {
-      return getQuery(params, resolveInfo, params.target ? GetControlActionByTargetQuery : GetQuery)
+      return getQuery(params, resolveInfo, params.targetIdentifier ? GetControlActionByTargetQuery : GetQuery)
     },
     Person (object, params, context, resolveInfo) {
       return getQuery(params, resolveInfo)
