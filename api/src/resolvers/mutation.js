@@ -16,7 +16,7 @@ export const mutationResolvers = {
       return command.create
     },
     UpdateControlAction (object, params, ctx, resolveInfo) {
-      const queryGenerator = new UpdateControlActionQuery(params)
+      const queryGenerator = new UpdateControlActionQuery(params, resolveInfo)
       return runQuery(queryGenerator.query, 'UpdateControlAction', 'ControlActionMutation')
     },
     AddThingInterfaceThingInterface (object, params, ctx, resolveInfo) {
@@ -219,7 +219,7 @@ const retrievePayload = function (payload, payloadType) {
     case 'RequestControlAction':
       return payload.properties
     case 'UpdateControlAction':
-      return payload.properties
+      return payload
     default:
       warning('Unknown payloadType encountered')
   }
