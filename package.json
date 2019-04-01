@@ -25,7 +25,8 @@
   },
   "scripts": {
     "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md",
-    "test": "jest tests/helpers.js tests --coverage"
+    "test": "jest tests/helpers.js tests --coverage",
+    "lint": "eslint api tests"
   },
   "husky": {
     "hooks": {

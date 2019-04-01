@@ -1,7 +1,7 @@
 import { info } from '../index'
 import { driver } from '../driver'
 import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
-import GetControlActionByTargetQuery from '../queries/GetControlActionByTargetQuery';
+import GetControlActionByTargetQuery from '../queries/GetControlActionByTargetQuery'
 import GetQuery from '../queries/GetQuery'
 import SearchQuery from '../queries/SearchQuery'
 
