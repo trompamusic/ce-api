@@ -30,20 +30,6 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.5",
-    "nodemon": "^1.18.10",
-    "standard": "^12.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md,graphql": [
-      "prettier --write",
-      "git add"
-    ]
+    "nodemon": "^1.18.10"
   }
 }
