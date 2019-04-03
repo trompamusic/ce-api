@@ -1,6 +1,9 @@
 import { driver } from './driver'
 import { schema } from './schema'
-import { ApolloServer } from 'apollo-server'
+// import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-express'
+import express from 'express'
+import bodyParser from 'body-parser'
 import { debug as Debug } from 'debug'
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
@@ -14,12 +17,29 @@ export const warning = Debug('ce-api-warning')
  */
 const server = new ApolloServer({
   schema: schema,
-  context: { driver }
+  context: ({ req }) => {
+    return { driver, req }
+  }
 })
+
+const app = express()
+app.use(bodyParser.json())
+
+// const checkErrorHeaderMiddleware = async (req, res, next) => {
+//   req.error = req.headers['x-error']
+//   next()
+// }
+const checkGraphQLRequestMiddleware = function (req, res, next) {
+  // a POST request with none or 'graphql' segment is handled as GraphQL
+  if (['', '/', 'graphql'].indexOf(req.url.toLowerCase()) >= 0 && req.method === 'POST') {
+    next()
+  }
+}
+app.use('*', checkGraphQLRequestMiddleware)
+
+server.applyMiddleware({ app, path: '/' })
 
 /*
  * Start Apollo server
  */
-server.listen(process.env.GRAPHQL_LISTEN_PORT, '0.0.0.0').then(({ url }) => {
-  debug(`GraphQL API ready at ${url}`)
-})
+app.listen(process.env.GRAPHQL_LISTEN_PORT, '0.0.0.0')
