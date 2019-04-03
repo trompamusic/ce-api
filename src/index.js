@@ -1,9 +1,8 @@
 import { driver } from './driver'
 import { schema } from './schema'
-// import { ApolloServer } from 'apollo-server'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import bodyParser from 'body-parser'
+import validator from 'validator'
 import { debug as Debug } from 'debug'
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
@@ -23,20 +22,16 @@ const server = new ApolloServer({
 })
 
 const app = express()
-app.use(bodyParser.json())
 
-// const checkErrorHeaderMiddleware = async (req, res, next) => {
-//   req.error = req.headers['x-error']
-//   next()
-// }
-const checkGraphQLRequestMiddleware = function (req, res, next) {
-  // a POST request with none or 'graphql' segment is handled as GraphQL
-  if (['', '/', 'graphql'].indexOf(req.url.toLowerCase()) >= 0 && req.method === 'POST') {
-    next()
+const restRequest = function (req, res, next) {
+  const identifier = req.params.identifier
+  if (validator.isUUID(identifier) && req.method.toUpperCase() === 'GET') {
+    res.status('200').send(`{"data":{"identifier":"${identifier}"}}}`)
   }
+  res.status('404').send()
 }
-app.use('*', checkGraphQLRequestMiddleware)
 
+app.use('/:identifier', restRequest)
 server.applyMiddleware({ app, path: '/' })
 
 /*
