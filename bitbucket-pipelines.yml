@@ -20,7 +20,7 @@ pipelines:
             - export BUILD_ID=$BITBUCKET_TAG
             - export SSH_KEY=`cat /opt/atlassian/pipelines/agent/data/id_rsa`
             - echo $BUILD_ID
-            - docker build -f api/Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
+            - docker build -f Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
             - docker push ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID
       - step:
           name: Deploy to test
@@ -43,7 +43,7 @@ pipelines:
             - export BUILD_ID=${BITBUCKET_BRANCH//\//\_}_${BITBUCKET_COMMIT}
             - export SSH_KEY=`cat /opt/atlassian/pipelines/agent/data/id_rsa`
             - echo $BUILD_ID
-            - docker build -f api/Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
+            - docker build -f Dockerfile -t ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID api
             - docker push ${AWS_REGISTRY_URL}/${CONTAINER_NAME_API}:$BUILD_ID
       - step:
           name: Deploy to test
