@@ -5,6 +5,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
+import validator from "validator";
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
 export const warning = Debug('ce-api-warning')
@@ -27,9 +28,25 @@ const restRequest = function (req, res, next) {
     return
   }
 
+  // validate against UUID
+  if (!validator.isUUID(identifier)) {
+    res.status('404').send(`{"error":{"message":"Not found"}}`)
+  }
+
   const getRequest = new GetRequest(identifier)
-  const result = getRequest.find
-  res.status(result.status).send(result.data)
+  let promise = getRequest.find
+  promise
+    .then(result => {
+      info('result')
+      info(result.properties)
+      const data = {
+        data: result
+      }
+      res.status('200').send(result.properties)
+    })
+    .catch(function (error) {
+      throw Error(error.toString())
+    })
 }
 
 app.use('/:identifier', restRequest)
