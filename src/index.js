@@ -4,6 +4,7 @@ import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import validator from 'validator'
 import bodyParser from 'body-parser'
+import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
@@ -29,8 +30,9 @@ const restRequest = function (req, res, next) {
 
   // only allow a valid UUID to be resolved
   if (validator.isUUID(identifier)) {
-    // TODO [WK] handle REST request
-    res.status('200').send(`{"data":{"identifier":"${identifier}"}}}`)
+    const getRequest = new GetRequest(identifier)
+    const result = getRequest.find
+    res.status(result.status).send(result.data)
     return
   }
 
