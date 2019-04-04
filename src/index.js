@@ -2,7 +2,6 @@ import { driver } from './driver'
 import { schema } from './schema'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import validator from 'validator'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
@@ -28,16 +27,9 @@ const restRequest = function (req, res, next) {
     return
   }
 
-  // only allow a valid UUID to be resolved
-  if (validator.isUUID(identifier)) {
-    const getRequest = new GetRequest(identifier)
-    const result = getRequest.find
-    res.status(result.status).send(result.data)
-    return
-  }
-
-  // return not found
-  res.status('404').send(`{"error":{"message":"Not found"}}`)
+  const getRequest = new GetRequest(identifier)
+  const result = getRequest.find
+  res.status(result.status).send(result.data)
 }
 
 app.use('/:identifier', restRequest)

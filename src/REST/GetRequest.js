@@ -1,7 +1,7 @@
 import { info, warning } from '../index'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
-import { pubsub } from '../resolvers'
+import validator from 'validator'
 
 class GetRequest {
   /**
@@ -9,18 +9,23 @@ class GetRequest {
    */
   constructor (identifier) {
     this.identifier = identifier
+    // default result
+    this.result = {
+      data: `{"error":{"message":"Not found"}}`,
+      status: '404'
+    }
   }
 
   /**
-   * @returns {string}
+   * @returns {{data: string, status: string}|*}
    */
   get find () {
-    const data = `{"data":{"identifier":"${this.identifier}"}}}`
-
-    return {
-      status: 200,
-      data: data
+    if (validator.isUUID(this.identifier)) {
+      this.result.status = '200'
+      this.result.data = `{"data":{"identifier":"${this.identifier}"}}}`
     }
+
+    return this.result
   }
 }
 
