@@ -14,15 +14,24 @@ app.use(bodyParser.json());
 
 const restRequest = function (req, res, next) {
   const identifier = req.params.identifier
-  // allow /graphql path to be resolved
+
+  // allow /graphql path to be resolved for POST and GET requests
   if (identifier.toLowerCase() === 'graphql') {
     next()
     return
   }
 
-  // only allow a valid UUID to be resolved for GET requests
-  if (validator.isUUID(identifier) && req.method.toUpperCase() === 'GET') {
+  // intercept methods other than GET and return METHOD NOT ALLOWED
+  if (req.method.toUpperCase() !== 'GET') {
+    res.status('405').send(`{"error":{"message":"Method not allowed"}}`)
+    return
+  }
+
+  // only allow a valid UUID to be resolved
+  if (validator.isUUID(identifier)) {
+    // TODO [WK] handle REST request
     res.status('200').send(`{"data":{"identifier":"${identifier}"}}}`)
+    return
   }
 
   // return not found
