@@ -5,7 +5,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
-import validator from "validator";
+import validator from "validator"
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
 export const warning = Debug('ce-api-warning')
@@ -43,6 +43,9 @@ const restRequest = function (req, res, next) {
         data: result
       }
       res.status('200').send(result.properties)
+    }, reason => {
+      info('restRequest rejected')
+      throw reason
     })
     .catch(function (error) {
       throw Error(error.toString())

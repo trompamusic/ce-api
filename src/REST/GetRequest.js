@@ -9,25 +9,31 @@ class GetRequest {
    */
   constructor (identifier) {
     this.identifier = identifier
+    this.session = driver.session()
   }
 
   /**
-   * @returns {{data: string, status: string}|*}
+   * @returns {Promise<{from, to}|never>}
    */
   get find () {
-    return this._runQuery(this._getQuery())
-    // if (validator.isUUID(this.identifier)) {
-    //   // const query = this._getQuery()
-    //   // info(query)
-    //
-    //   return this._runQuery(this._getQuery())
-    // }
-    //
-    // return this.result
+    return this._findNode()
   }
 
-  _getQuery () {
-    return `MATCH (n) WHERE n.identifier = "${this.identifier}" RETURN n AS _payload`
+  /**
+   * @returns {string}
+   * @private
+   */
+  _getTypeQuery () {
+    return `MATCH (\`n\`) WHERE \`n\`.\`identifier\` = "${this.identifier}" RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`))} AS \`_payload\``
+  }
+
+  /**
+   * @param type
+   * @returns {string}
+   * @private
+   */
+  _getFullPropertyQuery (type) {
+    return `MATCH (\`n\`:\`${type}\`) WHERE \`n\`.\`identifier\` = "${this.identifier}" RETURN \`n\` AS \`_payload\``
   }
 
   /**
@@ -36,45 +42,57 @@ class GetRequest {
    * @param publishChannel
    * @returns {Promise<{from, to} | never>}
    */
-  _runQuery (query, queryType, publishChannel) {
-    info(`query: ${query}`)
-    let session = driver.session()
-    return session.run(query)
-      .then(result => {
-        let rt = result.records.map(record => {
-          //return record.get('_payload')
-          return this._retrievePayload(record.get('_payload'), 'getRequest')
+  _findNode () {
+    const query = this._getTypeQuery()
+    info(`_findNode query: ${query}`)
+    return this.session.run(query)
+      // find a node with matching identifier
+      .then(identifyingResult => {
+        let rt = identifyingResult.records.map(record => {
+          return record.get('_payload')
         })
-        const returnValue = rt[0]
-        return returnValue
+        // only interpret the first result
+        return rt[0]
+      })
+      // determine type of node and query for all scalar properties and 1st order relations
+      .then(identifyingResult => {
+        if (typeof identifyingResult === 'undefined' || identifyingResult._schemaType === 'undefined') {
+          return Promise.reject(new Error('Node not found'))
+        }
+        return this._qetFullProperties(identifyingResult._schemaType)
+      }, reason => {
+        throw reason
       })
       .catch(function (error) {
+        info('_findNode caught error' + error.toString())
         throw Error(error.toString())
       })
   }
 
   /**
-   * @param payload
-   * @param payloadType
-   * @returns {*}
+   * @param type
+   * @param identifier
+   * @returns {Promise<StatementResult | never>}
+   * @private
    */
-  _retrievePayload (payload, payloadType) {
-    switch (payloadType) {
-      case 'add':
-      case 'remove':
-        return {
-          from: retrieveNodeData(payload.from),
-          to: retrieveNodeData(payload.to)
-        }
-      case 'RequestControlAction':
-        return payload.properties
-      case 'UpdateControlAction':
-        return payload
-      case 'getRequest':
-        return payload
-      default:
-        warning('Unknown payloadType encountered')
-    }
+  _qetFullProperties (type, identifier) {
+    const query = this._getFullPropertyQuery(type, identifier)
+    info(`_qetFullProperties query: ${query}`)
+    return this.session.run(query)
+      // find the node with all properties and 1st order relations
+      .then(fullResult => {
+        let rt = fullResult.records.map(record => {
+          return record.get('_payload')
+        })
+        // only interpret the first result
+        info('fullResult')
+        info(rt[0])
+        return rt[0]
+      })
+      .catch(function (error) {
+        info('__qetFullProperties caught error' + error.toString())
+        throw Error(error.toString())
+      })
   }
 }
 
