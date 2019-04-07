@@ -38,11 +38,8 @@ const restRequest = function (req, res, next) {
   promise
     .then(result => {
       info('result')
-      info(result.properties)
-      const data = {
-        data: result
-      }
-      res.status('200').send(result.properties)
+      info(result)
+      res.status('200').send(result)
     }, reason => {
       info('restRequest rejected')
       throw reason

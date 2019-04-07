@@ -33,7 +33,11 @@ class GetRequest {
    * @private
    */
   _getFullPropertyQuery (type) {
-    return `MATCH (\`n\`:\`${type}\`) WHERE \`n\`.\`identifier\` = "${this.identifier}" RETURN \`n\` AS \`_payload\``
+    return [
+      `MATCH (\`n\`:\`${type}\`)`,
+      `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
+      `RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`)), \`identifier\`:\`n\`.\`identifier\`} AS \`_payload\``
+    ].join(' ')
   }
 
   /**
