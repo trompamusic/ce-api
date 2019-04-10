@@ -57,7 +57,7 @@ class GetRequest {
    * @private
    */
   _qetNodeProperties (type) {
-    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier)
+    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier, 2)
     const query = getFullNodeQuery.query
     info(`_qetFullNodeQuery: ${query}`)
     return this.session.run(query)

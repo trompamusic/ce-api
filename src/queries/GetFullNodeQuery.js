@@ -1,4 +1,7 @@
-const defaultDepth = 3
+import { info, debug, warning } from '../index'
+import QueryHelper from '../helpers/QueryHelper'
+
+const defaultDepth = 2
 
 class GetFullNodeQuery {
   /**
@@ -10,6 +13,8 @@ class GetFullNodeQuery {
     this.type = type
     this.identifier = identifier
     this.depth = depth
+
+    this.queryHelper = new QueryHelper()
   }
 
   /**
@@ -24,6 +29,9 @@ class GetFullNodeQuery {
    * @private
    */
   _generateQuery () {
+    debug('GetFullNodeQuery._generateQuery')
+    debug(this.queryHelper.typePropertiesClause(this.type, 'n', this.depth))
+
     return [
       `MATCH (\`n\`:\`${this.type}\`)`,
       `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
