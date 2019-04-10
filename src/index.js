@@ -5,16 +5,18 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
-import validator from "validator";
+import validator from 'validator'
 export const debug = Debug('ce-api-debug')
 export const info = Debug('ce-api-info')
 export const warning = Debug('ce-api-warning')
 
+const allowedRestMethods = ['GET', 'OPTIONS']
 const app = express()
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 const restRequest = function (req, res, next) {
   const identifier = req.params.identifier
+  const method = req.method.toUpperCase()
 
   // allow /graphql path to be resolved for POST and GET requests
   if (identifier.toLowerCase() === 'graphql') {
@@ -22,26 +24,31 @@ const restRequest = function (req, res, next) {
     return
   }
 
-  // intercept methods other than GET and return METHOD NOT ALLOWED
-  if (req.method.toUpperCase() !== 'GET') {
+  // intercept methods other than GET/OPTIONS and return METHOD NOT ALLOWED
+  if (allowedRestMethods.indexOf(method) < 0) {
     res.status('405').send(`{"error":{"message":"Method not allowed"}}`)
     return
   }
 
+  // intercept health call
+  if (method === 'GET' && identifier === 'health') {
+    res.status('200').send(`{"message":"OK"}`)
+  }
+
   // validate against UUID
   if (!validator.isUUID(identifier)) {
-    res.status('404').send(`{"error":{"message":"Not found"}}`)
+    res.status('400').send(`{"error":{"message":"Identifier should be UUID"}}`)
+  }
+
+  // respond to OPTIONS call
+  if (method === 'OPTIONS') {
+    res.status('204').set('Allow', allowedRestMethods.join(', ')).send()
   }
 
   const getRequest = new GetRequest(identifier)
   let promise = getRequest.find
   promise
     .then(result => {
-      info('result')
-      info(result.properties)
-      const data = {
-        data: result
-      }
       res.status('200').send(result.properties)
     })
     .catch(function (error) {

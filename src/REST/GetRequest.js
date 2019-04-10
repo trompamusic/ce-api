@@ -1,7 +1,5 @@
-import { info, warning } from '../index'
-import QueryHelper from '../helpers/QueryHelper'
+import { info } from '../index'
 import { driver } from '../driver'
-import validator from 'validator'
 
 class GetRequest {
   /**
@@ -16,14 +14,6 @@ class GetRequest {
    */
   get find () {
     return this._runQuery(this._getQuery())
-    // if (validator.isUUID(this.identifier)) {
-    //   // const query = this._getQuery()
-    //   // info(query)
-    //
-    //   return this._runQuery(this._getQuery())
-    // }
-    //
-    // return this.result
   }
 
   _getQuery () {
@@ -42,8 +32,7 @@ class GetRequest {
     return session.run(query)
       .then(result => {
         let rt = result.records.map(record => {
-          //return record.get('_payload')
-          return this._retrievePayload(record.get('_payload'), 'getRequest')
+          return record.get('_payload')
         })
         const returnValue = rt[0]
         return returnValue
@@ -51,30 +40,6 @@ class GetRequest {
       .catch(function (error) {
         throw Error(error.toString())
       })
-  }
-
-  /**
-   * @param payload
-   * @param payloadType
-   * @returns {*}
-   */
-  _retrievePayload (payload, payloadType) {
-    switch (payloadType) {
-      case 'add':
-      case 'remove':
-        return {
-          from: retrieveNodeData(payload.from),
-          to: retrieveNodeData(payload.to)
-        }
-      case 'RequestControlAction':
-        return payload.properties
-      case 'UpdateControlAction':
-        return payload
-      case 'getRequest':
-        return payload
-      default:
-        warning('Unknown payloadType encountered')
-    }
   }
 }
 
