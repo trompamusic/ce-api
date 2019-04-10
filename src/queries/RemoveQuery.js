@@ -1,4 +1,4 @@
-import snakeCase from 'lodash/snakeCase'
+import QueryHelper from '../helpers/QueryHelper'
 
 class RemoveQuery {
   /**
@@ -6,6 +6,7 @@ class RemoveQuery {
    */
   constructor (params) {
     this.params = params
+    this.queryHelper = new QueryHelper()
   }
 
   /**
@@ -14,7 +15,7 @@ class RemoveQuery {
   get query () {
     return [
       `MATCH (\`node_from\`:\`${this.params.from.type}\` {\`identifier\`: "${this.params.from.identifier}"})`,
-      `-[\`relation\`:${snakeCase(this.params.field).toUpperCase()}]->`,
+      this.queryHelper.generateRelationClause(this.params.from.type, this.params.field, 'relation'),
       `(\`node_to\`: \`${this.params.to.type}\` {\`identifier\`: "${this.params.to.identifier}"})`,
       `DELETE \`relation\``,
       `RETURN { from: \`node_from\` ,to: \`node_to\` } AS \`_payload\`;`
