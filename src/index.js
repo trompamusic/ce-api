@@ -33,16 +33,19 @@ const restRequest = function (req, res, next) {
   // intercept health call
   if (method === 'GET' && identifier === 'health') {
     res.status('200').send(`{"message":"OK"}`)
+    return
   }
 
   // validate against UUID
   if (!validator.isUUID(identifier)) {
     res.status('400').send(`{"error":{"message":"Identifier should be UUID"}}`)
+    return
   }
 
   // respond to OPTIONS call
   if (method === 'OPTIONS') {
     res.status('204').set('Allow', allowedRestMethods.join(', ')).send()
+    return
   }
 
   const getRequest = new GetRequest(identifier)
