@@ -1,4 +1,4 @@
-import { warning } from '../index'
+import { info, debug, warning } from '../index'
 import { schema as defaultSchema } from '../schema'
 import SchemaHelper from './SchemaHelper'
 
@@ -12,6 +12,22 @@ class QueryHelper {
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
     this.schemaHelper = new SchemaHelper(this.schema)
+  }
+
+  /**
+   * @param typeName
+   * @param alias
+   * @param depth
+   */
+  typePropertiesClause (typeName, alias, depth = 3) {
+    const typeFields = this.schemaHelper.getTypeFields(typeName)
+    let segments = Object.getOwnPropertyNames(typeFields).map(fieldName => {
+      info('resolve fieldName:')
+      const fieldType = typeFields[fieldName]
+      return this._fieldClause(fieldType, depth)
+    })
+
+    return segments.join(', ')
   }
 
   /**
@@ -240,6 +256,72 @@ class QueryHelper {
     return properties.map(property => {
       return `\`${alias}\`:\`${alias}\`.\`${property}\``
     }).join(', ')
+  }
+
+  /**
+   * @param fieldType
+   * @param depth
+   * @returns {string}
+   * @private
+   */
+  _fieldClause (fieldType, depth) {
+    debug('fieldType:')
+    debug(fieldType)
+    const fieldTypeName = fieldType.name
+    debug('fieldTypeName:')
+    debug(fieldTypeName)
+
+    // debug('this.schemaHelper.getTypeFields(fieldTypeName):')
+    // debug(this.schemaHelper.getTypeFields(fieldTypeName))
+    // debug('fieldType.astNode.type:')
+    // debug(fieldType.astNode.type)
+    // debug('fieldType.astNode.name:')
+    // debug(fieldType.astNode.name)
+    // debug('fieldType.astNode.type.kind:')
+    // debug(fieldType.astNode.type.kind)
+    // debug('fieldType.astNode.type.type:')
+    // debug(fieldType.astNode.type.type)
+    // debug('fieldType.astNode.type.name:')
+    // debug(fieldType.astNode.type.name)
+    let retrievedType = null
+    let isListType = false
+    switch (fieldType.astNode.type.kind) {
+      case 'ListType':
+        isListType = true
+        // intentional fallthrough
+      case 'NonNullType':
+        retrievedType = fieldType.astNode.type.type
+        break
+      default:
+        retrievedType = fieldType.astNode.type
+    }
+
+    // const aggregatedType = this.schemaHelper.getSchemaType()
+
+    //const unionType = this.schemaHelper.findInterfaceImplementingTypes()
+
+    // if (fieldType.astNode.type.kind === 'ListType') {
+    //   retrievedType = fieldType.astNode.type.type
+    //   isListType = true
+    // } else if (fieldType.astNode.type.kind === 'ListType') {
+    //
+    // } else {
+    //   retrievedType = fieldType.astNode.type
+    // }
+    debug('getSchemaType property names:')
+    debug(Object.getOwnPropertyNames(this.schemaHelper.getSchemaType(retrievedType.name.value)))
+
+
+    // debug(`retrieved field type (listType: ${isListType ? 'true' : 'false'}) :`)
+    // debug(retrievedType)
+    // const retrievedTypeFields = this.schemaHelper.getTypeFields(retrievedType.name.value)
+    // debug('retrievedTypeFields:')
+    // debug(retrievedTypeFields)
+    // const retrievedTypePossibleTypes = this.schemaHelper.findPossibleTypes(retrievedType.name.value)
+    // debug('retrievedTypePossibleTypes:')
+    // debug(retrievedTypePossibleTypes)
+    info('**************************')
+    return `${fieldTypeName}.${depth}`
   }
 }
 
