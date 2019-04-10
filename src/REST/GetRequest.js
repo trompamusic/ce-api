@@ -1,7 +1,7 @@
 import { info, warning } from '../index'
-import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
-import validator from 'validator'
+import GetTypeQuery from '../queries/GetTypeQuery'
+import GetFullNodeQuery from '../queries/GetFullNodeQuery'
 
 class GetRequest {
   /**
@@ -16,39 +16,16 @@ class GetRequest {
    * @returns {Promise<{from, to}|never>}
    */
   get find () {
-    return this._findNode()
+    return this._findNodeType()
   }
 
   /**
-   * @returns {string}
-   * @private
-   */
-  _getTypeQuery () {
-    return `MATCH (\`n\`) WHERE \`n\`.\`identifier\` = "${this.identifier}" RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`))} AS \`_payload\``
-  }
-
-  /**
-   * @param type
-   * @returns {string}
-   * @private
-   */
-  _getFullPropertyQuery (type) {
-    return [
-      `MATCH (\`n\`:\`${type}\`)`,
-      `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
-      `RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`)), \`identifier\`:\`n\`.\`identifier\`} AS \`_payload\``
-    ].join(' ')
-  }
-
-  /**
-   * @param query
-   * @param queryType
-   * @param publishChannel
    * @returns {Promise<{from, to} | never>}
    */
-  _findNode () {
-    const query = this._getTypeQuery()
-    info(`_findNode query: ${query}`)
+  _findNodeType () {
+    const getTypeQuery = new GetTypeQuery(this.identifier)
+    const query = getTypeQuery.query
+    info(`_findNodeType query: ${query}`)
     return this.session.run(query)
       // find a node with matching identifier
       .then(identifyingResult => {
@@ -63,12 +40,12 @@ class GetRequest {
         if (typeof identifyingResult === 'undefined' || identifyingResult._schemaType === 'undefined') {
           return Promise.reject(new Error('Node not found'))
         }
-        return this._qetFullProperties(identifyingResult._schemaType)
+        return this._qetNodeProperties(identifyingResult._schemaType)
       }, reason => {
         throw reason
       })
       .catch(function (error) {
-        info('_findNode caught error' + error.toString())
+        info('_findNodeType caught error' + error.toString())
         throw Error(error.toString())
       })
   }
@@ -79,9 +56,10 @@ class GetRequest {
    * @returns {Promise<StatementResult | never>}
    * @private
    */
-  _qetFullProperties (type, identifier) {
-    const query = this._getFullPropertyQuery(type, identifier)
-    info(`_qetFullProperties query: ${query}`)
+  _qetNodeProperties (type) {
+    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier)
+    const query = getFullNodeQuery.query
+    info(`_qetFullNodeQuery: ${query}`)
     return this.session.run(query)
       // find the node with all properties and 1st order relations
       .then(fullResult => {
@@ -94,7 +72,7 @@ class GetRequest {
         return rt[0]
       })
       .catch(function (error) {
-        info('__qetFullProperties caught error' + error.toString())
+        info('__qetNodeProperties caught error' + error.toString())
         throw Error(error.toString())
       })
   }
