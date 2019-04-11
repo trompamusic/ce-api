@@ -61,6 +61,19 @@ class SchemaHelper {
   }
 
   /**
+   * @param unionName
+   * @returns {*}
+   */
+  findUnionType (unionName) {
+    const schemaType = this.getSchemaType(unionName)
+    if (typeof schemaType === 'undefined' || schemaType.astNode.kind !== 'UnionTypeDefinition') {
+      warning(`findUnionTypes() called on non-existent Union Type '${unionName}'`)
+    }
+
+    return schemaType
+  }
+
+  /**
    * @param typeName
    * @returns {*}
    */

@@ -19,12 +19,12 @@ class QueryHelper {
    * @param alias
    * @param depth
    */
-  typeFieldsClause (typeName, alias, depth = 3) {
-    debug(`typeFieldsClause called for typeName '${typeName}' with depth: ${depth}`)
+  typeFieldsClause (typeName, alias, depth = 2) {
     if (depth <= 0) {
-      debug('depth reached')
+      debug('typeFieldsClause depth reached')
       return `DEPTH REACHED`
     }
+    // debug(`typeFieldsClause called for typeName '${typeName}' with depth: ${depth}`)
 
     const typeFields = this.schemaHelper.getTypeFields(typeName)
     const segments = Object.getOwnPropertyNames(typeFields).map(fieldName => {
@@ -37,9 +37,9 @@ class QueryHelper {
           isListType = true
         // intentional fallthrough
         case 'NonNullType':
-          return this._generateFieldClause(fieldName, fieldType.astNode.type.type, alias, isListType, depth)
+          return this._generateFieldClause(fieldName, fieldType.astNode.type.type, alias, isListType, depth - 1)
         default:
-          return this._generateFieldClause(fieldName, fieldType.astNode.type, alias, isListType, depth)
+          return this._generateFieldClause(fieldName, fieldType.astNode.type, alias, isListType, depth - 1)
       }
     })
 
@@ -59,14 +59,19 @@ class QueryHelper {
    * @private
    */
   _generateFieldClause (fieldName, fieldType, alias, isListType, depth) {
+    // if (depth < 0) {
+    //   debug('_generateFieldClause depth reached')
+    //   return `DEPTH REACHED`
+    // }
+    // debug(`typeFieldsClause called for fieldName '${fieldName}' with depth: ${depth}`)
     const fieldTypeName = fieldType.name.value
-    debug(`fieldName: ${fieldName}, fieldTypeName: ${fieldTypeName}`)
+    // debug(`fieldName: ${fieldName}, fieldTypeName: ${fieldTypeName}`)
     const type = this.schemaHelper.getSchemaType(fieldTypeName)
     if (typeof type === 'undefined') {
       warning(`unknown type encountered: ${fieldTypeName}`)
       return `UNKNOWN TYPE`
     }
-    info(`type.constructor.name: ${type.constructor.name}`)
+    // info(`type.constructor.name: ${type.constructor.name}`)
     const className = type.constructor.name
     switch (className) {
       case 'GraphQLScalarType':
@@ -74,7 +79,7 @@ class QueryHelper {
       case 'GraphQLEnumType':
         // suppress private properties (underscore)
         if (fieldName.startsWith('_')) {
-          info(`private property ${fieldName} suppressed`)
+          // info(`private property ${fieldName} suppressed`)
           return `SUPPRESS: ${fieldName}`
         }
         return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
@@ -84,12 +89,28 @@ class QueryHelper {
           info(`_Neo4j class detected`)
           return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
         }
+        if (depth <= 1) {
+          return `Object fieldType ${fieldTypeName} identifier`
+        }
         // recurse object fields
-        return this.typeFieldsClause(fieldTypeName, alias, (depth - 1))
+        return `Object fieldType ${fieldTypeName} fields`
+        // return this.typeFieldsClause(fieldTypeName, alias, (depth))
       case 'GraphQLInterfaceType':
-        return `GraphQLInterfaceType clause for Interface ${fieldTypeName}`
+        if (depth <= 1) {
+          return `Interface fieldType ${fieldTypeName} identifier`
+        }
+        return `Interface fieldType ${fieldTypeName} fields`
       case 'GraphQLUnionType':
-        return `GraphQLUnionType clause for Union ${fieldTypeName}`
+        const unionType = this.schemaHelper.findUnionType(fieldTypeName)
+        if (!unionType) {
+          return
+        }
+        return unionType._types.map(typeName => {
+          if (depth <= 1) {
+            return `Union fieldType ${typeName} identifier`
+          }
+          return `Union fieldType ${typeName} identifier`
+        })
       default:
         warning(`unknown type class encountered: ${fieldTypeName}`)
         break

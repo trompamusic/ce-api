@@ -30,7 +30,7 @@ class GetFullNodeQuery {
    */
   _generateQuery () {
     debug('GetFullNodeQuery._generateQuery')
-    debug(this.queryHelper.typeFieldsClause(this.type, 'n', this.depth))
+    debug(this.queryHelper.typeFieldsClause(this.type, 'alias', this.depth))
 
     return [
       `MATCH (\`n\`:\`${this.type}\`)`,
