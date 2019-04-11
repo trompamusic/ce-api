@@ -1,4 +1,4 @@
-import { info, warning } from '../index'
+import { debug, info, warning } from '../index'
 import { driver } from '../driver'
 import GetTypeQuery from '../queries/GetTypeQuery'
 import GetFullNodeQuery from '../queries/GetFullNodeQuery'
@@ -16,31 +16,24 @@ class GetRequest {
    * @returns {Promise<{from, to}|never>}
    */
   get find () {
-    return this._findNodeType()
-  }
-
-  /**
-   * @returns {Promise<{from, to} | never>}
-   */
-  _findNodeType () {
     const getTypeQuery = new GetTypeQuery(this.identifier)
     const query = getTypeQuery.query
     info(`_findNodeType query: ${query}`)
     return this.session.run(query)
-      // find a node with matching identifier
-      .then(identifyingResult => {
-        let rt = identifyingResult.records.map(record => {
+    // find a node with matching identifier
+      .then(typeResult => {
+        let rt = typeResult.records.map(record => {
           return record.get('_payload')
         })
         // only interpret the first result
         return rt[0]
       })
       // determine type of node and query for all scalar properties and 1st order relations
-      .then(identifyingResult => {
-        if (typeof identifyingResult === 'undefined' || identifyingResult._schemaType === 'undefined') {
+      .then(typeResult => {
+        if (typeof typeResult === 'undefined' || typeResult._schemaType === 'undefined') {
           return Promise.reject('Node not found')
         }
-        return this._qetNodeProperties(identifyingResult._schemaType)
+        return this._qetNodeProperties(typeResult._schemaType)
       }, reason => {
         throw reason
       })
@@ -52,7 +45,6 @@ class GetRequest {
 
   /**
    * @param type
-   * @param identifier
    * @returns {Promise<StatementResult | never>}
    * @private
    */
