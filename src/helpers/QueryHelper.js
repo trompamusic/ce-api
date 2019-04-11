@@ -19,15 +19,81 @@ class QueryHelper {
    * @param alias
    * @param depth
    */
-  typePropertiesClause (typeName, alias, depth = 3) {
+  typeFieldsClause (typeName, alias, depth = 3) {
+    debug(`typeFieldsClause called for typeName '${typeName}' with depth: ${depth}`)
+    if (depth <= 0) {
+      debug('depth reached')
+      return `DEPTH REACHED`
+    }
+
     const typeFields = this.schemaHelper.getTypeFields(typeName)
-    let segments = Object.getOwnPropertyNames(typeFields).map(fieldName => {
-      info('resolve fieldName:')
+    const segments = Object.getOwnPropertyNames(typeFields).map(fieldName => {
+      // info(`resolve fieldName '${fieldName}':`)
       const fieldType = typeFields[fieldName]
-      return this._fieldClause(fieldType, depth)
+      // let retrievedType = null
+      let isListType = false
+      switch (fieldType.astNode.type.kind) {
+        case 'ListType':
+          isListType = true
+        // intentional fallthrough
+        case 'NonNullType':
+          return this._generateFieldClause(fieldName, fieldType.astNode.type.type, alias, isListType, depth)
+        default:
+          return this._generateFieldClause(fieldName, fieldType.astNode.type, alias, isListType, depth)
+      }
     })
 
+    debug('segments:')
+    debug(segments)
+
     return segments.join(', ')
+  }
+
+  /**
+   * @param fieldName
+   * @param fieldType
+   * @param alias
+   * @param isListType
+   * @param depth
+   * @returns {string}
+   * @private
+   */
+  _generateFieldClause (fieldName, fieldType, alias, isListType, depth) {
+    const fieldTypeName = fieldType.name.value
+    debug(`fieldName: ${fieldName}, fieldTypeName: ${fieldTypeName}`)
+    const type = this.schemaHelper.getSchemaType(fieldTypeName)
+    if (typeof type === 'undefined') {
+      warning(`unknown type encountered: ${fieldTypeName}`)
+      return `UNKNOWN TYPE`
+    }
+    info(`type.constructor.name: ${type.constructor.name}`)
+    const className = type.constructor.name
+    switch (className) {
+      case 'GraphQLScalarType':
+        // intentional fallthrough
+      case 'GraphQLEnumType':
+        // suppress private properties (underscore)
+        if (fieldName.startsWith('_')) {
+          info(`private property ${fieldName} suppressed`)
+          return `SUPPRESS: ${fieldName}`
+        }
+        return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
+      case 'GraphQLObjectType':
+        // return _Neo4j classes (datetime etc) as Scalars not Objects
+        if (fieldTypeName.startsWith('_Neo4j')) {
+          info(`_Neo4j class detected`)
+          return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
+        }
+        // recurse object fields
+        return this.typeFieldsClause(fieldTypeName, alias, (depth - 1))
+      case 'GraphQLInterfaceType':
+        return `GraphQLInterfaceType clause for Interface ${fieldTypeName}`
+      case 'GraphQLUnionType':
+        return `GraphQLUnionType clause for Union ${fieldTypeName}`
+      default:
+        warning(`unknown type class encountered: ${fieldTypeName}`)
+        break
+    }
   }
 
   /**
@@ -256,72 +322,6 @@ class QueryHelper {
     return properties.map(property => {
       return `\`${alias}\`:\`${alias}\`.\`${property}\``
     }).join(', ')
-  }
-
-  /**
-   * @param fieldType
-   * @param depth
-   * @returns {string}
-   * @private
-   */
-  _fieldClause (fieldType, depth) {
-    debug('fieldType:')
-    debug(fieldType)
-    const fieldTypeName = fieldType.name
-    debug('fieldTypeName:')
-    debug(fieldTypeName)
-
-    // debug('this.schemaHelper.getTypeFields(fieldTypeName):')
-    // debug(this.schemaHelper.getTypeFields(fieldTypeName))
-    // debug('fieldType.astNode.type:')
-    // debug(fieldType.astNode.type)
-    // debug('fieldType.astNode.name:')
-    // debug(fieldType.astNode.name)
-    // debug('fieldType.astNode.type.kind:')
-    // debug(fieldType.astNode.type.kind)
-    // debug('fieldType.astNode.type.type:')
-    // debug(fieldType.astNode.type.type)
-    // debug('fieldType.astNode.type.name:')
-    // debug(fieldType.astNode.type.name)
-    let retrievedType = null
-    let isListType = false
-    switch (fieldType.astNode.type.kind) {
-      case 'ListType':
-        isListType = true
-        // intentional fallthrough
-      case 'NonNullType':
-        retrievedType = fieldType.astNode.type.type
-        break
-      default:
-        retrievedType = fieldType.astNode.type
-    }
-
-    // const aggregatedType = this.schemaHelper.getSchemaType()
-
-    //const unionType = this.schemaHelper.findInterfaceImplementingTypes()
-
-    // if (fieldType.astNode.type.kind === 'ListType') {
-    //   retrievedType = fieldType.astNode.type.type
-    //   isListType = true
-    // } else if (fieldType.astNode.type.kind === 'ListType') {
-    //
-    // } else {
-    //   retrievedType = fieldType.astNode.type
-    // }
-    debug('getSchemaType property names:')
-    debug(Object.getOwnPropertyNames(this.schemaHelper.getSchemaType(retrievedType.name.value)))
-
-
-    // debug(`retrieved field type (listType: ${isListType ? 'true' : 'false'}) :`)
-    // debug(retrievedType)
-    // const retrievedTypeFields = this.schemaHelper.getTypeFields(retrievedType.name.value)
-    // debug('retrievedTypeFields:')
-    // debug(retrievedTypeFields)
-    // const retrievedTypePossibleTypes = this.schemaHelper.findPossibleTypes(retrievedType.name.value)
-    // debug('retrievedTypePossibleTypes:')
-    // debug(retrievedTypePossibleTypes)
-    info('**************************')
-    return `${fieldTypeName}.${depth}`
   }
 }
 

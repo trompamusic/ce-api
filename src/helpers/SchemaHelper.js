@@ -31,12 +31,20 @@ class SchemaHelper {
    * @returns {*}
    */
   findInterfaceImplementingTypes (interfaceName) {
-    const implementations = this.schema._implementations[interfaceName]
+    const implementations = this.findInterface(interfaceName)
     if (implementations instanceof Array === false || !implementations.length) {
       return null
     }
 
     return implementations.map(implementation => { return implementation.toString() })
+  }
+
+  /**
+   * @param interfaceName
+   * @returns {*|Array<GraphQLObjectType>}
+   */
+  findInterface (interfaceName) {
+    return this.schema._implementations[interfaceName]
   }
 
   /**
@@ -74,7 +82,7 @@ class SchemaHelper {
    * @returns {*}
    */
   getSchemaType (typeName) {
-    debug('getSchemaType for:' + typeName)
+    // debug('getSchemaType for:' + typeName)
     const schemaType = this.schemaTypeMap[typeName]
     if (typeof schemaType === 'undefined') {
       throw Error('Type could not be retrieved from schema')
