@@ -1,8 +1,10 @@
 import { schema as defaultSchema } from '../schema'
+import { info, debug, warning } from '../index'
 
 class SchemaHelper {
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
+    this.schemaTypeMap = this.schema._typeMap
   }
 
   /**
@@ -48,6 +50,37 @@ class SchemaHelper {
     }
 
     return Object.keys(possibleTypes)
+  }
+
+  /**
+   * @param typeName
+   * @returns {*}
+   */
+  getTypeFields (typeName) {
+    const schemaType = this.getSchemaType(typeName)
+    // debug('schemaType:')
+    // debug(schemaType)
+    const typeFields = schemaType._fields
+    if (typeof typeFields === 'undefined') {
+      info('No typeFields (type could be scalar)')
+      return null
+    }
+
+    return typeFields
+  }
+
+  /**
+   * @param typeName
+   * @returns {*}
+   */
+  getSchemaType (typeName) {
+    debug('getSchemaType for:' + typeName)
+    const schemaType = this.schemaTypeMap[typeName]
+    if (typeof schemaType === 'undefined') {
+      throw Error('Type could not be retrieved from schema')
+    }
+
+    return schemaType
   }
 
   /**
