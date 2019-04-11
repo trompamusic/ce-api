@@ -60,7 +60,12 @@ const restRequest = function (req, res, next) {
       throw reason
     })
     .catch(function (error) {
-      throw Error(error.toString())
+      let statusCode = 400
+      const errorString = error.toString()
+      if (errorString.toLowerCase().includes('not found')) {
+        statusCode = 404
+      }
+      res.status(statusCode).send(errorString)
     })
 }
 

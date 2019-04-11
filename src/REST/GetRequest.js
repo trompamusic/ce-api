@@ -38,7 +38,7 @@ class GetRequest {
       // determine type of node and query for all scalar properties and 1st order relations
       .then(identifyingResult => {
         if (typeof identifyingResult === 'undefined' || identifyingResult._schemaType === 'undefined') {
-          return Promise.reject(new Error('Node not found'))
+          return Promise.reject('Node not found')
         }
         return this._qetNodeProperties(identifyingResult._schemaType)
       }, reason => {
