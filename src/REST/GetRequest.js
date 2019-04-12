@@ -60,8 +60,6 @@ class GetRequest {
           return record.get('_payload')
         })
         // only interpret the first result
-        info('fullResult')
-        info(rt[0])
         return rt[0]
       })
       .catch(function (error) {

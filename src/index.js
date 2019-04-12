@@ -53,8 +53,6 @@ const restRequest = function (req, res, next) {
   let promise = getRequest.find
   promise
     .then(result => {
-      info('REST request result:')
-      info(result)
       res.status('200').send(result)
     }, reason => {
       info('restRequest rejected')
