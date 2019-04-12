@@ -45,7 +45,12 @@ class QueryHelper {
       }
     })
 
-    return segments.join(', ')
+    debug(`segments:`)
+    debug(segments)
+
+    return segments.filter(Boolean).join(', ')
+
+    // return segments.join(', ')
   }
 
   /**
@@ -60,9 +65,7 @@ class QueryHelper {
    * @private
    */
   _generateFieldClause (typeName, fieldName, fieldType, alias, isListType, host, depth) {
-    // debug(`typeFieldsClause called for fieldName '${fieldName}' with depth: ${depth}`)
     const fieldTypeName = fieldType.name.value
-    // debug(`fieldName: ${fieldName}, fieldTypeName: ${fieldTypeName}`)
     const type = this.schemaHelper.getSchemaType(fieldTypeName)
     if (typeof type === 'undefined') {
       warning(`unknown type encountered: ${fieldTypeName}`)
@@ -70,7 +73,6 @@ class QueryHelper {
     }
 
     let segments = []
-    // info(`type.constructor.name: ${type.constructor.name}`)
     const className = type.constructor.name
     switch (className) {
       case 'GraphQLScalarType':
@@ -78,7 +80,7 @@ class QueryHelper {
       case 'GraphQLEnumType':
         // suppress private properties (underscore)
         if (fieldName.startsWith('_')) {
-          segments.push(`SUPPRESS: ${fieldName}`)
+          info(`SUPPRESS: ${fieldName}`)
         } else {
           segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
         }
@@ -89,17 +91,28 @@ class QueryHelper {
           info(`_Neo4j class detected`)
           segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
         } else if (depth <= 1) {
-          segments.push(`Object fieldType ${fieldTypeName} identifier`)
+          // segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+          // segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
+          // segments.push(`${isListType ? `` : `)`}`)
         } else {
-          segments.push(`Object fieldType ${fieldTypeName} fields`)
+          info(`Object fieldType ${fieldTypeName} fields`)
         }
         break
       case 'GraphQLInterfaceType':
-        if (depth <= 1) {
-          segments.push(`Interface fieldType ${fieldTypeName} identifier`)
-        } else {
-          segments.push(`Interface fieldType ${fieldTypeName} fields`)
+        const interfaceTypeNames = this.schemaHelper.findInterfaceImplementingTypes(fieldTypeName)
+        if (!interfaceTypeNames || interfaceTypeNames.length <= 0) {
+          break
         }
+        // segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+        segments.push(
+          interfaceTypeNames.map(interfaceTypeName => {
+            if (depth <= 1) {
+              // return this._nodePropertyURIClause(typeName, alias, fieldName, interfaceTypeName, host)
+            } else {
+              info(`Interface fieldType ${interfaceTypeName} fields`)
+            }
+          }).filter(Boolean).join(' + '))
+        // segments.push(`${isListType ? `` : `)`}`)
         break
       case 'GraphQLUnionType':
         const unionType = this.schemaHelper.findUnionType(fieldTypeName)
@@ -112,9 +125,9 @@ class QueryHelper {
             if (depth <= 1) {
               return this._nodePropertyURIClause(typeName, alias, fieldName, unionType.name, host)
             } else {
-              return `Union fieldType ${unionType.name} fields`
+              info(`Union fieldType ${unionType.name} fields`)
             }
-          }).join(' + '))
+          }).filter(Boolean).join(' + '))
         segments.push(`${isListType ? `` : `)`}`)
         break
       default:
@@ -122,7 +135,7 @@ class QueryHelper {
         break
     }
 
-    return segments.join(' ')
+    return segments.filter(Boolean).join(' ')
   }
 
   /**
@@ -161,7 +174,7 @@ class QueryHelper {
       }
     })
 
-    return scalarPropertyClauses.join(`, `)
+    return scalarPropertyClauses.filter(Boolean).join(`, `)
   }
 
   /**
@@ -351,6 +364,16 @@ class QueryHelper {
     return `\`${propertyName}\`:\`${alias}\`.\`${propertyName}\``
   }
 
+  // _nodePropertiesClause (parentTypeName, parentAlias, propertyName, propertyTypeName) {
+  //   const propertyTypeAlias = StringHelper.lowercaseFirstCharacter(propertyTypeName)
+  //   const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
+  //   return [
+  //     `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
+  //     `|`,
+  //     `"${host.replace(/\/$|$/, '/')}"+\`${relatedNodeAlias}\`.\`identifier\` ]`
+  //   ].join(' ')
+  // }
+
   /**
    * @param parentTypeName
    * @param parentAlias
@@ -361,8 +384,11 @@ class QueryHelper {
    * @private
    */
   _nodePropertyURIClause (parentTypeName, parentAlias, propertyName, propertyTypeName, host) {
+    debug(`_nodePropertyURIClause`)
     const propertyTypeAlias = StringHelper.lowercaseFirstCharacter(propertyTypeName)
+    debug(`_nodePropertyURIClause 2`)
     const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
+    debug(`_nodePropertyURIClause 3`)
     return [
       `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
       `|`,
