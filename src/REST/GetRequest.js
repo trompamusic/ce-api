@@ -32,7 +32,7 @@ class GetRequest {
       // determine type of node and query for all scalar properties and 1st order relations
       .then(typeResult => {
         if (typeof typeResult === 'undefined' || typeResult._schemaType === 'undefined') {
-          return Promise.reject('Node not found')
+          return Promise.reject(new Error('Node not found'))
         }
         return this._getNodeProperties(typeResult._schemaType)
       }, reason => {
