@@ -1,6 +1,7 @@
 import { info, debug, warning } from '../index'
 import { schema as defaultSchema } from '../schema'
 import SchemaHelper from './SchemaHelper'
+import StringHelper from './StringHelper'
 
 const bracketRegExString = '^\\[.*?\\]$'
 const paginationParameters = { 'offset': 'SKIP', 'first': 'LIMIT' }
@@ -17,14 +18,15 @@ class QueryHelper {
   /**
    * @param typeName
    * @param alias
+   * @param host
    * @param depth
+   * @returns {string}
    */
-  typeFieldsClause (typeName, alias, depth = 2) {
+  typeFieldsClause (typeName, alias, host, depth = 2) {
     if (depth <= 0) {
       debug('typeFieldsClause depth reached')
       return `DEPTH REACHED`
     }
-    // debug(`typeFieldsClause called for typeName '${typeName}' with depth: ${depth}`)
 
     const typeFields = this.schemaHelper.getTypeFields(typeName)
     const segments = Object.getOwnPropertyNames(typeFields).map(fieldName => {
@@ -37,32 +39,27 @@ class QueryHelper {
           isListType = true
         // intentional fallthrough
         case 'NonNullType':
-          return this._generateFieldClause(fieldName, fieldType.astNode.type.type, alias, isListType, depth - 1)
+          return this._generateFieldClause(typeName, fieldName, fieldType.astNode.type.type, alias, isListType, host, depth - 1)
         default:
-          return this._generateFieldClause(fieldName, fieldType.astNode.type, alias, isListType, depth - 1)
+          return this._generateFieldClause(typeName, fieldName, fieldType.astNode.type, alias, isListType, host, depth - 1)
       }
     })
-
-    debug('segments:')
-    debug(segments)
 
     return segments.join(', ')
   }
 
   /**
+   * @param typeName
    * @param fieldName
    * @param fieldType
    * @param alias
    * @param isListType
+   * @param host
    * @param depth
    * @returns {string}
    * @private
    */
-  _generateFieldClause (fieldName, fieldType, alias, isListType, depth) {
-    // if (depth < 0) {
-    //   debug('_generateFieldClause depth reached')
-    //   return `DEPTH REACHED`
-    // }
+  _generateFieldClause (typeName, fieldName, fieldType, alias, isListType, host, depth) {
     // debug(`typeFieldsClause called for fieldName '${fieldName}' with depth: ${depth}`)
     const fieldTypeName = fieldType.name.value
     // debug(`fieldName: ${fieldName}, fieldTypeName: ${fieldTypeName}`)
@@ -71,6 +68,8 @@ class QueryHelper {
       warning(`unknown type encountered: ${fieldTypeName}`)
       return `UNKNOWN TYPE`
     }
+
+    let segments = []
     // info(`type.constructor.name: ${type.constructor.name}`)
     const className = type.constructor.name
     switch (className) {
@@ -79,42 +78,51 @@ class QueryHelper {
       case 'GraphQLEnumType':
         // suppress private properties (underscore)
         if (fieldName.startsWith('_')) {
-          // info(`private property ${fieldName} suppressed`)
-          return `SUPPRESS: ${fieldName}`
+          segments.push(`SUPPRESS: ${fieldName}`)
+        } else {
+          segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
         }
-        return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
+        break
       case 'GraphQLObjectType':
         // return _Neo4j classes (datetime etc) as Scalars not Objects
         if (fieldTypeName.startsWith('_Neo4j')) {
           info(`_Neo4j class detected`)
-          return `\`${fieldName}\`:\`${alias}\`.\`${fieldName}\``
+          segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
+        } else if (depth <= 1) {
+          segments.push(`Object fieldType ${fieldTypeName} identifier`)
+        } else {
+          segments.push(`Object fieldType ${fieldTypeName} fields`)
         }
-        if (depth <= 1) {
-          return `Object fieldType ${fieldTypeName} identifier`
-        }
-        // recurse object fields
-        return `Object fieldType ${fieldTypeName} fields`
-        // return this.typeFieldsClause(fieldTypeName, alias, (depth))
+        break
       case 'GraphQLInterfaceType':
         if (depth <= 1) {
-          return `Interface fieldType ${fieldTypeName} identifier`
+          segments.push(`Interface fieldType ${fieldTypeName} identifier`)
+        } else {
+          segments.push(`Interface fieldType ${fieldTypeName} fields`)
         }
-        return `Interface fieldType ${fieldTypeName} fields`
+        break
       case 'GraphQLUnionType':
         const unionType = this.schemaHelper.findUnionType(fieldTypeName)
-        if (!unionType) {
-          return
+        if (!unionType || unionType._types.length <= 0) {
+          break
         }
-        return unionType._types.map(typeName => {
-          if (depth <= 1) {
-            return `Union fieldType ${typeName} identifier`
-          }
-          return `Union fieldType ${typeName} identifier`
-        })
+        segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+        segments.push(
+          unionType._types.map(unionType => {
+            if (depth <= 1) {
+              return this._nodePropertyURIClause(typeName, alias, fieldName, unionType.name, host)
+            } else {
+              return `Union fieldType ${unionType.name} fields`
+            }
+          }).join(' + '))
+        segments.push(`${isListType ? `` : `)`}`)
+        break
       default:
         warning(`unknown type class encountered: ${fieldTypeName}`)
         break
     }
+
+    return segments.join(' ')
   }
 
   /**
@@ -124,7 +132,7 @@ class QueryHelper {
    * @returns {string}
    */
   selectedPropertiesClause (parentType, parentAlias, selectionSet) {
-    let propertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
+    let scalarPropertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
 
     if (selectionSet.kind !== 'SelectionSet') {
       throw Error('Property clause generation needs a selectionSet')
@@ -135,7 +143,7 @@ class QueryHelper {
         case 'Field':
           const nodeClause = this.selectedPropertyClause(parentType, parentAlias, selection)
           if (typeof nodeClause === 'string') {
-            propertyClauses.push(nodeClause)
+            scalarPropertyClauses.push(nodeClause)
           }
           break
         case 'InlineFragment':
@@ -143,7 +151,7 @@ class QueryHelper {
             selection.selectionSet.selections.map(namedTypeSelection => {
               const nodeClause = this.selectedPropertyClause(parentType, parentAlias, namedTypeSelection)
               if (typeof nodeClause === 'string') {
-                propertyClauses.push(nodeClause)
+                scalarPropertyClauses.push(nodeClause)
               }
             })
           }
@@ -153,7 +161,7 @@ class QueryHelper {
       }
     })
 
-    return propertyClauses.join(`, `)
+    return scalarPropertyClauses.join(`, `)
   }
 
   /**
@@ -163,20 +171,20 @@ class QueryHelper {
    * @returns {*}
    */
   selectedPropertyClause (parentType, parentAlias, selection) {
-    let propertyClause = null
+    let scalarPropertyClause = null
 
     if (typeof selection.selectionSet === 'object' && selection.selectionSet !== null) {
       // this is a deeper node with its own properties - recurse
-      propertyClause = this.selectionSetNodeClause(parentType, parentAlias, selection)
+      scalarPropertyClause = this.selectionSetNodeClause(parentType, parentAlias, selection)
     } else {
       const propertyName = selection.name.value.toString()
       // ignore library private properties, indicated with double-underscore prefix, like '__typename'
       if (propertyName.substring(0, 2) !== '__') {
-        propertyClause = `\`${propertyName}\`:\`${parentAlias}\`.\`${propertyName}\``
+        scalarPropertyClause = `\`${propertyName}\`:\`${parentAlias}\`.\`${propertyName}\``
       }
     }
 
-    return propertyClause
+    return scalarPropertyClause
   }
 
   /**
@@ -332,6 +340,34 @@ class QueryHelper {
    */
   static schemaTypeClause (alias) {
     return `\`_schemaType\`:HEAD(labels(\`${alias}\`))`
+  }
+
+  /**
+   * @param propertyName
+   * @param alias
+   * @returns {string}
+   */
+  static scalarPropertyClause (propertyName, alias) {
+    return `\`${propertyName}\`:\`${alias}\`.\`${propertyName}\``
+  }
+
+  /**
+   * @param parentTypeName
+   * @param parentAlias
+   * @param propertyName
+   * @param propertyTypeName
+   * @param host
+   * @returns {string}
+   * @private
+   */
+  _nodePropertyURIClause (parentTypeName, parentAlias, propertyName, propertyTypeName, host) {
+    const propertyTypeAlias = StringHelper.lowercaseFirstCharacter(propertyTypeName)
+    const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
+    return [
+      `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
+      `|`,
+      `"${host.replace(/\/$|$/, '/')}"+\`${relatedNodeAlias}\`.\`identifier\` ]`
+    ].join(' ')
   }
 
   /**

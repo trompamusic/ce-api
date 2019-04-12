@@ -13,6 +13,7 @@ class SchemaHelper {
    * @returns {GraphQLField<*, *>|GraphQLInputField}
    */
   findPropertyType (parentType, propertyName) {
+    debug(`findPropertyType ${parentType}, ${propertyName}`)
     const typeMap = this.schema._typeMap[parentType]
     if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema')

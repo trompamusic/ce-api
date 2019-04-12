@@ -1,3 +1,5 @@
+import { info, debug, warning } from '../index'
+
 class StringHelper {
   /**
    * @param string

@@ -48,7 +48,8 @@ const restRequest = function (req, res, next) {
     return
   }
 
-  const getRequest = new GetRequest(identifier)
+  const baseURL = `${req.protocol}://${req.get('host')}`
+  const getRequest = new GetRequest(identifier, baseURL)
   let promise = getRequest.find
   promise
     .then(result => {

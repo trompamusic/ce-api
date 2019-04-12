@@ -7,12 +7,14 @@ class GetFullNodeQuery {
   /**
    * @param type
    * @param identifier
+   * @param host
    * @param depth
    */
-  constructor (type, identifier, depth = defaultDepth) {
+  constructor (type, identifier, host, depth = defaultDepth) {
     this.type = type
     this.identifier = identifier
     this.depth = depth
+    this.host = host
 
     this.queryHelper = new QueryHelper()
   }
@@ -29,13 +31,11 @@ class GetFullNodeQuery {
    * @private
    */
   _generateQuery () {
-    debug('GetFullNodeQuery._generateQuery')
-    debug(this.queryHelper.typeFieldsClause(this.type, 'alias', this.depth))
-
+    const alias = `node`
     return [
-      `MATCH (\`n\`:\`${this.type}\`)`,
-      `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
-      `RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`)), \`identifier\`:\`n\`.\`identifier\`} AS \`_payload\``
+      `MATCH (\`${alias}\`:\`${this.type}\`)`,
+      `WHERE \`${alias}\`.\`identifier\` = "${this.identifier}"`,
+      `RETURN \`${alias}\` {${this.queryHelper.typeFieldsClause(this.type, alias, this.host, this.depth)}} AS \`_payload\``
     ].join(' ')
   }
 }

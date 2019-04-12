@@ -7,9 +7,10 @@ class GetRequest {
   /**
    * @param identifier
    */
-  constructor (identifier) {
+  constructor (identifier, host) {
     this.identifier = identifier
     this.session = driver.session()
+    this.host = host
   }
 
   /**
@@ -33,7 +34,7 @@ class GetRequest {
         if (typeof typeResult === 'undefined' || typeResult._schemaType === 'undefined') {
           return Promise.reject('Node not found')
         }
-        return this._qetNodeProperties(typeResult._schemaType)
+        return this._getNodeProperties(typeResult._schemaType)
       }, reason => {
         throw reason
       })
@@ -48,8 +49,8 @@ class GetRequest {
    * @returns {Promise<StatementResult | never>}
    * @private
    */
-  _qetNodeProperties (type) {
-    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier, 2)
+  _getNodeProperties (type) {
+    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier, this.host, 2)
     const query = getFullNodeQuery.query
     info(`_qetFullNodeQuery: ${query}`)
     return this.session.run(query)
@@ -64,7 +65,7 @@ class GetRequest {
         return rt[0]
       })
       .catch(function (error) {
-        info('__qetNodeProperties caught error' + error.toString())
+        info('_getNodeProperties caught error' + error.toString())
         throw Error(error.toString())
       })
   }
