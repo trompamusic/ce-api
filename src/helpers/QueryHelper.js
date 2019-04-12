@@ -359,16 +359,6 @@ class QueryHelper {
     return `\`${propertyName}\`:\`${alias}\`.\`${propertyName}\``
   }
 
-  // _nodePropertiesClause (parentTypeName, parentAlias, propertyName, propertyTypeName) {
-  //   const propertyTypeAlias = StringHelper.lowercaseFirstCharacter(propertyTypeName)
-  //   const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
-  //   return [
-  //     `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
-  //     `|`,
-  //     `"${host.replace(/\/$|$/, '/')}"+\`${relatedNodeAlias}\`.\`identifier\` ]`
-  //   ].join(' ')
-  // }
-
   /**
    * @param parentTypeName
    * @param parentAlias
