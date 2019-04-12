@@ -2,6 +2,7 @@ import { driver } from './driver'
 import { schema } from './schema'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
@@ -12,7 +13,7 @@ export const warning = Debug('ce-api-warning')
 
 const allowedRestMethods = ['GET', 'OPTIONS']
 const app = express()
-app.use(bodyParser.json())
+app.use(bodyParser.json()).use(cors())
 
 const restRequest = function (req, res, next) {
   const identifier = req.params.identifier

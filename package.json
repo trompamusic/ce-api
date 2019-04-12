@@ -12,6 +12,7 @@
     "apollo-server": "^2.4.8",
     "concat": "^1.0.3",
     "concatenate": "0.0.2",
+    "cors": "^2.8.5",
     "debug": "^4.1.1",
     "dotenv": "^5.0.1",
     "graphql-subscriptions": "^1.0.0",
