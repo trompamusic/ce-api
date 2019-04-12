@@ -1,4 +1,4 @@
-import { debug, info, warning } from '../index'
+import { info } from '../index'
 import { driver } from '../driver'
 import GetTypeQuery from '../queries/GetTypeQuery'
 import GetFullNodeQuery from '../queries/GetFullNodeQuery'

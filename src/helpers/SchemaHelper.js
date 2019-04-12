@@ -1,5 +1,5 @@
 import { schema as defaultSchema } from '../schema'
-import { info, debug, warning } from '../index'
+import { info, warning } from '../index'
 
 class SchemaHelper {
   constructor (schema) {

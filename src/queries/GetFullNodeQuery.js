@@ -1,6 +1,6 @@
-import { info, debug, warning } from '../index'
 import QueryHelper from '../helpers/QueryHelper'
 
+// Warning: only depth 1 is supported
 const defaultDepth = 1
 
 class GetFullNodeQuery {
