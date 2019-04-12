@@ -24,7 +24,7 @@ class QueryHelper {
    */
   typeFieldsClause (typeName, alias, host, depth = 2) {
     if (depth <= 0) {
-      debug('typeFieldsClause depth reached')
+      info('typeFieldsClause depth reached')
       return `DEPTH REACHED`
     }
 
@@ -45,12 +45,7 @@ class QueryHelper {
       }
     })
 
-    debug(`segments:`)
-    debug(segments)
-
     return segments.filter(Boolean).join(', ')
-
-    // return segments.join(', ')
   }
 
   /**
@@ -91,9 +86,9 @@ class QueryHelper {
           info(`_Neo4j class detected`)
           segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
         } else if (depth <= 1) {
-          // segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
-          // segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
-          // segments.push(`${isListType ? `` : `)`}`)
+          segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+          segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
+          segments.push(`${isListType ? `` : `)`}`)
         } else {
           info(`Object fieldType ${fieldTypeName} fields`)
         }
@@ -103,16 +98,16 @@ class QueryHelper {
         if (!interfaceTypeNames || interfaceTypeNames.length <= 0) {
           break
         }
-        // segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+        segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
         segments.push(
           interfaceTypeNames.map(interfaceTypeName => {
             if (depth <= 1) {
-              // return this._nodePropertyURIClause(typeName, alias, fieldName, interfaceTypeName, host)
+              return this._nodePropertyURIClause(typeName, alias, fieldName, interfaceTypeName, host)
             } else {
               info(`Interface fieldType ${interfaceTypeName} fields`)
             }
           }).filter(Boolean).join(' + '))
-        // segments.push(`${isListType ? `` : `)`}`)
+        segments.push(`${isListType ? `` : `)`}`)
         break
       case 'GraphQLUnionType':
         const unionType = this.schemaHelper.findUnionType(fieldTypeName)
@@ -384,11 +379,8 @@ class QueryHelper {
    * @private
    */
   _nodePropertyURIClause (parentTypeName, parentAlias, propertyName, propertyTypeName, host) {
-    debug(`_nodePropertyURIClause`)
     const propertyTypeAlias = StringHelper.lowercaseFirstCharacter(propertyTypeName)
-    debug(`_nodePropertyURIClause 2`)
     const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
-    debug(`_nodePropertyURIClause 3`)
     return [
       `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
       `|`,

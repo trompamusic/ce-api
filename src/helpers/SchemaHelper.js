@@ -13,7 +13,6 @@ class SchemaHelper {
    * @returns {GraphQLField<*, *>|GraphQLInputField}
    */
   findPropertyType (parentType, propertyName) {
-    debug(`findPropertyType ${parentType}, ${propertyName}`)
     const typeMap = this.schema._typeMap[parentType]
     if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema')
@@ -80,8 +79,6 @@ class SchemaHelper {
    */
   getTypeFields (typeName) {
     const schemaType = this.getSchemaType(typeName)
-    // debug('schemaType:')
-    // debug(schemaType)
     const typeFields = schemaType._fields
     if (typeof typeFields === 'undefined') {
       info('No typeFields (type could be scalar)')
@@ -96,7 +93,6 @@ class SchemaHelper {
    * @returns {*}
    */
   getSchemaType (typeName) {
-    // debug('getSchemaType for:' + typeName)
     const schemaType = this.schemaTypeMap[typeName]
     if (typeof schemaType === 'undefined') {
       throw Error('Type could not be retrieved from schema')
