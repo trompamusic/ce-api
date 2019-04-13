@@ -153,7 +153,7 @@ type Person implements MetadataInterface & SearchableInterface & ThingInterface 
 #  "https://schema.org/naics"
 #  naics
   "https://schema.org/nationality"
-  nationality: [Place]
+  nationality: [Place] @relation(name: "NATIONALITY", direction: "OUT")
 #   "https://schema.org/netWorth"
 #  netWorth
   "https://schema.org/owns"
@@ -161,7 +161,7 @@ type Person implements MetadataInterface & SearchableInterface & ThingInterface 
   "https://schema.org/parent"
   parent: [Person] @relation(name: "PARENT", direction: "OUT")
   "https://schema.org/performerIn"
-  performerIn: [Event]
+  performerIn: [Event] @relation(name: "PERFORMER_IN", direction: "OUT")
   #publishingPrinciples: URL
   "https://schema.org/relatedTo"
   relatedTo: [Person] @relation(name: "RELATED_TO", direction: "OUT")
