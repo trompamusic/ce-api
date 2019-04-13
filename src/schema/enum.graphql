@@ -316,6 +316,7 @@ enum ValueType {
   Review
   SoftwareApplication
   VideoObject
+  ItemList
 }
 
 # TODO auto-generate -> ValueReference = ValuePattern + ValueType
@@ -353,6 +354,7 @@ enum ValueReference {
   Review
   SoftwareApplication
   VideoObject
+  ItemList
 }
 
 enum SearchableMetadataFields {
@@ -360,10 +362,6 @@ enum SearchableMetadataFields {
   creator
   description
   subject
-}
-
-enum ControlActionTargetType {
-  essentia
 }
 
 enum ControlActionStatus {
@@ -409,4 +407,11 @@ enum ValidAdditionalPropertyNodeValueType {
   Occupation
   DigitalDocumentPermission
   Audience
+}
+
+enum ItemListOrder {
+  ascending
+  descending
+  unordered
+  ordered
 }

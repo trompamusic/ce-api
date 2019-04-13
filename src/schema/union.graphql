@@ -3,7 +3,7 @@ union LegalPerson = Person | Organization | MusicGroup
 union Performer = Person | MusicGroup
 
 # TODO auto generate
-union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience | EntryPoint | Action | UpdateAction | ReplaceAction | ControlAction | SoftwareApplication | PropertyValueSpecification | Property | PropertyValue
+union ThingInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place | Occupation | DigitalDocumentPermission | Audience | EntryPoint | Action | UpdateAction | ReplaceAction | ControlAction | SoftwareApplication | PropertyValueSpecification | Property | PropertyValue | ItemList | ListItem
 # TODO auto generate
 union MetadataInterfaced = Person | CreativeWork | Article | DigitalDocument | MediaObject | Review | AudioObject | DataDownload | Dataset | ImageObject | MusicComposition | MusicPlaylist | MusicAlbum | MusicRecording | VideoObject | Event | Organization | MusicGroup | Product | Place
 # TODO auto generate
