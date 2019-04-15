@@ -1,8 +1,10 @@
 import { schema as defaultSchema } from '../schema'
+import { info, warning } from '../index'
 
 class SchemaHelper {
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
+    this.schemaTypeMap = this.schema._typeMap
   }
 
   /**
@@ -29,12 +31,20 @@ class SchemaHelper {
    * @returns {*}
    */
   findInterfaceImplementingTypes (interfaceName) {
-    const implementations = this.schema._implementations[interfaceName]
+    const implementations = this.findInterface(interfaceName)
     if (implementations instanceof Array === false || !implementations.length) {
       return null
     }
 
     return implementations.map(implementation => { return implementation.toString() })
+  }
+
+  /**
+   * @param interfaceName
+   * @returns {*|Array<GraphQLObjectType>}
+   */
+  findInterface (interfaceName) {
+    return this.schema._implementations[interfaceName]
   }
 
   /**
@@ -48,6 +58,47 @@ class SchemaHelper {
     }
 
     return Object.keys(possibleTypes)
+  }
+
+  /**
+   * @param unionName
+   * @returns {*}
+   */
+  findUnionType (unionName) {
+    const schemaType = this.getSchemaType(unionName)
+    if (typeof schemaType === 'undefined' || schemaType.astNode.kind !== 'UnionTypeDefinition') {
+      warning(`findUnionTypes() called on non-existent Union Type '${unionName}'`)
+    }
+
+    return schemaType
+  }
+
+  /**
+   * @param typeName
+   * @returns {*}
+   */
+  getTypeFields (typeName) {
+    const schemaType = this.getSchemaType(typeName)
+    const typeFields = schemaType._fields
+    if (typeof typeFields === 'undefined') {
+      info('No typeFields (type could be scalar)')
+      return null
+    }
+
+    return typeFields
+  }
+
+  /**
+   * @param typeName
+   * @returns {*}
+   */
+  getSchemaType (typeName) {
+    const schemaType = this.schemaTypeMap[typeName]
+    if (typeof schemaType === 'undefined') {
+      throw Error('Type could not be retrieved from schema')
+    }
+
+    return schemaType
   }
 
   /**

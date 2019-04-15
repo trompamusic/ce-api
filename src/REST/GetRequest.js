@@ -1,43 +1,69 @@
 import { info } from '../index'
 import { driver } from '../driver'
+import GetTypeQuery from '../queries/GetTypeQuery'
+import GetFullNodeQuery from '../queries/GetFullNodeQuery'
 
 class GetRequest {
   /**
    * @param identifier
    */
-  constructor (identifier) {
+  constructor (identifier, host) {
     this.identifier = identifier
+    this.session = driver.session()
+    this.host = host
   }
 
   /**
-   * @returns {{data: string, status: string}|*}
+   * @returns {Promise<{from, to}|never>}
    */
   get find () {
-    return this._runQuery(this._getQuery())
-  }
-
-  _getQuery () {
-    return `MATCH (n) WHERE n.identifier = "${this.identifier}" RETURN n AS _payload`
+    const getTypeQuery = new GetTypeQuery(this.identifier)
+    const query = getTypeQuery.query
+    info(`_findNodeType query: ${query}`)
+    return this.session.run(query)
+    // find a node with matching identifier
+      .then(typeResult => {
+        let rt = typeResult.records.map(record => {
+          return record.get('_payload')
+        })
+        // only interpret the first result
+        return rt[0]
+      })
+      // determine type of node and query for all scalar properties and 1st order relations
+      .then(typeResult => {
+        if (typeof typeResult === 'undefined' || typeResult._schemaType === 'undefined') {
+          return Promise.reject(new Error('Node not found'))
+        }
+        return this._getNodeProperties(typeResult._schemaType)
+      }, reason => {
+        throw reason
+      })
+      .catch(function (error) {
+        info('_findNodeType caught error' + error.toString())
+        throw Error(error.toString())
+      })
   }
 
   /**
-   * @param query
-   * @param queryType
-   * @param publishChannel
-   * @returns {Promise<{from, to} | never>}
+   * @param type
+   * @returns {Promise<StatementResult | never>}
+   * @private
    */
-  _runQuery (query, queryType, publishChannel) {
-    info(`query: ${query}`)
-    let session = driver.session()
-    return session.run(query)
-      .then(result => {
-        let rt = result.records.map(record => {
+  _getNodeProperties (type) {
+    const getFullNodeQuery = new GetFullNodeQuery(type, this.identifier, this.host, 2)
+    const query = getFullNodeQuery.query
+    info(`_qetFullNodeQuery: ${query}`)
+    return this.session.run(query)
+      // find the node with all properties and 1st order relations
+      .then(fullResult => {
+        let rt = fullResult.records.map(record => {
           return record.get('_payload')
         })
-        const returnValue = rt[0]
-        return returnValue
+        // only interpret the first result
+        return rt[0]
       })
       .catch(function (error) {
+        info('_getNodeProperties caught error' + error.toString())
         throw Error(error.toString())
       })
   }

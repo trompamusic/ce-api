@@ -1,41 +1,5 @@
-"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/UpdateAction,https://schema.org/DeleteAction,https://www.w3.org/TR/prov-o/#Activity"
-type UpdateAction implements MetadataInterface & ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
-  ### Metadata properties ###
-  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
-  contributor: String!
-  "http://purl.org/dc/elements/1.1/coverage"
-  coverage: String
-  "http://purl.org/dc/elements/1.1/creator"
-  creator: String!
-  "http://purl.org/dc/elements/1.1/date"
-  date: _Neo4jDate
-  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String!
-  "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: String
-  "http://purl.org/dc/elements/1.1/format"
-  format: String!
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
-  identifier: ID
-  "http://purl.org/dc/elements/1.1/language"
-  language: AvailableLanguage!
-  "http://purl.org/dc/elements/1.1/publisher"
-  publisher: String
-  "http://purl.org/dc/elements/1.1/relation"
-  relation: String
-  "http://purl.org/dc/elements/1.1/rights"
-  rights: String
-  "http://purl.org/dc/elements/1.1/source"
-  source: String!
-  "http://purl.org/dc/elements/1.1/subject"
-  subject: String!
-  "http://purl.org/dc/elements/1.1/title"
-  title: String!
-  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
-  type: String
-  ####################################
-  ### SearchableInterface property ###
-  _searchScore: Float
+"https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/UpdateAction,https://schema.org/DeleteAction,https://www.w3.org/TR/prov-o/#Activity"
+type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -44,6 +8,12 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
@@ -58,18 +28,6 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://pending.schema.org/url"
   url: URL
-  #######################
-  ### SKOS properties ###
-  "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [Action]  @relation(name: "BROAD_MATCH", direction: "OUT")
-  "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [Action]  @relation(name: "CLOSE_MATCH", direction: "OUT")
-  "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [Action]  @relation(name: "EXACT_MATCH", direction: "OUT")
-  "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [Action]  @relation(name: "NARROW_MATCH", direction: "OUT")
-  "http://www.w3.org/2004/02/skos/core#relatedMatch"
-  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
@@ -115,5 +73,5 @@ type UpdateAction implements MetadataInterface & ThingInterface & ActionInterfac
   ###############################
   ### UpdateAction properties ###
   "https://schema.org/targetCollection"
-  targetCollection: [ThingInterfaced] @relation(name: "TARGET_COLLECTION", direction: "OUT")
+  targetCollection: [ThingInterface] @relation(name: "TARGET_COLLECTION", direction: "OUT")
 }

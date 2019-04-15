@@ -2,6 +2,7 @@ import { driver } from './driver'
 import { schema } from './schema'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import GetRequest from './REST/GetRequest'
 import { debug as Debug } from 'debug'
@@ -12,7 +13,7 @@ export const warning = Debug('ce-api-warning')
 
 const allowedRestMethods = ['GET', 'OPTIONS']
 const app = express()
-app.use(bodyParser.json())
+app.use(bodyParser.json()).use(cors())
 
 const restRequest = function (req, res, next) {
   const identifier = req.params.identifier
@@ -48,14 +49,23 @@ const restRequest = function (req, res, next) {
     return
   }
 
-  const getRequest = new GetRequest(identifier)
+  const baseURL = `${req.protocol}://${req.get('host')}`
+  const getRequest = new GetRequest(identifier, baseURL)
   let promise = getRequest.find
   promise
     .then(result => {
-      res.status('200').send(result.properties)
+      res.status('200').send(result)
+    }, reason => {
+      info('restRequest rejected')
+      throw reason
     })
     .catch(function (error) {
-      throw Error(error.toString())
+      let statusCode = 400
+      const errorString = error.toString()
+      if (errorString.toLowerCase().includes('not found')) {
+        statusCode = 404
+      }
+      res.status(statusCode).send(errorString)
     })
 }
 

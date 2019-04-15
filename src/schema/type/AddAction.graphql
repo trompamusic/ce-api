@@ -1,5 +1,5 @@
-"https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/UpdateAction,https://schema.org/ReplaceAction,https://www.w3.org/TR/prov-o/#Activity"
-type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
+"https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/UpdateAction,https://schema.org/AddAction,https://www.w3.org/TR/prov-o/#Activity"
+type AddAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -73,11 +73,5 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   ###############################
   ### UpdateAction properties ###
   "https://schema.org/targetCollection"
-  targetCollection: [ThingInterface] @relation(name: "TARGET_COLLECTION", direction: "OUT")
-  ################################
-  ### ReplaceAction properties ###
-  "https://schema.org/replacee"
-  replacee: ThingInterfaced @relation(name: "REPLACEE", direction: "OUT")
-  "https://schema.org/replacer"
-  replacer: ThingInterfaced @relation(name: "REPLACER", direction: "OUT")
+  targetCollection: [ThingInterfaced] @relation(name: "TARGET_COLLECTION", direction: "OUT")
 }

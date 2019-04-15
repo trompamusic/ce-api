@@ -101,8 +101,9 @@ enum ThingInterfaceType {
   DigitalDocumentPermission
   Audience
   Action
-  UpdateAction
+  AddAction
   ReplaceAction
+  DeleteAction
   ControlAction
   EntryPoint
   SoftwareApplication
@@ -113,6 +114,7 @@ enum ThingInterfaceType {
 
 # TODO auto generate
 enum MetadataInterfaceType {
+  Action
   Person
   CreativeWork
   Article
@@ -176,15 +178,16 @@ enum OrganizationInterfaceType {
 # TODO auto generate
 enum ActionInterfaceType {
   Action
-  UpdateAction
+  AddAction
   ReplaceAction
+  DeleteAction
   ControlAction
 }
 
 enum ProvenanceActivityInterfaceType {
-  Action
-  UpdateAction
+  AddAction
   ReplaceAction
+  DeleteAction
 }
 
 # TODO auto generate
@@ -218,8 +221,9 @@ enum ProvenanceEntityInterfaceType {
   MusicRecording
   VideoObject
   MusicGroup
-  UpdateAction
+  AddAction
   ReplaceAction
+  DeleteAction
 }
 
 # TODO auto generate
@@ -316,6 +320,7 @@ enum ValueType {
   Review
   SoftwareApplication
   VideoObject
+  ItemList
 }
 
 # TODO auto-generate -> ValueReference = ValuePattern + ValueType
@@ -353,6 +358,7 @@ enum ValueReference {
   Review
   SoftwareApplication
   VideoObject
+  ItemList
 }
 
 enum SearchableMetadataFields {
@@ -360,10 +366,6 @@ enum SearchableMetadataFields {
   creator
   description
   subject
-}
-
-enum ControlActionTargetType {
-  essentia
 }
 
 enum ControlActionStatus {
@@ -409,4 +411,11 @@ enum ValidAdditionalPropertyNodeValueType {
   Occupation
   DigitalDocumentPermission
   Audience
+}
+
+enum ItemListOrder {
+  ascending
+  descending
+  unordered
+  ordered
 }

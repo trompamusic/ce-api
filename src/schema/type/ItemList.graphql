@@ -1,0 +1,44 @@
+"https://schema.org/ItemList"
+type ItemList implements ThingInterface {
+  ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
+  "http://purl.org/dc/elements/1.1/title"
+  title: String!
+  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  description: String!
+  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  type: String
+  #################################
+  ### ThingInterface properties ###
+  "https://schema.org/additionalType"
+  additionalType: [String]
+  "https://schema.org/additionalProperty"
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  "https://schema.org/alternateName"
+  alternateName: String
+  "https://schema.org/disambiguatingDescription"
+  disambiguatingDescription: String
+  "https://schema.org/image"
+  image: URL
+  "https://schema.org/mainEntityOfPage"
+  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  "https://schema.org/name"
+  name: String!
+  "https://schema.org/potentialAction"
+  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  "https://schema.org/sameAs"
+  sameAs: URL
+  "https://pending.schema.org/subjectOf"
+  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  "https://pending.schema.org/url"
+  url: URL
+  ################################
+  ### ItemList properties ###
+  "https://pending.schema.org/itemListElement"
+  itemListElement: [ThingInterfaced] @relation(name: "ITEM_LIST_ELEMENT", direction: "OUT")
+  "https://pending.schema.org/itemListOrder"
+  itemListOrder: ItemListOrder
+#  "https://pending.schema.org/numberOfItems"
+#  numberOfItems: Int
+}

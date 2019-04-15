@@ -44,7 +44,7 @@ type PropertyValue {
   #unitText: String
   "https://schema.org/value"
   value: String # string, that can be validated/cast according to value of `valueReference` property
-  "TROMPA specific extension to mitigate Apollo limitation, and allow `value` to be scalar or a node"
+  "https://schema.org/value, TROMPA specific extension to mitigate Apollo limitation, and allow `value` to be scalar or a node"
   nodeValue: ThingInterfaced @relation(name: "NODE_VALUE", direction: "OUT")
   "https://schema.org/valueReference"
   valueReference: ValueReference! # contains either a valid scalar or valid schema-type
