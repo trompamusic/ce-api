@@ -90,6 +90,32 @@ class SchemaHelper {
 
   /**
    * @param typeName
+   * @returns {String}
+   */
+  getTypeDescription (typeName) {
+    const schemaType = this.getSchemaType(typeName)
+
+    return schemaType.description
+  }
+
+  /**
+   * @param property
+   * @returns {boolean}
+   */
+  isRelationalProperty (property) {
+    const astNodeKind = property.type && property.type.astNode && property.type.astNode.kind
+    const asTypeNodeKind = property.type && property.type.ofType && property.type.ofType.astNode && property.type.ofType.astNode.kind
+    const kind = astNodeKind || asTypeNodeKind
+
+    if (!kind || property.type.toString().includes('_Neo4j')) {
+      return false
+    }
+
+    return kind === 'ObjectTypeDefinition' || kind === 'InterfaceTypeDefinition' || kind === 'UnionTypeDefinition' || kind.includes('Interfaced')
+  }
+
+  /**
+   * @param typeName
    * @returns {*}
    */
   getSchemaType (typeName) {

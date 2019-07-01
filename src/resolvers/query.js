@@ -1,4 +1,4 @@
-import { info } from '../index'
+import { info } from '../utils/logger'
 import { driver } from '../driver'
 import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
 import GetControlActionByTargetQuery from '../queries/GetControlActionByTargetQuery'
