@@ -1,4 +1,4 @@
-"https://schema.org/PropertyValue"
+"https://schema.org/PropertyValueSpecification"
 type PropertyValueSpecification {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
@@ -29,9 +29,9 @@ type PropertyValueSpecification {
 #  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
 #  "https://schema.org/sameAs"
 #  sameAs: URL
-#  "https://pending.schema.org/subjectOf"
+#  "https://schema.org/subjectOf"
 #  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-#  "https://pending.schema.org/url"
+#  "https://schema.org/url"
 #  url: URL
   ################################
   ### PropertyValueSpecification properties ###

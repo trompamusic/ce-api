@@ -1,4 +1,4 @@
-"https://schema.org/Thing,https://schema.org/Intangible,https://www.w3.org/TR/prov-o/,https://schema.org/DigitalDocumentPermission"
+"https://schema.org/DigitalDocumentPermission"
 type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInterface {
   #################################
   ### ThingInterface properties ###
@@ -24,9 +24,9 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   #######################
   ### SKOS properties ###
@@ -52,8 +52,8 @@ type DigitalDocumentPermission implements ThingInterface & ProvenanceEntityInter
   used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
   ############################################
   ### DigitalDocumentPermission properties ###
-  "https://pending.schema.org/grantee"
+  "https://schema.org/grantee"
   grantee: [LegalPerson] @relation(name: "GRANTEE", direction: "IN")
-  "https://pending.schema.org/permissionType"
+  "https://schema.org/permissionType"
   permissionType: DigitalDocumentPermissionType
 }

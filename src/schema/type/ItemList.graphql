@@ -29,16 +29,16 @@ type ItemList implements ThingInterface {
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   ################################
   ### ItemList properties ###
-  "https://pending.schema.org/itemListElement"
+  "https://schema.org/itemListElement"
   itemListElement: [ThingInterfaced] @relation(name: "ITEM_LIST_ELEMENT", direction: "OUT")
-  "https://pending.schema.org/itemListOrder"
+  "https://schema.org/itemListOrder"
   itemListOrder: ItemListOrder
-#  "https://pending.schema.org/numberOfItems"
+#  "https://schema.org/numberOfItems"
 #  numberOfItems: Int
 }

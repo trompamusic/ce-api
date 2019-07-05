@@ -1,4 +1,4 @@
-"https://schema.org/Thing,https://schema.org/Intangible,https://schema.org/Audience"
+"https://schema.org/Audience"
 type Audience implements ThingInterface {
   ########################
   ### ThingInterface properties ###
@@ -24,9 +24,9 @@ type Audience implements ThingInterface {
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   #######################
   ### SKOS properties ###
@@ -42,8 +42,8 @@ type Audience implements ThingInterface {
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
   ################################
   ### Audience properties ###
-  "https://pending.schema.org/audienceType"
+  "https://schema.org/audienceType"
   audienceType: [AudienceType]
-  "https://pending.schema.org/geographicArea"
+  "https://schema.org/geographicArea"
   geographicArea: [Place] @relation(name: "GEOGRAPHIC_AREA", direction: "IN")
 }

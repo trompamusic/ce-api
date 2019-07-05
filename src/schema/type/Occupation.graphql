@@ -1,4 +1,4 @@
-"https://schema.org/Thing,https://schema.org/Intangible,https://schema.org/Occupation"
+"https://schema.org/Occupation"
 type Occupation implements ThingInterface {
   ########################
   ### ThingInterface properties ###
@@ -24,9 +24,9 @@ type Occupation implements ThingInterface {
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   #######################
   ### SKOS properties ###
@@ -42,19 +42,19 @@ type Occupation implements ThingInterface {
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
   ################################
   ### Occupation properties ###
-  #"https://pending.schema.org/educationRequirements"
+  #"https://schema.org/educationRequirements"
   #educationRequirements: String
   #estimatedSalary:
-  #"https://pending.schema.org/experienceRequirements"
+  #"https://schema.org/experienceRequirements"
   #experienceRequirements: String
-  "https://pending.schema.org/occupationLocation"
+  "https://schema.org/occupationLocation"
   occupationLocation: [Place] @relation(name: "OCCUPATION_LOCATION", direction: "IN")
-  "https://pending.schema.org/occupationalCategory"
+  "https://schema.org/occupationalCategory"
   occupationalCategory: String
-  "https://pending.schema.org/qualifications"
+  "https://schema.org/qualifications"
   qualifications: String
-  "https://pending.schema.org/responsibilities"
+  "https://schema.org/responsibilities"
   responsibilities: String
-  "https://pending.schema.org/skills"
+  "https://schema.org/skills"
   skills: String
 }
