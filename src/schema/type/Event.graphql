@@ -83,7 +83,7 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   ########################
   ### Event properties ###
   "https://schema.org/about"
-  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterfaced] @relation(name: "SUBJECT_OF", direction: "IN")
   "https://schema.org/actor"
   actor: [Person]  @relation(name: "ACTOR", direction: "IN")
   #aggregateRating: AggregateRating

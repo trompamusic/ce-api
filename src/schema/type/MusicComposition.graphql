@@ -83,7 +83,7 @@ type MusicComposition implements MetadataInterface & SearchableInterface & Thing
   ###############################
   ### CreativeWork properties ###
   "https://schema.org/about"
-  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterfaced] @relation(name: "SUBJECT_OF", direction: "IN")
   #"https://schema.org/accessMode"
   #accessMode: AccessMode
   #"https://schema.org/accessModeSufficient"
