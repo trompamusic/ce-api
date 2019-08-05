@@ -27,4 +27,5 @@ type Query {
   Audience(identifier: String, title: String, creator: String, contributor: String, source: URL, language: AvailableLanguage, publisher: String, offset: Int, first: Int):[Audience]
   EntryPoint(identifier: String, offset: Int, first: Int):[EntryPoint]
   PropertyValue(identifier: String, offset: Int, first: Int): [PropertyValue]
+  Annotation(identifier: String, target: URL, creator: URL): [Annotation]
 }
