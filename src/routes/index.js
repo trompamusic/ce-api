@@ -30,7 +30,7 @@ router.get('/:identifier', (req, res) => {
   getDocument(identifier, baseURL)
     .then(({ data, type }) => {
       // Transform document to JSON-LD
-      if (accept === 'application/json-ld') {
+      if (accept === 'application/ld+json') {
         return res.status(200).send(transformJsonLD(type, data))
       }
 
