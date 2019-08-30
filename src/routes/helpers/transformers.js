@@ -53,11 +53,13 @@ export const transformJsonLD = (type, data) => {
     // Iterate over all property scopes
     property.description.split(',').forEach(uri => {
       // Find the scope in the predefined scoped context dictionary
-      const prefix = prefixes.find(prefix => uri.indexOf(scopedContexts[prefix]) === 0)
+      const prefix = prefixes.find(prefix => uri.indexOf(scopedContexts[prefix]) === 0);
 
       // Set the property with the namespace
       if (prefix) {
-        jsonLdData[`${prefix}:${key}`] = elementValue
+        const context = scopedContexts[prefix];
+        const jsonLDKey = uri.substring(context.length);
+        jsonLdData[`${prefix}:${jsonLDKey}`] = elementValue;
 
         return
       }
