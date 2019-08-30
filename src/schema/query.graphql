@@ -28,4 +28,5 @@ type Query {
   EntryPoint(identifier: String, offset: Int, first: Int):[EntryPoint]
   PropertyValue(identifier: String, offset: Int, first: Int): [PropertyValue]
   Annotation(identifier: String, target: URL, creator: URL): [Annotation]
+  TextualBody(identifier: String): [TextualBody]
 }

@@ -1,33 +1,43 @@
-"WebAnnotations Body"
+"http://www.w3.org/ns/oa#TextualBody"
 type TextualBody {
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
   value: String!
+  "http://purl.org/dc/elements/1.1/format"
   format: String
+  "http://purl.org/dc/elements/1.1/language"
   language: AvailableLanguage
-  type: AnnotationMotivation
+  # Should always be "http://www.w3.org/ns/oa#TextualBody"
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+  type: String
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
 }
 
-"A WebAnnotations annotation"
+"http://www.w3.org/ns/oa#Annotation"
 type Annotation {
   # TODO: This should be a UUID or a URL, is there a type that can be used?
   #       Additionally, it could be a relationship in the db so that we can do queries on it?
   #       Because this isn't always something in the CE, perhaps it shouldn't be a relation
   #         - We don't want to lose things like fragments either
-  "http://www.w3.org/ns/oa/hasTarget"
-  target: URL
+  "http://www.w3.org/ns/oa#hasTarget"
+  target: [URL]
   "http://purl.org/dc/terms/creator"
   creator: URL
   "http://purl.org/dc/elements/1.1/date"
-  created: _Neo4jDateTime
+  created: String
   "http://purl.org/dc/elements/1.1/date"
-  updated: _Neo4jDateTime
+  updated: String
   # TODO: Motivation can also be defined by us, therefore should also be an ID/UUID
   # TODO: in GraphQL, how do you allow this to be either an enum or a string?
-  "http://www.w3.org/ns/oa/Motivation"
-  motivation: [AnnotationMotivation]
-  "http://www.w3.org/ns/oa/TextualBody"
-  body: URL
-  textualBody: [TextualBody] @relation(name: "BODY", direction: "OUT")
+  # We want the output of this to be a URI of the motivation, so we just set it to
+  # a [URI] for now so that we output the URI instead of the enum name
+  "http://www.w3.org/ns/oa#Motivation"
+  motivation: [URL]
+  "http://www.w3.org/ns/oa#hasBody"
+  body: [URL]
+  # Remove the relationship for now - manually add the relationship to the body field
+  # "http://www.w3.org/ns/oa#hasBody"
+  # textualBody: [TextualBody] @relation(name: "BODY", direction: "OUT")
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
 }
