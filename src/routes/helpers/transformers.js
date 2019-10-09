@@ -1,5 +1,6 @@
 import SchemaHelper from '../../helpers/SchemaHelper'
 import { warning } from '../../utils/logger'
+import { isDateTime } from 'neo4j-driver/lib/v1/temporal-types.js'
 
 // Used scopes dict
 const scopedContexts = {
@@ -35,7 +36,13 @@ export const transformJsonLD = (type, data) => {
     const property = schemaHelper.findPropertyType(type, key)
 
     // Use the current value by default
-    let elementValue = data[key]
+    let elementValue = data[key];
+
+    // A DateTime object should be formatted as an iso8601 date
+    // TODO: there is also a LocalDateTime, but we don't appear to use it
+    if (isDateTime(elementValue)) {
+      elementValue = elementValue.toString();
+    }
 
     // Transform the value when it's a relational property
     if (elementValue && schemaHelper.isRelationalProperty(property)) {
