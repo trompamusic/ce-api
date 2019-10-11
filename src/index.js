@@ -1,3 +1,4 @@
+import http from 'http'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import cors from 'cors'
@@ -32,11 +33,14 @@ const server = new ApolloServer({
 // Bind the Apollo server to the express server.
 server.applyMiddleware({ app, path: '/' })
 
+const httpServer = http.createServer(app)
+server.installSubscriptionHandlers(httpServer)
+
 // Listen for errors.
 app.on('error', error => debug(error))
 
-// Log the server url.
-console.log(`started server on ${host}:${port}`)
-
 // Start the express and Apollo server
-app.listen(port, host)
+httpServer.listen(port, host, () => {
+  // Log the server url.
+  console.log(`started server on ${host}:${port}`)
+})
