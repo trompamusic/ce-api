@@ -1,4 +1,4 @@
-"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Action,https://schema.org/ControlAction,https://www.w3.org/TR/prov-o/#Activity"
+"https://schema.org/ControlAction,https://www.w3.org/TR/prov-o/#Activity"
 type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
@@ -24,9 +24,9 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   #######################
   ### SKOS properties ###

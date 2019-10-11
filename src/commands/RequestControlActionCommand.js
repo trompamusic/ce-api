@@ -1,4 +1,4 @@
-import { info, warning } from '../index'
+import { info, warning } from '../utils/logger'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
 import { pubsub } from '../resolvers'

@@ -1,4 +1,4 @@
-"http://dublincore.org/2012/06/14/dcelements,https://schema.org/Thing,https://www.w3.org/TR/prov-o/,https://schema.org/Person,https://www.w3.org/TR/prov-o/#Agent"
+"https://schema.org/Person,https://www.w3.org/TR/prov-o/#Agent"
 type Person implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
@@ -54,9 +54,9 @@ type Person implements MetadataInterface & SearchableInterface & ThingInterface 
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   #######################
   ### SKOS properties ###

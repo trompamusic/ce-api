@@ -29,18 +29,18 @@ type ListItem implements ThingInterface {
   potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://pending.schema.org/subjectOf"
+  "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://pending.schema.org/url"
+  "https://schema.org/url"
   url: URL
   ################################
   ### ListItem properties ###
-  "https://pending.schema.org/item"
+  "https://schema.org/item"
   item: [ThingInterfaced] @relation(name: "ITEM", direction: "OUT")
-  "https://pending.schema.org/nextItem"
+  "https://schema.org/nextItem"
   nextItem: ListItem @relation(name: "NEXT_ITEM", direction: "OUT")
-  "https://pending.schema.org/previousItem"
+  "https://schema.org/previousItem"
   previousItem: ListItem @relation(name: "PREVIOUS_ITEM", direction: "OUT")
-  "https://pending.schema.org/position"
+  "https://schema.org/position"
   position: Int
 }
