@@ -1,3 +1,23 @@
+## 0.4.0 (2019-10-11)
+
+* chore: fix eslint errors 4b58d3a
+* chore: import debug helpers from logger util b7cfcdd
+* chore(project): add missing dependencies fbd3572
+* chore(project): npm security fixes cbfef93
+* chore(project): update docker-compose file 94c1361
+* fix: make subscriptions work again c993ac6
+* fix(routes): fix accept header for JSON LD 3a6af41
+* Bump eslint-utils from 1.3.1 to 1.4.2 c9d37c3
+* Bump lodash.template from 4.4.0 to 4.5.0 3433db9
+* Format DateTime objects in ISO8601 format 4d9817d
+* Use the predicate as defined in the ontology as json key 96a58bc
+* feat(project): add JSON-LD response handler 4caffea
+* feat(schema): add name param in Person query ad1892d, closes #19
+* refactor(project): refactor rest logic 8a12f03
+* refactor(types): cleanup vocabularies in types c5c4637
+
+
+
 ## <small>0.3.2 (2019-04-15)</small>
 
 * add basic node data response ([4041eb7](https://bitbucket.org/videodock/ce-api/commits/4041eb7))
