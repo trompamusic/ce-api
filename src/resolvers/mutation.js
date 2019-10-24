@@ -1,4 +1,4 @@
-import { info, warning } from '../index'
+import { info, warning } from '../utils/logger'
 import { driver } from '../driver'
 import { retrieveNodeData, pubsub } from '../resolvers'
 import RequestControlActionCommand from '../commands/RequestControlActionCommand'
