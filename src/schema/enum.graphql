@@ -9,6 +9,7 @@ enum ThingInterfaceRelationToThingInterface {
 enum ThingInterfaceRelationToCreativeWorkInterface {
   mainEntityOfPage
   subjectOf
+  exampleOfWork
 }
 
 # TODO auto generate

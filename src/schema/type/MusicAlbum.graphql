@@ -207,8 +207,8 @@ type MusicAlbum implements MetadataInterface & SearchableInterface & ThingInterf
   version: String
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
-  "https://schema.org/creativeWork"
-  workExample: [CreativeWorkInterfaced] @relation(name: "WORK_EXAMPLE", direction: "OUT")
+  "https://schema.org/workExample"
+  workExample: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
   "https://bib.schema.org/workTranslation"
   workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
