@@ -1,7 +1,7 @@
 "http://www.w3.org/ns/prov#Agent"
 interface ProvenanceAgentInterface {
   "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
-  wasAssociatedWith: [LegalPerson] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
+  wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
-  actedOnBehalfOf: [LegalPerson] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+  actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
 }

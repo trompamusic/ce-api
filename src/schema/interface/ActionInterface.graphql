@@ -3,21 +3,21 @@ interface ActionInterface {
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"
-  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
   error: String
   "https://schema.org/instrument"
-  instrument: [ThingInterfaced] @relation(name: "INSTRUMENT", direction: "OUT")
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  #  object: [ThingInterfaced] @relation(name: "OBJECT", direction: "OUT")
+  #  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   #  "https://schema.org/participant"
-  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPersonInterface] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: ThingInterfaced @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"

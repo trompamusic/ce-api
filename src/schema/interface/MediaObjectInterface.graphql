@@ -13,7 +13,7 @@ interface MediaObjectInterface {
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterface] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/height"

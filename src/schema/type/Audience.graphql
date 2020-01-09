@@ -17,15 +17,15 @@ type Audience implements ThingInterface {
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
   #######################

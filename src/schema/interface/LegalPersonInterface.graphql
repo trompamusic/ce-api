@@ -1,0 +1,4 @@
+interface LegalPersonInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+}

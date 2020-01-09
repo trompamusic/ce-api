@@ -1,5 +1,5 @@
 "https://schema.org/MusicGroup,http://purl.org/ontology/mo/MusicGroup"
-type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface {
+type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface & PerformerInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
@@ -47,15 +47,15 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
   #######################
@@ -73,19 +73,19 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ###########################################
   ### ProvenanceAgentInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
-  wasAssociatedWith: [LegalPerson] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
+  wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
-  actedOnBehalfOf: [LegalPerson] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+  actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
   ###############################
   ### Organization properties ###
   #actionableFeedbackPolicy
@@ -122,7 +122,7 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -140,7 +140,7 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPersonInterface] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -156,7 +156,7 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "OUT")
+  sponsor: [LegalPersonInterface] @relation(name: "SPONSOR", direction: "OUT")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID

@@ -1,11 +1,11 @@
 "http://www.w3.org/ns/prov#Entity"
 interface ProvenanceEntityInterface {
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
 }

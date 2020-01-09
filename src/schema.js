@@ -21,7 +21,7 @@ export const schema = makeAugmentedSchema({
   resolvers,
   allowUndefinedInResolve: true,
   config: {
-    query: false,
+    query: true,
     mutation: {
       exclude: ['Subscription']
     }
