@@ -20,7 +20,9 @@ class SearchQuery {
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
       `RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: \`score\` }`,
-      `ORDER BY \`score\` DESC`
+      `ORDER BY \`score\` DESC`,
+      this.params.offset ? `SKIP toInteger($offset)` : ``,
+      this.params.first ? `LIMIT toInteger($first)` : ``
     ].join(' ')
   }
 
