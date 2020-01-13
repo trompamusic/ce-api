@@ -30,11 +30,3 @@ export function retrieveNodeData (node) {
   }
   return data
 }
-
-// hydrate node data with searchScore
-export function hydrateNodeSearchScore (nodeData, weight) {
-  if (weight !== undefined) {
-    nodeData._searchScore = weight
-  }
-  return nodeData
-}

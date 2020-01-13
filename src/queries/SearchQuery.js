@@ -19,7 +19,7 @@ class SearchQuery {
       `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._generateSubStringClause())}")`,
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
-      `RETURN \`node\`, HEAD(labels(node)) as \`_schemaType\`, \`score\``,
+      `RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: \`score\` }`,
       `ORDER BY \`score\` DESC`
     ].join(' ')
   }

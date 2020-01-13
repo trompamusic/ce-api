@@ -1,6 +1,5 @@
 import { info } from '../utils/logger'
 import { driver } from '../driver'
-import { retrieveNodeData, hydrateNodeSearchScore } from '../resolvers'
 import SearchQuery from '../queries/SearchQuery'
 
 export const queryResolvers = {
@@ -14,11 +13,7 @@ export const queryResolvers = {
       let session = driver.session()
       return session.run(query, params)
         .then(result => {
-          return result.records.map(
-            record => {
-              let nodeData = retrieveNodeData(record.get('node'))
-              return hydrateNodeSearchScore(nodeData, record.get('score'))
-            })
+          return result.records.map(record => record.get('node'))
         })
         .catch(function (error) {
           throw Error(error.toString())
