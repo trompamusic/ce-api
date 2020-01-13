@@ -1,11 +1,3 @@
 {
-  "presets": ["@babel/preset-env"],
-  "plugins": [
-    ["module-resolver", {
-      "root": ["./src"],
-      "alias": {
-        "neo4j-graphql-js": "./lib/neo4j-graphql-js"
-      }
-    }]
-  ]
+  "presets": ["@babel/preset-env"]
 }
