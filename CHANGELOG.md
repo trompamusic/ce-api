@@ -1,3 +1,9 @@
+## <small>0.6.1 (2020-01-13)</small>
+
+* fix(project): install git in Dockerfile ([7be1dda](https://github.com/trompamusic/ce-api/commit/7be1dda))
+
+
+
 ## 0.6.0 (2020-01-13)
 
 * chore: remove redundant code ([4482822](https://github.com/trompamusic/ce-api/commit/4482822))
