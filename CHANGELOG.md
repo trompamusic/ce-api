@@ -1,3 +1,15 @@
+## 0.5.0 (2020-01-09)
+
+* feat: Make workExample relation the inverse of exampleOfWork ([5cf6e67](https://github.com/trompamusic/ce-api/commit/5cf6e67))
+* feat(docker): add package-lock.json to Dockerfile ([4270257](https://github.com/trompamusic/ce-api/commit/4270257))
+* feat(project): update dependencies ([2c697e4](https://github.com/trompamusic/ce-api/commit/2c697e4))
+* fix: import debug helpers from logger util ([f14353f](https://github.com/trompamusic/ce-api/commit/f14353f))
+* chore: add repository to package.json ([e79e9f2](https://github.com/trompamusic/ce-api/commit/e79e9f2))
+* Bump lodash from 4.17.11 to 4.17.15 ([f76f567](https://github.com/trompamusic/ce-api/commit/f76f567))
+* Bump mixin-deep from 1.3.1 to 1.3.2 ([141626d](https://github.com/trompamusic/ce-api/commit/141626d))
+
+
+
 ## 0.4.0 (2019-10-11)
 
 * chore: fix eslint errors 4b58d3a
