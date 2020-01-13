@@ -21,9 +21,38 @@ export const schema = makeAugmentedSchema({
   resolvers,
   allowUndefinedInResolve: true,
   config: {
-    query: true,
+    query: {
+      exclude: [
+        'ActionInterface',
+        'CreativeWorkInterface',
+        'LegalPersonInterface',
+        'MediaObjectInterface',
+        'MetadataInterface',
+        'OrganizationInterface',
+        'PerformerInterface',
+        'ProvenanceActivityInterface',
+        'ProvenanceAgentInterface',
+        'ProvenanceEntityInterface',
+        'SearchableInterface',
+        'ThingInterface'
+      ]
+    },
     mutation: {
-      exclude: ['Subscription']
+      exclude: [
+        'ActionInterface',
+        'CreativeWorkInterface',
+        'LegalPersonInterface',
+        'MediaObjectInterface',
+        'MetadataInterface',
+        'OrganizationInterface',
+        'PerformerInterface',
+        'ProvenanceActivityInterface',
+        'ProvenanceAgentInterface',
+        'ProvenanceEntityInterface',
+        'SearchableInterface',
+        'ThingInterface',
+        'Subscription'
+      ]
     }
   }
 })
