@@ -39,18 +39,6 @@ export const schema = makeAugmentedSchema({
     },
     mutation: {
       exclude: [
-        'ActionInterface',
-        'CreativeWorkInterface',
-        'LegalPersonInterface',
-        'MediaObjectInterface',
-        'MetadataInterface',
-        'OrganizationInterface',
-        'PerformerInterface',
-        'ProvenanceActivityInterface',
-        'ProvenanceAgentInterface',
-        'ProvenanceEntityInterface',
-        'SearchableInterface',
-        'ThingInterface',
         'Subscription'
       ]
     }
