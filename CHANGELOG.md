@@ -1,3 +1,16 @@
+## 0.6.0 (2020-01-13)
+
+* chore: remove redundant code ([4482822](https://github.com/trompamusic/ce-api/commit/4482822))
+* chore(project): revert including neo4j-graphql-js ([d646e70](https://github.com/trompamusic/ce-api/commit/d646e70))
+* feat(project): remove a lot of redundant code after neo4j-graphql-js interfaces fix ([9d8dfd5](https://github.com/trompamusic/ce-api/commit/9d8dfd5))
+* feat(project): temporarily add neo4j-graphql-js library to project ([0df5674](https://github.com/trompamusic/ce-api/commit/0df5674))
+* feat(schema): exlude queries and mutations on interfaces ([8581cd1](https://github.com/trompamusic/ce-api/commit/8581cd1))
+* fix(schema): add an identifier property to all interfaces ([45498c2](https://github.com/trompamusic/ce-api/commit/45498c2))
+* fix(schema): fix performer property in Event type ([6be36eb](https://github.com/trompamusic/ce-api/commit/6be36eb))
+* fix(schema): revert exclude interface mutations ([8330fb3](https://github.com/trompamusic/ce-api/commit/8330fb3))
+
+
+
 ## 0.5.0 (2020-01-09)
 
 * feat: Make workExample relation the inverse of exampleOfWork ([5cf6e67](https://github.com/trompamusic/ce-api/commit/5cf6e67))
