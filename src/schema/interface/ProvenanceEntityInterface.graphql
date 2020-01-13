@@ -1,5 +1,7 @@
 "http://www.w3.org/ns/prov#Entity"
 interface ProvenanceEntityInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
   wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"

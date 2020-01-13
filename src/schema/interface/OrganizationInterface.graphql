@@ -1,5 +1,7 @@
 "https://schema.org/Organization"
 interface OrganizationInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   #actionableFeedbackPolicy
   "https://schema.org/address"
   address: String

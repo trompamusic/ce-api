@@ -1,5 +1,7 @@
 "https://schema.org/Action"
 interface ActionInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   #"https://schema.org/actionStatus"
   #actionStatus: String
   "https://schema.org/agent"

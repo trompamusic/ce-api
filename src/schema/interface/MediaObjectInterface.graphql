@@ -1,5 +1,7 @@
 "https://schema.org/MediaObject"
 interface MediaObjectInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://schema.org/associatedArticle"
   associatedArticle: [Article] @relation(name: "ASSOCIATED_ARTICLE", direction: "IN")
   "https://schema.org/bitrate"

@@ -1,5 +1,7 @@
 "https://schema.org/CreativeWork"
 interface CreativeWorkInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://schema.org/about"
   about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
   #"https://schema.org/accessMode"
