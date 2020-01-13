@@ -17,15 +17,15 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
   #######################
@@ -35,19 +35,19 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ##############################################
   ### ProvenanceActivityInterface properties ###
   "https://www.w3.org/TR/prov-o/#startedAtTime"
   startedAtTime: _Neo4jDateTime
   "https://www.w3.org/TR/prov-o/#wasInformedBy"
-  wasInformedBy: [ActionInterfaced] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
+  wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#endedAtTime"
   endedAtTime: _Neo4jDateTime
   ##################################
@@ -55,21 +55,21 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/actionStatus"
   actionStatus: ControlActionStatus
   "https://schema.org/agent"
-  agent: [LegalPerson] @relation(name: "AGENT", direction: "OUT")
+  agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
   error: String
   "https://schema.org/instrument"
-  instrument: [ThingInterfaced] @relation(name: "INSTRUMENT", direction: "OUT")
+  instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
   "https://schema.org/object"
-  object: [ThingInterfaced] @relation(name: "OBJECT", direction: "OUT")
+  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [LegalPerson] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [LegalPersonInterface] @relation(name: "PARTICIPANT", direction: "OUT")
   "https://schema.org/result"
-  result: ThingInterfaced @relation(name: "RESULT", direction: "OUT")
+  result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
   startTime: _Neo4jDateTime
   "https://schema.org/target"

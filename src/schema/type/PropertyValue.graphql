@@ -22,15 +22,15 @@ type PropertyValue {
   "https://schema.org/image"
   image: URL
   #  "https://schema.org/mainEntityOfPage"
-  #  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  #  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   #  "https://schema.org/potentialAction"
-  #  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  #  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   #  "https://schema.org/sameAs"
   #  sameAs: URL
   #  "https://schema.org/subjectOf"
-  #  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  #  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   #  "https://schema.org/url"
   #  url: URL
   ################################
@@ -45,7 +45,7 @@ type PropertyValue {
   "https://schema.org/value"
   value: String # string, that can be validated/cast according to value of `valueReference` property
   "https://schema.org/value, TROMPA specific extension to mitigate Apollo limitation, and allow `value` to be scalar or a node"
-  nodeValue: ThingInterfaced @relation(name: "NODE_VALUE", direction: "OUT")
+  nodeValue: ThingInterface @relation(name: "NODE_VALUE", direction: "OUT")
   "https://schema.org/valueReference"
   valueReference: ValueReference! # contains either a valid scalar or valid schema-type
 }

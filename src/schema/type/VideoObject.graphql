@@ -47,15 +47,15 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
   #######################
@@ -73,17 +73,17 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ###############################
   ### CreativeWork properties ###
   "https://schema.org/about"
-  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
   #"https://schema.org/accessMode"
   #accessMode: AccessMode
   #"https://schema.org/accessModeSufficient"
@@ -99,18 +99,18 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   "https://schema.org/alternativeHeadline"
   alternativeHeadline: String
   "https://schema.org/associatedMedia"
-  associatedMedia: [MediaObjectInterfaced] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
+  associatedMedia: [MediaObjectInterface] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
   #audience: Audience
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
-  author: [LegalPerson] @relation(name: "AUTHOR", direction: "OUT")
+  author: [LegalPersonInterface] @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/award"
   award: String
   "https://schema.org/character"
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
-  citation: [CreativeWorkInterfaced] @relation(name: "CITATION", direction: "IN")
+  citation: [CreativeWorkInterface] @relation(name: "CITATION", direction: "IN")
   #"https://schema.org/comment"
   #comment: Comment
   #"https://schema.org/commentCount"
@@ -118,13 +118,13 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   #contentLocation: Place
   #contentRating: Rating | String
   #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
+  #contributor: String! | LegalPersonInterface @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
-  copyrightHolder: [LegalPerson] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
+  copyrightHolder: [LegalPersonInterface] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
   #correction: String
-  #creator: String! | LegalPerson @relation(name: "AUTHOR", direction: "OUT")
+  #creator: String! | LegalPersonInterface @relation(name: "AUTHOR", direction: "OUT")
   #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
@@ -135,19 +135,19 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   #educationalAlignment
   #educationalUse
   "https://schema.org/encoding"
-  encoding: [MediaObjectInterfaced] @relation(name: "ENCODING", direction: "IN")
+  encoding: [MediaObjectInterface] @relation(name: "ENCODING", direction: "IN")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/exampleOfWork"
-  exampleOfWork: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
+  exampleOfWork: [CreativeWorkInterface] @relation(name: "EXAMPLE_OF_WORK", direction: "OUT")
   "https://schema.org/expires"
   expires: _Neo4jDate
   "https://schema.org/funder"
-  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/genre"
   genre: String
   "https://schema.org/hasPart"
-  hasPart: [CreativeWorkInterfaced] @relation(name: "HAS_PART", direction: "OUT")
+  hasPart: [CreativeWorkInterface] @relation(name: "HAS_PART", direction: "OUT")
   "https://schema.org/headline"
   headline: String
   "https://schema.org/inLanguage"
@@ -155,10 +155,10 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   #interactionStatistic
   #interactivityType
   "https://schema.org/isBasedOn"
-  isBasedOn: [CreativeWorkInterfaced] @relation(name: "IS_BASED_ON", direction: "OUT")
+  isBasedOn: [CreativeWorkInterface] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWorkInterfaced @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterface @relation(name: "IS_PART_OF", direction: "OUT")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
@@ -166,15 +166,15 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   license: URL
   #locationCreated
   "https://schema.org/mainEntity"
-  mainEntity: ThingInterfaced @relation(name: "MAIN_ENTITY", direction: "IN")
+  mainEntity: ThingInterface @relation(name: "MAIN_ENTITY", direction: "IN")
   #material
   "https://schema.org/mentions"
-  mentions: [ThingInterfaced] @relation(name: "MENTIONS", direction: "OUT")
+  mentions: [ThingInterface] @relation(name: "MENTIONS", direction: "OUT")
   #offers:
   "https://schema.org/position"
   position: Int
   "https://schema.org/producer"
-  producer: [LegalPerson] @relation(name: "PRODUCER", direction: "IN")
+  producer: [LegalPersonInterface] @relation(name: "PRODUCER", direction: "IN")
   #provider:
   #publication:
   "https://schema.org/publisher"
@@ -201,16 +201,16 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   thumbnailUrl: URL
   #timeRequired:
   "https://schema.org/translator"
-  translator: [LegalPerson] @relation(name: "TRANSLATOR", direction: "IN")
+  translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: "IN")
   #typicalAgeRange:
   "https://schema.org/version"
   version: String
   "https://schema.org/video"
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/workExample"
-  workExample: [CreativeWorkInterfaced] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
+  workExample: [CreativeWorkInterface] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
   "https://bib.schema.org/workTranslation"
-  workTranslation: [CreativeWorkInterfaced] @relation(name: "WORK_TRANSLATION", direction: "OUT")
+  workTranslation: [CreativeWorkInterface] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
   ### MediaObjectInterface properties ###
   "https://schema.org/associatedArticle"
@@ -226,7 +226,7 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterface] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
   height: Int
   "https://schema.org/playerType"
@@ -250,7 +250,7 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   "https://schema.org/director"
   director: [Person] @relation(name: "DIRECTOR", direction: "IN")
   "https://schema.org/musicBy"
-  musicBy: [Performer] @relation(name: "MUSIC_BY", direction: "OUT")
+  musicBy: [PerformerInterface] @relation(name: "MUSIC_BY", direction: "OUT")
   "https://schema.org/thumbnail"
   thumbnail: [ImageObject] @relation(name: "THUMBNAIL", direction: "OUT")
   "https://schema.org/transcript"

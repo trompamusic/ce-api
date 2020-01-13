@@ -1,5 +1,7 @@
 "https://schema.org/Organization"
 interface OrganizationInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   #actionableFeedbackPolicy
   "https://schema.org/address"
   address: String
@@ -34,7 +36,7 @@ interface OrganizationInterface {
   "https://schema.org/foundingLocation"
   foundingLocation: Place @relation(name: "FOUNDING_LOCATION", direction: "OUT")
   "https://schema.org/funder"
-  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/globalLocationNumber"
   globalLocationNumber: String
   #hasOfferCatalog: OfferCatalog
@@ -52,7 +54,7 @@ interface OrganizationInterface {
   logo: URL
   #makesOffer
   "https://schema.org/member"
-  member: [LegalPerson] @relation(name: "MEMBER", direction: "IN")
+  member: [LegalPersonInterface] @relation(name: "MEMBER", direction: "IN")
   "https://schema.org/memberOf"
   memberOf: [Organization] @relation(name: "MEMBER_OF", direction: "OUT")
   #naics
@@ -68,7 +70,7 @@ interface OrganizationInterface {
   review: [Review]
   #seeks
   "https://schema.org/sponsor"
-  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "OUT")
+  sponsor: [LegalPersonInterface] @relation(name: "SPONSOR", direction: "OUT")
   "https://schema.org/subOrganization"
   subOrganization: [Organization] @relation(name: "SUB_ORGANIZATION", direction: "IN")
   #taxID

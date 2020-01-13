@@ -1,5 +1,7 @@
 "https://schema.org/MediaObject"
 interface MediaObjectInterface {
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://schema.org/associatedArticle"
   associatedArticle: [Article] @relation(name: "ASSOCIATED_ARTICLE", direction: "IN")
   "https://schema.org/bitrate"
@@ -13,7 +15,7 @@ interface MediaObjectInterface {
   "https://schema.org/embedUrl"
   embedUrl: URL
   "https://schema.org/encodesCreativeWork"
-  encodesCreativeWork: [CreativeWorkInterfaced] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
+  encodesCreativeWork: [CreativeWorkInterface] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/encodingFormat"
   encodingFormat: String
   "https://schema.org/height"

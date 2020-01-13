@@ -47,15 +47,15 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterfaced] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
   name: String!
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterfaced] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterfaced] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
   #######################
@@ -73,17 +73,17 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   ############################################
   ### ProvenanceEntityInterface properties ###
   "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterfaced] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterfaced] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#wasAttributedTo"
-  wasAttributedTo: [LegalPerson]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "https://www.w3.org/TR/prov-o/#used"
-  used: [ThingInterfaced] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ########################
   ### Event properties ###
   "https://schema.org/about"
-  about: [ThingInterfaced] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
   "https://schema.org/actor"
   actor: [Person]  @relation(name: "ACTOR", direction: "IN")
   #aggregateRating: AggregateRating
@@ -91,9 +91,9 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   attendee: [Person] @relation(name: "ATTENDEE", direction: "IN")
   #audience: Audience
   "https://schema.org/composer"
-  composer: [LegalPerson] @relation(name: "COMPOSER", direction: "IN")
+  composer: [LegalPersonInterface] @relation(name: "COMPOSER", direction: "IN")
   #"https://schema.org/contributor"
-  #contributor: LegalPerson @relation(name: "CONTRIBUTOR", direction: "IN")
+  #contributor: LegalPersonInterface @relation(name: "CONTRIBUTOR", direction: "IN")
   "https://schema.org/director"
   director: [Person]  @relation(name: "DIRECTOR", direction: "IN")
   "https://schema.org/doortime"
@@ -103,7 +103,7 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   endDate: _Neo4jDateTime
   #eventStatus: EventStatusType
   "https://schema.org/funder"
-  funder: [LegalPerson] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: "IN")
   "https://schema.org/inLanguage"
   inLanguage: String
   "https://schema.org/isAccessibleForFree"
@@ -114,17 +114,17 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   maximumAttendeeCapacity: Int
   #offers: Offer
   "https://schema.org/organizer"
-  organizer: [LegalPerson] @relation(name: "ORGANIZER", direction: "IN")
-  "https://schema.org/performer"
-  performer: [Performer] @relation(name: "PERFORMER", direction: "IN")
+  organizer: [LegalPersonInterface] @relation(name: "ORGANIZER", direction: "IN")
+  "https://schema.org/PerformerInterface"
+  performer: [PerformerInterface] @relation(name: "PerformerInterface", direction: "IN")
   #previousStartDate: _Neo4jDate
   "https://schema.org/recordedIn"
-  recordedIn: [CreativeWorkInterfaced] @relation(name: "RECORDED_IN", direction: "OUT")
+  recordedIn: [CreativeWorkInterface] @relation(name: "RECORDED_IN", direction: "OUT")
   #remainingAttendeeCapacity: Integer
   "https://schema.org/review"
   review: [Review]
   "https://schema.org/sponsor"
-  sponsor: [LegalPerson] @relation(name: "SPONSOR", direction: "OUT")
+  sponsor: [LegalPersonInterface] @relation(name: "SPONSOR", direction: "OUT")
   "https://schema.org/startDate"
   startDate: _Neo4jDateTime
   "https://schema.org/subEvent"
@@ -132,10 +132,10 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   "https://schema.org/superEvent"
   superEvent: Event
   "https://schema.org/translator"
-  translator: [LegalPerson] @relation(name: "TRANSLATOR", direction: "IN")
+  translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: "IN")
   #typicalAgeRange: Text
   "https://schema.org/workFeatured"
-  workFeatured: [CreativeWorkInterfaced] @relation(name: "WORK_FEATURED", direction: "OUT")
+  workFeatured: [CreativeWorkInterface] @relation(name: "WORK_FEATURED", direction: "OUT")
   "https://schema.org/workPerformed"
-  workPerformed: [CreativeWorkInterfaced]  @relation(name: "WORK_PERFORMED", direction: "OUT")
+  workPerformed: [CreativeWorkInterface]  @relation(name: "WORK_PERFORMED", direction: "OUT")
 }
