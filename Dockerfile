@@ -1,5 +1,8 @@
 FROM node:10.13.0-alpine
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 RUN mkdir -p /app
 WORKDIR /app
 
