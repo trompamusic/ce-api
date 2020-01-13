@@ -116,7 +116,7 @@ type Event implements MetadataInterface & SearchableInterface & ThingInterface &
   "https://schema.org/organizer"
   organizer: [LegalPersonInterface] @relation(name: "ORGANIZER", direction: "IN")
   "https://schema.org/PerformerInterface"
-  PerformerInterface: [PerformerInterface] @relation(name: "PerformerInterface", direction: "IN")
+  performer: [PerformerInterface] @relation(name: "PerformerInterface", direction: "IN")
   #previousStartDate: _Neo4jDate
   "https://schema.org/recordedIn"
   recordedIn: [CreativeWorkInterface] @relation(name: "RECORDED_IN", direction: "OUT")
