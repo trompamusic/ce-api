@@ -130,7 +130,7 @@ class RequestControlActionCommand {
    */
   _validateRequestInput (template, requestInput) {
     // check request propertyObjects against template properties
-    let requestPropertyValidity = requestInput.propertyObject.map(requestProperty => {
+    let requestPropertyValidity = (requestInput.propertyObject || []).map(requestProperty => {
       return template.potentialAction.object.some(templateProperty => {
         if (
           templateProperty._schemaType === 'Property' && requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
@@ -139,18 +139,20 @@ class RequestControlActionCommand {
         }
       })
     })
+
     if (requestPropertyValidity.includes(false)) {
       throw Error('Request error: one or more passed propertyObjects do not match potential action properties')
     }
 
     // check request propertyObjects against template properties
-    let requestPropertyValueValidity = requestInput.propertyValueObject.map(requestProperty => {
+    let requestPropertyValueValidity = (requestInput.propertyValueObject || []).map(requestProperty => {
       return template.potentialAction.object.some(templateProperty => {
         if (templateProperty._schemaType === 'PropertyValueSpecification' && requestProperty.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier) {
           return true
         }
       })
     })
+
     if (requestPropertyValueValidity.includes(false)) {
       throw Error('Request error: one or more passed propertyValueObjects do not match potential action properties')
     }
