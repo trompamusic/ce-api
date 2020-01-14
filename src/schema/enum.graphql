@@ -298,15 +298,11 @@ enum SearchableMetadataFields {
   subject
 }
 
-enum ControlActionStatus {
-  requested
-  received
-  accepted
-  starting
-  running
-  stopping
-  complete
-  error
+enum ActionStatusType {
+  ActiveActionStatus
+  CompletedActionStatus
+  FailedActionStatus
+  PotentialActionStatus
 }
 
 enum ValidAdditionalPropertyNodeValueType {

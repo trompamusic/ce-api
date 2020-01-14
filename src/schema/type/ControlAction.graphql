@@ -53,7 +53,7 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   ##################################
   ### ActionInterface properties ###
   "https://schema.org/actionStatus"
-  actionStatus: ControlActionStatus
+  actionStatus: ActionStatusType
   "https://schema.org/agent"
   agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
   "https://schema.org/endTime"
