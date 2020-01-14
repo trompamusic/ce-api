@@ -205,6 +205,10 @@ class RequestControlActionCommand {
         return (typeof template[key] !== 'object' && !['identifier', '_schemaType'].includes(key))
       })
       .map(key => {
+        if (key === 'actionStatus') {
+          return `\`${key}\`:"PotentialActionStatus"`
+        }
+
         return `\`${key}\`:"${potentialActionProps[key] || template[key]}"`
       })
       .join(', ')
