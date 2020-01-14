@@ -114,7 +114,7 @@ class RequestControlActionCommand {
       `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"})`,
       propertySelections ? `, ${propertySelections}` : '',
       `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
-      `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
+      `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\`:\`ActionInterface\`:\`ProvenanceActivityInterface\`:\`ProvenanceEntityInterface\`:\`ThingInterface\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
       this._generateNodeValueRelationsClause(requestInput.propertyObject),
