@@ -199,16 +199,12 @@ class RequestControlActionCommand {
    */
   _generateControlActionPropertyClause (template) {
     const potentialActionProps = (this.params.controlAction && this.params.controlAction.potentialAction) || {}
-    const scalarProperties = Object.keys(template)
+    const scalarProperties = Object.keys({ ...template, actionStatus: 'PotentialActionStatus' })
       .filter(key => {
         // from the template, ignore non-generic properties and properties containing objects
         return (typeof template[key] !== 'object' && !['identifier', '_schemaType'].includes(key))
       })
       .map(key => {
-        if (key === 'actionStatus') {
-          return `\`${key}\`:"PotentialActionStatus"`
-        }
-
         return `\`${key}\`:"${potentialActionProps[key] || template[key]}"`
       })
       .join(', ')
