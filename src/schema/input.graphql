@@ -1,8 +1,16 @@
 input RequestControlActionInput {
   entryPointIdentifier: String!
   potentialActionIdentifier: String!
+  potentialAction: PotentialActionInput
   propertyObject: [PropertyInput]
   propertyValueObject: [PropertyValueInput]
+}
+
+input PotentialActionInput {
+  name: String
+  title: String
+  description: String
+  url: String
 }
 
 input PropertyValueInput {
