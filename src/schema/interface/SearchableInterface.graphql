@@ -1,7 +1,7 @@
 interface SearchableInterface {
-####################################
-  ### SearchableInterface property ###
-  _searchScore: Float
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
+  ####################################
+  ### SearchableInterface property ###
+  _searchScore: Float
 }

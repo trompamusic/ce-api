@@ -2,6 +2,8 @@
 type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "https://schema.org/additionalType"
   additionalType: [String]
   "https://schema.org/additionalProperty"
@@ -12,8 +14,6 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   description: String!
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
-  identifier: ID
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"

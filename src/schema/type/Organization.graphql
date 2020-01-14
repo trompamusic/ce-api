@@ -1,6 +1,8 @@
 "https://schema.org/Organization,https://www.w3.org/TR/prov-o/#Agent"
 type Organization implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface {
   ### Metadata properties ###
+  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  identifier: ID
   "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
   contributor: String!
   "http://purl.org/dc/elements/1.1/coverage"
@@ -15,8 +17,6 @@ type Organization implements MetadataInterface & SearchableInterface & ThingInte
   disambiguatingDescription: String
   "http://purl.org/dc/elements/1.1/format"
   format: String!
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
-  identifier: ID
   "http://purl.org/dc/elements/1.1/language"
   language: AvailableLanguage!
   "http://purl.org/dc/elements/1.1/publisher"
