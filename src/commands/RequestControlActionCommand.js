@@ -108,17 +108,18 @@ class RequestControlActionCommand {
    */
   _generateCreateQuery (template, requestInput) {
     const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => { return `\`${object.alias}\`` }).join(', ')}` : ``
+    const propertySelections = this._generateMatchPropertyNodes(requestInput)
 
     return [
-      `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"}),`,
-      this._generateMatchPropertyNodes(requestInput),
+      `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"})`,
+      propertySelections ? `, ${propertySelections}` : '',
       `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
       `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
       this._generateNodeValueRelationsClause(requestInput.propertyObject),
       this._generateReturnClause(template, requestInput)
-    ].join(' ')
+    ].filter(line => typeof line === 'string' && line.length > 0).join(' ')
   }
 
   /**
@@ -256,7 +257,7 @@ class RequestControlActionCommand {
    */
   _generateMatchPropertyNodes (requestInput) {
     if (!Array.isArray(requestInput.propertyObject) || !requestInput.propertyObject.length > 0) {
-      return
+      return ''
     }
 
     return requestInput.propertyObject.map(node => {
