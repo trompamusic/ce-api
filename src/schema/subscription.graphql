@@ -1,4 +1,4 @@
-type _CreateNodeMutationPayload {
+type _ThingCreateMutationPayload {
   type: ThingInterfaceType!
   identifier: ID!
 }
@@ -6,5 +6,8 @@ type _CreateNodeMutationPayload {
 type Subscription {
   ControlActionRequest(entryPointIdentifier: String!): ControlAction
   ControlActionMutation(identifier: String!): ControlAction
-  CreateNodeMutation(onTypes: [ThingInterfaceType!]): _CreateNodeMutationPayload
+  ThingCreateMutation(onTypes: [ThingInterfaceType!]): _ThingCreateMutationPayload
+  MediaObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
+  VideoObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
+  AudioObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
 }

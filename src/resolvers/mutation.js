@@ -16,7 +16,10 @@ export const mutationResolvers = {
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const queryGenerator = new UpdateControlActionQuery(params, resolveInfo)
       return runQuery(queryGenerator.query, 'UpdateControlAction', 'ControlActionMutation')
-    }
+    },
+    CreateMediaObject: QueryAndPublishResolver.resolve('MediaObject', 'MediaObjectCreateMutation'),
+    CreateVideoObject: QueryAndPublishResolver.resolve('VideoObject', 'VideoObjectCreateMutation'),
+    CreateAudioObject: QueryAndPublishResolver.resolve('AudioObject', 'AudioObjectCreateMutation')
   }
 }
 
@@ -25,7 +28,9 @@ walkSync(`${__dirname}/../schema/type`, { directories: false, includeBasePath: t
   .forEach(file => {
     const { name } = parse(file)
 
-    mutationResolvers.Mutation[`Create${name}`] = QueryAndPublishResolver.resolve(name)
+    if (!mutationResolvers.Mutation[`Create${name}`]) {
+      mutationResolvers.Mutation[`Create${name}`] = QueryAndPublishResolver.resolve(name)
+    }
   })
 
 /**

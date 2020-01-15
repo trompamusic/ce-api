@@ -2,7 +2,7 @@ import { neo4jgraphql } from 'neo4j-graphql-js'
 import { pubsub } from '../resolvers'
 
 export default class QueryAndPublishResolver {
-  static resolve (type) {
+  static resolve (type, customTriggerName) {
     return (object, params, ctx, resolveInfo) => {
       const selections = resolveInfo.fieldNodes[0] && resolveInfo.fieldNodes[0].selectionSet.selections
       const hasIdentifier = selections.find(({ name }) => name.value === 'identifier')
@@ -30,7 +30,12 @@ export default class QueryAndPublishResolver {
 
         // publish for subscriptions
         if (response.identifier) {
-          pubsub.publish('CreateNodeMutation', { type, identifier: response.identifier })
+          // always trigger a ThingCreateMutation
+          pubsub.publish('ThingCreateMutation', { type, identifier: response.identifier })
+
+          if (customTriggerName) {
+            pubsub.publish(customTriggerName, { type, identifier: response.identifier, params })
+          }
         }
 
         return response

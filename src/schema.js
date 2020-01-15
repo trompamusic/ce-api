@@ -35,13 +35,13 @@ export const schema = makeAugmentedSchema({
         'ProvenanceEntityInterface',
         'SearchableInterface',
         'ThingInterface',
-        '_CreateNodeMutationPayload'
+        '_ThingCreateMutationPayload'
       ]
     },
     mutation: {
       exclude: [
         'Subscription',
-        '_CreateNodeMutationPayload'
+        '_ThingCreateMutationPayload'
       ]
     }
   }
