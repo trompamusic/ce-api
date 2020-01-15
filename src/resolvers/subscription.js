@@ -18,6 +18,15 @@ export const subscriptionResolvers = {
           return payload.identifier === variables.identifier
         }
       )
+    },
+    CreateNodeMutation: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('CreateNodeMutation'),
+        (payload, variables) => {
+          return !variables.onTypes || variables.onTypes.includes(payload.type)
+        }
+      ),
+      resolve: payload => payload
     }
   }
 }

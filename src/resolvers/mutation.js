@@ -1,7 +1,10 @@
+import { parse } from 'path'
+import walkSync from 'walk-sync'
 import { info, warning } from '../utils/logger'
 import { driver } from '../driver'
 import { retrieveNodeData, pubsub } from '../resolvers'
 import RequestControlActionCommand from '../commands/RequestControlActionCommand'
+import QueryAndPublishResolver from '../commands/QueryAndPublishResolver'
 import UpdateControlActionQuery from '../queries/UpdateControlActionQuery'
 
 export const mutationResolvers = {
@@ -16,6 +19,14 @@ export const mutationResolvers = {
     }
   }
 }
+
+// add resolvers for all create mutations
+walkSync(`${__dirname}/../schema/type`, { directories: false, includeBasePath: true, globs: ['*.graphql'] })
+  .forEach(file => {
+    const { name } = parse(file)
+
+    mutationResolvers.Mutation[`Create${name}`] = QueryAndPublishResolver.resolve(name)
+  })
 
 /**
  * @param query

@@ -34,12 +34,14 @@ export const schema = makeAugmentedSchema({
         'ProvenanceAgentInterface',
         'ProvenanceEntityInterface',
         'SearchableInterface',
-        'ThingInterface'
+        'ThingInterface',
+        '_CreateNodeMutationPayload'
       ]
     },
     mutation: {
       exclude: [
-        'Subscription'
+        'Subscription',
+        '_CreateNodeMutationPayload'
       ]
     }
   }

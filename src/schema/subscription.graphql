@@ -1,4 +1,10 @@
+type _CreateNodeMutationPayload {
+  type: ThingInterfaceType!
+  identifier: ID!
+}
+
 type Subscription {
   ControlActionRequest(entryPointIdentifier: String!): ControlAction
   ControlActionMutation(identifier: String!): ControlAction
+  CreateNodeMutation(onTypes: [ThingInterfaceType!]): _CreateNodeMutationPayload
 }
