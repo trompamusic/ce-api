@@ -32,7 +32,6 @@ export const subscriptionResolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator('MediaObjectCreateMutation'),
         (payload, variables) => {
-          console.log(variables, payload)
           return !variables.encodingFormat || variables.encodingFormat === payload.params.encodingFormat
         }
       ),
