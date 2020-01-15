@@ -12,7 +12,7 @@ type VideoObject implements MetadataInterface & SearchableInterface & ThingInter
   "http://purl.org/dc/elements/1.1/date"
   date: _Neo4jDate
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String!
+  description: String
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/elements/1.1/format"
