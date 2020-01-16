@@ -11,7 +11,7 @@ type ControlAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/alternateName"
   alternateName: String
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String!
+  description: String
 "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "https://schema.org/image"

@@ -11,7 +11,7 @@ interface MetadataInterface {
   "http://purl.org/dc/elements/1.1/date"
   date: _Neo4jDate
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
-  description: String!
+  description: String
   "http://purl.org/dc/elements/1.1/format"
   format: String
   "http://purl.org/dc/elements/1.1/language"
@@ -27,7 +27,7 @@ interface MetadataInterface {
   "http://purl.org/dc/elements/1.1/subject"
   subject: String
   "http://purl.org/dc/elements/1.1/title"
-  title: String!
+  title: String
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
   type: String
 }
