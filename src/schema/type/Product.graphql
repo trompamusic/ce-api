@@ -28,7 +28,7 @@ type Product implements MetadataInterface & SearchableInterface & ThingInterface
   "http://purl.org/dc/elements/1.1/source"
   source: String!
   "http://purl.org/dc/elements/1.1/subject"
-  subject: String!
+  subject: String
   "http://purl.org/dc/elements/1.1/title"
   title: String
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
