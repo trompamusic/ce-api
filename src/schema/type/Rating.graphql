@@ -1,0 +1,56 @@
+"https://schema.org/Rating"
+type Rating implements ThingInterface {
+    ### Metadata properties ###
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+    contributor: String
+    "http://purl.org/dc/elements/1.1/creator"
+    creator: String!
+    "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+    description: String
+    "https://schema.org/disambiguatingDescription"
+    disambiguatingDescription: String
+    "http://purl.org/dc/elements/1.1/language"
+    language: AvailableLanguage
+    "http://purl.org/dc/elements/1.1/title"
+    title: String
+    "http://purl.org/dc/terms/created"
+    created: String
+    #################################
+    ### ThingInterface properties ###
+    "https://schema.org/additionalType"
+    additionalType: [String]
+    "https://schema.org/additionalProperty"
+    additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+    "https://schema.org/alternateName"
+    alternateName: String
+    "https://schema.org/image"
+    image: URL
+    "https://schema.org/mainEntityOfPage"
+    mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+    "https://schema.org/name"
+    name: String
+    "https://schema.org/potentialAction"
+    potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+    "https://schema.org/sameAs"
+    sameAs: URL
+    "https://schema.org/subjectOf"
+    subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
+    "https://schema.org/url"
+    url: URL
+    #########################
+    ### Rating properties ###
+    "https://schema.org/author"
+    author: String
+    "https://schema.org/bestRating"
+    bestRating: Int
+    "https://pending.schema.org/ratingExplanation"
+    ratingExplanation: String
+    "https://schema.org/ratingValue"
+    ratingValue: Int
+    "https://schema.org/reviewAspect"
+    reviewAspect: String
+    "https://schema.org/worstRating"
+    worstRating: Int
+}
