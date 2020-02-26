@@ -18,7 +18,7 @@ type Dataset implements MetadataInterface & SearchableInterface & ThingInterface
   "http://purl.org/dc/elements/1.1/format"
   format: String!
   "http://purl.org/dc/elements/1.1/language"
-  language: AvailableLanguage!
+  language: AvailableLanguage
   "http://purl.org/dc/elements/1.1/publisher"
   publisher: String
   "http://purl.org/dc/elements/1.1/relation"
@@ -28,7 +28,7 @@ type Dataset implements MetadataInterface & SearchableInterface & ThingInterface
   "http://purl.org/dc/elements/1.1/source"
   source: String!
   "http://purl.org/dc/elements/1.1/subject"
-  subject: String!
+  subject: String
   "http://purl.org/dc/elements/1.1/title"
   title: String
   "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
