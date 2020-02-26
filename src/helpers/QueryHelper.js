@@ -344,9 +344,13 @@ class QueryHelper {
 
   /**
    * @param alias
+   * @param [typeNames]
    * @returns {string}
    */
-  static schemaTypeClause (alias) {
+  static schemaTypeClause (alias, typeNames) {
+    if (Array.isArray(typeNames)) {
+      return `\`_schemaType\`: head( [ label IN labels(${alias}) WHERE label IN [${typeNames.map(a => `"${a}"`).join(', ')}] ] )`
+    }
     return `\`_schemaType\`:HEAD(labels(\`${alias}\`))`
   }
 

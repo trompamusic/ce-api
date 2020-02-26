@@ -23,18 +23,6 @@ export const schema = makeAugmentedSchema({
   config: {
     query: {
       exclude: [
-        'ActionInterface',
-        'CreativeWorkInterface',
-        'LegalPersonInterface',
-        'MediaObjectInterface',
-        'MetadataInterface',
-        'OrganizationInterface',
-        'PerformerInterface',
-        'ProvenanceActivityInterface',
-        'ProvenanceAgentInterface',
-        'ProvenanceEntityInterface',
-        'SearchableInterface',
-        'ThingInterface',
         '_ThingCreateMutationPayload'
       ]
     },

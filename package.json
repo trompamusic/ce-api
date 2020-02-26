@@ -29,8 +29,11 @@
     "@babel/core": "7.7.*",
     "@babel/node": "7.7.*",
     "@babel/preset-env": "7.7.*",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/jest": "^24.0.25",
     "babel-jest": "^24.9.0",
+    "conventional-changelog": "^3.1.8",
     "conventional-changelog-cli": "^2.0.31",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
@@ -53,7 +56,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
     }
   },
   "lint-staged": {
