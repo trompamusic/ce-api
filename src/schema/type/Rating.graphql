@@ -17,6 +17,8 @@ type Rating implements ThingInterface {
     title: String
     "http://purl.org/dc/terms/created"
     created: String
+    "http://purl.org/dc/terms/modified"
+    modified: String
     #################################
     ### ThingInterface properties ###
     "https://schema.org/additionalType"

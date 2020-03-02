@@ -33,10 +33,10 @@ type DefinedTerm implements ThingInterface {
     title: String
     "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
     type: String
-    "http://purl.org/dc/elements/1.1/date"
+    "http://purl.org/dc/terms/created"
     created: String
-    "http://purl.org/dc/elements/1.1/date"
-    updated: String
+    "http://purl.org/dc/terms/modified"
+    modified: String
     #################################
     ### ThingInterface properties ###
     "https://schema.org/additionalType"
