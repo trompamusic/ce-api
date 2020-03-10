@@ -2,12 +2,43 @@ import { makeAugmentedSchema } from 'neo4j-graphql-js'
 import { resolvers } from './resolvers'
 import concatenate from 'concatenate'
 import walkSync from 'walk-sync'
+import { buildAuthScopeDirective } from 'neo4j-graphql-js/dist/augment/directives'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
 const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true, globs: ['**/**/*.graphql'] })
 const typeDefs = concatenate.sync(graphQlFiles)
+
+const addDirectives = (schema) => {
+  const mutationTypes = schema['_mutationType']['_fields']
+  for (let mutationTypesKey in mutationTypes) {
+    mutationTypes[mutationTypesKey].astNode.directives.push(buildDirective(mutationTypesKey))
+  }
+
+  const queryTypes = schema['_queryType']['_fields']
+  for (let queryTypesKey in queryTypes) {
+    queryTypes[queryTypesKey].astNode.directives = []
+
+    if (['DeleteAction', 'AddAction', 'ReplaceAction'].includes(queryTypesKey) === true) {
+      queryTypes[queryTypesKey].astNode.directives.push(buildDirective(queryTypesKey))
+    }
+  }
+  return schema
+}
+
+const buildDirective = (typeName) => {
+  const directive = buildAuthScopeDirective({
+    scopes: [
+      { typeName: 'ALL', mutation: `Add` },
+      { typeName: 'ALL', mutation: `Create` },
+      { typeName: 'ALL', mutation: `Merge` },
+      { typeName: 'ALL', mutation: `Update` },
+      { typeName: 'ALL', mutation: `Remove` }
+    ]
+  })
+  return directive
+}
 
 /*
  * Create an executable GraphQL schema object from GraphQL type definitions
@@ -16,11 +47,14 @@ const typeDefs = concatenate.sync(graphQlFiles)
  * in generated queries and/or mutations. Read more in the docs:
  * https://grandstack.io/docs/neo4j-graphql-js-api.html#makeaugmentedschemaoptions-graphqlschema
  */
-export const schema = makeAugmentedSchema({
+export const schema = addDirectives(makeAugmentedSchema({
   typeDefs,
   resolvers,
   allowUndefinedInResolve: true,
   config: {
+    auth: {
+      hasScope: true
+    },
     query: {
       exclude: [
         'ActionInterface',
@@ -44,3 +78,4 @@ export const schema = makeAugmentedSchema({
     }
   }
 })
+)

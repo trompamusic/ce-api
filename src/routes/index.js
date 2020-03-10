@@ -3,8 +3,10 @@ import { Router } from 'express'
 import { getDocument } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
+import { sign } from 'jsonwebtoken'
 
 const router = new Router()
+const authKeys = JSON.parse(process.env.JWT_AUTH_KEYS)
 
 /**
  * Health check endpoint
@@ -53,6 +55,20 @@ router.get('/:identifier', (req, res) => {
 
       res.status(statusCode).send(errorString)
     })
+})
+
+router.post('/token', async (req, res) => {
+  const { id, key } = req.body
+
+  // check if key is valid
+  const authKey = authKeys.find(x => x.id === id)
+  if (typeof authKey === 'undefined' || authKey.key !== key) {
+    return res.status(401).send({ success: false, message: 'Invalid request' })
+  }
+
+  // generate token
+  const token = sign({ id: authKey.id, expiresIn: ((60 * 60) * (24 * 1)) * 1000, scope: authKey.scope }, process.env.JWT_SECRET)
+  return res.send({ success: true, token: token })
 })
 
 export default router

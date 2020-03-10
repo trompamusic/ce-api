@@ -19,6 +19,7 @@
     "express": "4.17.*",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "jsonwebtoken": "^8.5.1",
     "neo4j-driver": "4.0.*",
     "neo4j-graphql-js": "https://github.com/neo4j-graphql/neo4j-graphql-js#3e166629dfedcc8a8094851fd5d651f32650fb86",
     "validator": "12.1.*",

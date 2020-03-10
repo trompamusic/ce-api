@@ -27,7 +27,7 @@ app.use('/', router)
 // generated resolvers to connect to the database.
 const server = new ApolloServer({
   schema: schema,
-  context: ({ req }) => ({ driver, req })
+  context: ({ req }) => ({ driver, ...req })
 })
 
 // Bind the Apollo server to the express server.
