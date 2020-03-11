@@ -55,27 +55,10 @@ export const schema = addDirectives(makeAugmentedSchema({
     auth: {
       hasScope: true
     },
-    query: {
-      exclude: [
-        'ActionInterface',
-        'CreativeWorkInterface',
-        'LegalPersonInterface',
-        'MediaObjectInterface',
-        'MetadataInterface',
-        'OrganizationInterface',
-        'PerformerInterface',
-        'ProvenanceActivityInterface',
-        'ProvenanceAgentInterface',
-        'ProvenanceEntityInterface',
-        'SearchableInterface',
-        'ThingInterface'
-      ]
-    },
     mutation: {
       exclude: [
         'Subscription'
       ]
     }
   }
-})
-)
+}))

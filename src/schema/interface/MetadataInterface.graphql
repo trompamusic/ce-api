@@ -15,7 +15,7 @@ interface MetadataInterface {
   "http://purl.org/dc/elements/1.1/format"
   format: String
   "http://purl.org/dc/elements/1.1/language"
-  language: AvailableLanguage!
+  language: AvailableLanguage
   "http://purl.org/dc/elements/1.1/publisher,https://schema.org/publisher"
   publisher: String
   "http://purl.org/dc/elements/1.1/relation"
