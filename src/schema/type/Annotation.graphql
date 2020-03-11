@@ -1,0 +1,98 @@
+interface AnnotationTargetInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+}
+
+"An Annotation Target which refers to an external URL"
+type AnnotationURLTarget implements AnnotationTargetInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    url: URL!
+}
+
+"An Annotation Target which refers to a node in the CE"
+type AnnotationCETarget implements AnnotationTargetInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    "The item in the CE that this Annotation targets"
+    target: ThingInterface!
+    "The name of the field of the item in the CE which contains the target value"
+    field: String!
+    "In the case that the target is a fragment, the fragment value"
+    fragment: String
+}
+
+interface AnnotationMotivationInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+}
+
+# TODO: This will require creating an object of this type for each item in the enum AnnotationMotivation
+type AnnotationSchemaMotivation implements AnnotationMotivationInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    motivation: AnnotationMotivation!
+}
+
+"A custom motivation"
+type AnnotationCEMotivation implements AnnotationMotivationInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    # TODO: This should be rendered in jsonld as skos:Broader
+    parentMotivation: AnnotationMotivation!
+    motivation: String!
+}
+
+interface AnnotationBodyInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+}
+
+"http://www.w3.org/ns/oa#TextualBody"
+type AnnotationTextualBody implements AnnotationBodyInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
+    value: String!
+    "http://purl.org/dc/elements/1.1/format"
+    format: String
+    "http://purl.org/dc/elements/1.1/language"
+    language: AvailableLanguage
+    # Should always be "http://www.w3.org/ns/oa#TextualBody"
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    type: String
+    # TODO: Purpose (same as a motivation, can it be a custom value?)
+}
+
+"An annotation body which refers to a node in the CE"
+type AnnotationCEBody implements AnnotationBodyInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    target: Thing!
+}
+
+"An annotation body which refers to an external URL"
+type AnnotationURLBody implements AnnotationBodyInterface {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    target: URL!
+}
+
+"http://www.w3.org/ns/oa#Annotation"
+type Annotation {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID
+    "http://www.w3.org/ns/oa#hasTarget"
+    target: [AnnotationTargetInterface] @relation(name: "ANNOTATION_TARGET", direction: "OUT")
+    "http://purl.org/dc/elements/1.1/creator"
+    creator: URL
+    "http://purl.org/dc/terms/created"
+    created: String
+    "http://purl.org/dc/terms/modified"
+    modified: String
+    "http://www.w3.org/ns/oa#Motivation"
+    motivation: [AnnotationMotivationInterface] @relation(name: "ANNOTATION_MOTIVATION", direction: "OUT")
+    "http://www.w3.org/ns/oa#hasBody"
+    body: [AnnotationBodyInterface] @relation(name: "ANNOTATION_BODY", direction: "OUT")
+    # TODO: Audience
+}
