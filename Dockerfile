@@ -9,8 +9,9 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
+RUN npm build
 COPY . .
 
 EXPOSE 80
 
-CMD ["npm", "start"]
+CMD ["npm", "start:prod"]
