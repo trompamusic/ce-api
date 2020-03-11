@@ -1,43 +1,44 @@
 import { makeAugmentedSchema } from 'neo4j-graphql-js'
-import { resolvers } from './resolvers'
+import { TransformRootFields, transformSchema } from 'graphql-tools'
 import concatenate from 'concatenate'
 import walkSync from 'walk-sync'
-import { buildAuthScopeDirective } from 'neo4j-graphql-js/dist/augment/directives'
+import { resolvers } from './resolvers'
+import { verifyRequest } from './auth'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
-const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true, globs: ['**/**/*.graphql'] })
+const graphQlFiles = walkSync(`${__dirname}/schema`, {
+  directories: false,
+  includeBasePath: true,
+  globs: ['**/**/*.graphql']
+})
 const typeDefs = concatenate.sync(graphQlFiles)
 
 const addDirectives = (schema) => {
-  const mutationTypes = schema['_mutationType']['_fields']
-  for (let mutationTypesKey in mutationTypes) {
-    mutationTypes[mutationTypesKey].astNode.directives.push(buildDirective(mutationTypesKey))
-  }
+  return transformSchema(schema, [
+    new TransformRootFields((operation, fieldName, field) => {
+      // authentication is only needed for Mutations
+      if (operation === 'Mutation') {
+        const next = field.resolve
+        field.resolve = (object, params, context, info) => {
+          // verify request with a generated scope, e.g. Mutation:DeleteControlAction, Mutation.CreatePerson, ...
+          verifyRequest(context, `${operation}:${fieldName}`)
 
-  const queryTypes = schema['_queryType']['_fields']
-  for (let queryTypesKey in queryTypes) {
-    queryTypes[queryTypesKey].astNode.directives = []
-
-    if (['DeleteAction', 'AddAction', 'ReplaceAction'].includes(queryTypesKey) === true) {
-      queryTypes[queryTypesKey].astNode.directives.push(buildDirective(queryTypesKey))
-    }
-  }
-  return schema
+          return next(object, params, context, info)
+        }
+      }
+      return undefined
+    })
+  ])
 }
 
-const buildDirective = (typeName) => {
-  const directive = buildAuthScopeDirective({
-    scopes: [
-      { typeName: 'ALL', mutation: `Add` },
-      { typeName: 'ALL', mutation: `Create` },
-      { typeName: 'ALL', mutation: `Merge` },
-      { typeName: 'ALL', mutation: `Update` },
-      { typeName: 'ALL', mutation: `Remove` }
+const config = {
+  mutation: {
+    exclude: [
+      'Subscription'
     ]
-  })
-  return directive
+  }
 }
 
 /*
@@ -50,15 +51,5 @@ const buildDirective = (typeName) => {
 export const schema = addDirectives(makeAugmentedSchema({
   typeDefs,
   resolvers,
-  allowUndefinedInResolve: true,
-  config: {
-    auth: {
-      hasScope: true
-    },
-    mutation: {
-      exclude: [
-        'Subscription'
-      ]
-    }
-  }
+  config
 }))

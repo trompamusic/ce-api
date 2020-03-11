@@ -8,15 +8,15 @@ import router from './routes/index'
 import { driver } from './driver'
 import { schema } from './schema'
 
-const host = process.env.HOST || '0.0.0.0'
-const port = process.env.PORT || 4000
+const SERVER_HOST = process.env.HOST || '0.0.0.0'
+const SERVER_PORT = process.env.PORT || 4000
 
 // Initialize express
 const app = express()
 
 // Configure middlewares
 app.use(bodyParser.json())
-app.use(cors({ methods: ['GET', 'OPTIONS'] }))
+app.use(cors({ methods: ['GET', 'OPTIONS', 'POST'] }))
 
 // Configure routes
 app.use('/', router)
@@ -27,7 +27,12 @@ app.use('/', router)
 // generated resolvers to connect to the database.
 const server = new ApolloServer({
   schema: schema,
-  context: ({ req }) => ({ driver, ...req })
+  context: ({ req }) => {
+    // make sure the `cookies` property is set (graphql-auth-directive will error if the `cookies` property is undefined)
+    req.cookies = req.cookies || {}
+
+    return ({ driver, req })
+  }
 })
 
 // Bind the Apollo server to the express server.
@@ -40,7 +45,7 @@ server.installSubscriptionHandlers(httpServer)
 app.on('error', error => debug(error))
 
 // Start the express and Apollo server
-httpServer.listen(port, host, () => {
+httpServer.listen(SERVER_PORT, SERVER_HOST, () => {
   // Log the server url.
-  console.log(`started server on ${host}:${port}`)
+  console.log(`started server on ${SERVER_HOST}:${SERVER_PORT}`)
 })

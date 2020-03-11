@@ -1,12 +1,16 @@
 import validator from 'validator'
 import { Router } from 'express'
+import { sign } from 'jsonwebtoken'
+import * as micromatch from 'micromatch'
 import { getDocument } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
-import { sign } from 'jsonwebtoken'
 
 const router = new Router()
-const authKeys = JSON.parse(process.env.JWT_AUTH_KEYS)
+
+const JWT_ISSUER = process.env.JWT_ISSUER || 'https://trompamusic.eu'
+const JWT_SECRET = process.env.JWT_SECRET
+const JWT_AUTH_KEYS = process.env.JWT_AUTH_KEYS ? JSON.stringify(process.env.JWT_AUTH_KEYS) : []
 
 /**
  * Health check endpoint
@@ -57,18 +61,48 @@ router.get('/:identifier', (req, res) => {
     })
 })
 
-router.post('/token', async (req, res) => {
-  const { id, key } = req.body
+router.post('/jwt', async (req, res) => {
+  // eslint-disable-next-line camelcase
+  const { id, apiKey, scopes } = req.body
+
+  if (!id || !apiKey) {
+    return res.status(401).send({
+      success: false,
+      message: 'The `apiKey` or `id` property is missing in the request body'
+    })
+  }
+
+  if (!scopes || !Array.isArray(scopes) || !scopes.length) {
+    return res.status(401).send({
+      success: false,
+      message: 'The `scopes` property is missing or not an Array with at least one scope'
+    })
+  }
 
   // check if key is valid
-  const authKey = authKeys.find(x => x.id === id)
-  if (typeof authKey === 'undefined' || authKey.key !== key) {
-    return res.status(401).send({ success: false, message: 'Invalid request' })
+  const keyPair = JWT_AUTH_KEYS.find(item => item.apiKey === apiKey && item.id === id)
+
+  if (!keyPair) {
+    return res.status(403).send({ success: false, message: 'Forbidden' })
+  }
+
+  // verify if the requested scopes are allowed
+  for (let index = 0; index < scopes.length; index++) {
+    if (!micromatch.isMatch(scopes[index], keyPair.scopes)) {
+      return res.status(403).send({
+        success: false,
+        message: `The scope '${scopes[index]}' is not allowed`
+      })
+    }
   }
 
   // generate token
-  const token = sign({ id: authKey.id, expiresIn: ((60 * 60) * (24 * 1)) * 1000, scope: authKey.scope }, process.env.JWT_SECRET)
-  return res.send({ success: true, token: token })
+  const token = sign({ id, scopes }, JWT_SECRET, {
+    expiresIn: '1d',
+    issuer: JWT_ISSUER
+  })
+
+  return res.send({ success: true, jwt: token })
 })
 
 export default router
