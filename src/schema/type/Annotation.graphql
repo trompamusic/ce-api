@@ -1,0 +1,129 @@
+"An Annotation Target which refers to a node in the CE"
+type AnnotationCETarget {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID @id
+    "The item in the CE that this Annotation targets"
+    target: ThingInterface! @relation(name: "ANNOTATION_TARGET", direction: OUT)
+    "The name of the field of the item in the CE which contains the target value. If not set, the target refers to the entire node"
+    field: String
+    "In the case that the target is a fragment, the fragment value"
+    fragment: String
+
+    "http://purl.org/dc/terms/creator"
+    creator: String
+
+    "http://purl.org/dc/terms/created"
+    created: _Neo4jDateTime
+    "http://purl.org/dc/terms/modified"
+    modified: _Neo4jDateTime
+}
+
+"http://www.w3.org/ns/oa#TextualBody"
+type AnnotationTextualBody {
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID @id
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
+    value: String!
+    "http://purl.org/dc/elements/1.1/format"
+    format: String
+    "http://purl.org/dc/elements/1.1/language"
+    language: AvailableLanguage
+    # Should always be "http://www.w3.org/ns/oa#TextualBody"
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    type: String
+
+    "http://purl.org/dc/terms/creator"
+    creator: String
+
+    "http://purl.org/dc/terms/created"
+    created: _Neo4jDateTime
+    "http://purl.org/dc/terms/modified"
+    modified: _Neo4jDateTime
+}
+
+"http://www.w3.org/ns/oa#Annotation"
+type Annotation implements ThingInterface {
+    #############################
+    ### Annotation properties ###
+    "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+    identifier: ID @id
+    # An annotation can have multiple Targets, but must have at least one
+    "http://www.w3.org/ns/oa#hasTarget"
+    targetNode: [AnnotationCETarget] @relation(name: "ANNOTATION_TARGET", direction: OUT)
+    "An external resource that this annotation is about"
+    targetUrl:  [String]
+    # An annotation should always have a motivation. If you want to use a more specific
+    # annotation from a toolkit (a DefinedTerm) then you can include it, but you should
+    # still add the base motivation.
+    "http://www.w3.org/ns/oa#Motivation"
+    motivationDefinedTerm: DefinedTerm @relation(name: "ANNOTATON_MOTIVATION_DEFINED_TERM", direction: OUT)
+    "http://www.w3.org/ns/oa#Motivation"
+    motivation: AnnotationMotivation!
+    # An annotation can have multiple bodies, or none
+    "A textual body node"
+    bodyText: [AnnotationTextualBody] @relation(name: "ANNOTATION_BODY_TEXT", direction: OUT)
+    "A body which is a URL to an external resource"
+    bodyUrl: [String],
+    "A body which represents a node in the CE [will be rendered in the same way as bodyUrl]"
+    bodyNode: [ThingInterface] @relation(name: "ANNOTATION_BODY_NODE", direction: OUT)
+
+    #################################
+    ### ThingInterface properties ###
+    "https://schema.org/additionalType"
+    additionalType: [String]
+    "https://schema.org/additionalProperty"
+    additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: OUT)
+    "https://schema.org/alternateName"
+    alternateName: String
+    "https://schema.org/image"
+    image: String
+    "https://schema.org/mainEntityOfPage"
+    mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: OUT)
+    "https://schema.org/name"
+    name: String
+    "https://schema.org/potentialAction"
+    potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: OUT)
+    "https://schema.org/sameAs"
+    sameAs: String
+    "https://schema.org/subjectOf"
+    subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: OUT)
+    "https://schema.org/url"
+    url: String
+
+    ########################
+    ### MetadataInterface properties ###
+    "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
+    contributor: String
+    "http://purl.org/dc/terms/coverage"
+    coverage: String
+    "http://purl.org/dc/terms/creator"
+    creator: String
+    "http://purl.org/dc/terms/date"
+    date: _Neo4jDate
+    "http://purl.org/dc/terms/description,https://schema.org/description"
+    description: String
+    "https://schema.org/disambiguatingDescription"
+    disambiguatingDescription: String
+    "http://purl.org/dc/terms/format"
+    format: String
+    "http://purl.org/dc/terms/language"
+    language: AvailableLanguage
+    "http://purl.org/dc/terms/publisher"
+    publisher: String
+    "http://purl.org/dc/terms/relation"
+    relation: String
+    "http://purl.org/dc/terms/rights"
+    rights: String
+    "http://purl.org/dc/terms/source"
+    source: String
+    "http://purl.org/dc/terms/subject"
+    subject: String
+    "http://purl.org/dc/terms/title"
+    title: String
+    "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    type: String
+    "http://purl.org/dc/terms/created"
+    created: _Neo4jDateTime
+    "http://purl.org/dc/terms/modified"
+    modified: _Neo4jDateTime
+}

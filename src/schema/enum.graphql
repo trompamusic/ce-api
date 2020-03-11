@@ -344,3 +344,19 @@ enum ItemListOrder {
   ItemListOrderDescending
   ItemListUnordered
 }
+
+enum AnnotationMotivation {
+  assessing
+  bookmarking
+  classifying
+  commenting
+  describing
+  editing
+  highlighting
+  identifying
+  linking
+  moderating
+  questioning
+  replying
+  tagging
+}
