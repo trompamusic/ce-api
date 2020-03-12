@@ -62,7 +62,6 @@ router.get('/:identifier', (req, res) => {
 })
 
 router.post('/jwt', async (req, res) => {
-  // eslint-disable-next-line camelcase
   const { id, apiKey, scopes } = req.body
 
   if (!id || !apiKey) {
@@ -91,7 +90,7 @@ router.post('/jwt', async (req, res) => {
     if (!micromatch.isMatch(scopes[index], keyPair.scopes)) {
       return res.status(403).send({
         success: false,
-        message: `The scope '${scopes[index]}' is not allowed`
+        message: `You don't have access to the requested '${scopes[index]}' scope`
       })
     }
   }
