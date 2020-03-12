@@ -16,7 +16,7 @@ const app = express()
 
 // Configure middlewares
 app.use(bodyParser.json())
-app.use(cors({ methods: ['GET', 'OPTIONS', 'POST'] }))
+app.use(cors({ methods: ['GET', 'OPTIONS', 'POST'], allowedHeaders: ['Authorization'] }))
 
 // Configure routes
 app.use('/', router)
