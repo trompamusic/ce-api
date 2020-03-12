@@ -11,6 +11,7 @@ const router = new Router()
 const JWT_ISSUER = process.env.JWT_ISSUER || 'https://trompamusic.eu'
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_AUTH_KEYS = process.env.JWT_AUTH_KEYS ? JSON.stringify(process.env.JWT_AUTH_KEYS) : []
+const JWT_EXPIRES = process.env.JWT_EXPIRES || '1d'
 
 /**
  * Health check endpoint
@@ -97,7 +98,7 @@ router.post('/jwt', async (req, res) => {
 
   // generate token
   const token = sign({ id, scopes }, JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: JWT_EXPIRES,
     issuer: JWT_ISSUER
   })
 
