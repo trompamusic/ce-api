@@ -53,7 +53,7 @@
     "build": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files",
     "build:debug": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files --source-maps",
     "lint": "eslint src tests",
-    "start": "babel-node --watch src src/index.js",
+    "start": "nodemon --exec babel-node --watch src src/index.js",
     "start:prod": "nodemon --exec node dist/index.js",
     "test:functional": "CI=true jest tests/helpers.js tests/functional",
     "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
