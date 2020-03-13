@@ -2,10 +2,10 @@ import { neo4jgraphql } from 'neo4j-graphql-js'
 import { pubsub } from '../resolvers'
 
 export default class QueryAndPublishResolver {
-  static resolve (type, customTriggerName) {
+  static createResolver (type, customTriggerName) {
     return (object, params, ctx, resolveInfo) => {
       const selections = resolveInfo.fieldNodes[0] && resolveInfo.fieldNodes[0].selectionSet.selections
-      const hasIdentifier = selections.find(({ name }) => name.value === 'identifier')
+      const hasIdentifier = selections && selections.find(({ name }) => name.value === 'identifier')
 
       // add identifier to selections
       if (!hasIdentifier) {
@@ -21,7 +21,8 @@ export default class QueryAndPublishResolver {
       }
 
       return neo4jgraphql(object, params, ctx, resolveInfo).then(response => {
-        // remove the identifier so it doesn't end up in the response
+        // remove the identifier so it doesn't end up in the response if the original request does not include it in
+        // its response
         if (!hasIdentifier) {
           const idx = selections.findIndex(({ name }) => name.value === 'identifier')
 
