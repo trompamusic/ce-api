@@ -49,6 +49,7 @@ const config = {
  * https://grandstack.io/docs/neo4j-graphql-js-api.html#makeaugmentedschemaoptions-graphqlschema
  */
 export const schema = addDirectives(makeAugmentedSchema({
+  allowUndefinedInResolve: true,
   typeDefs,
   resolvers,
   config
