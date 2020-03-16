@@ -50,12 +50,16 @@
     "jest": "^24.9.0",
     "lint-staged": "9.5.*",
     "node-fetch": "2.3.*",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
+    "build": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files",
+    "build:debug": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files --source-maps",
     "lint": "eslint src tests",
     "start": "nodemon --exec babel-node --watch src src/index.js",
-    "test:functional": "CI=true jest tests/helpers.js tests/functional",
+    "start:prod": "node dist/index.js",
+    "test:functional": "CI=true jest /helpers.js tests/functional",
     "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
   },
   "husky": {
