@@ -37,6 +37,31 @@ When requesting a JWT token, you can determine to which resources the token has 
 
 The scope pattern uses the `Operation` and `Fieldname` with a Colon ":" in between. Globs are also supported to make it easier to obtain access to multiple resources or while developing. If you need access to all `Create` operations, you could use the following scopes: `"scopes": ["Mutation:Create*"]`
 
+### Expiration time
+
+Each generated JWT token can be used until the expiration time is reached. Currently, the expiration is set to `1d` which means the token can be used for 24 hours from the time of requesting.
+
+The expiration time can be read from the JWT token by decoding it using the `jsonwebtoken` dependency like so:
+
+```js
+import * as jwt from 'jsonwebtoken'
+
+try {
+  const token = jwt.decode('your-jwt-token')
+
+  const expirationInMs = token.exp * 1000
+  const time = Date.now()
+
+  if (time > expirationInMs) {
+    // the token has expired
+  } else {
+    // the token is valid
+  }
+} catch (error) {
+  console.log(`Error parsing the JWT token: ${error.message}`)
+}
+```     
+
 ### Response
 
 If the authentication is successfull the API will give the following JSON response:
@@ -139,7 +164,19 @@ In the GraphQL playground, you can manually add the `Authorization` header in th
 
 The CE-API uses environment variables to configure the jwt secret key, expiration, auth keys, and issuer.
 
-### Auth keys
+### JWT_SECRET
+
+The generated JWT tokens are generated and validated with the configured JWT secret. This is a generated string and should be unique for each environment. You can change the JWT secret by setting the `JWT_SECRET` environment variable.
+
+### JWT_EXPIRES
+
+Control how long a JWT token is valid until expiring. The `JWT_EXPIRES` environment variable accepts a number of seconds or a time span which is parsed by the [zeit/ms](https://github.com/zeit/ms) package.
+
+### JWT_ISSUER
+
+Currently not being used, but it is recommended by the JWT protocol.
+
+### JWT_AUTH_KEYS
 
 Each client has an unique auth key which can be used to request a JWT token. This auth key is configured in the `JWT_AUTH_KEYS` environment variable. The value should be a collection with the following properties: id, apiKey and scopes.
 
