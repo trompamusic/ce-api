@@ -49,7 +49,7 @@ type Intangible implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/mainEntityOfPage"
   mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
-  name: String!
+  name: String
   "https://schema.org/potentialAction"
   potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
