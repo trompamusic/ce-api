@@ -18,6 +18,7 @@ services:
 
   api:
     build: ./
+    command: ["npm", "start"]
     ports:
       - 4000:4000
     environment:
@@ -27,7 +28,6 @@ services:
       NEO4J_USER: "neo4j"
       NEO4J_PASSWORD: "letmein"
       DEBUG: ce-api-*
-#      DEBUG: info
     volumes:
       - ./src:/app/src
     links:
