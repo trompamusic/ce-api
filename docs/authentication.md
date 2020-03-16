@@ -7,6 +7,12 @@ All read operations in the Contributor Environment API are publicly accessible. 
 
 The Contributor Environment API has an endpoint to create a JWT token. This endpoint **MUST ONLY** be used in a secured environment since it uses a private API key which shouldn't be visible to users. Best practice for web applications is to request the JWT token in a backend environment and to only use the JWT token in the frontend.
 
+For local development (using docker-compose), you can use the following token which will be valid until 03-16-2021.
+
+```text
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxvY2FsIiwic2NvcGVzIjpbIioiXSwiaWF0IjoxNTg0MzU3ODA4LCJleHAiOjE2MTU5MTU0MDgsImlzcyI6Imh0dHBzOi8vYXBpLnRyb21wYW11c2ljLmV1In0.DZbk8FwrBMWElqE8KBOG1Hd1M7ZVIwsNkOLhMz7BJ3M
+```
+
 ### JWT Endpoint
 
 For test environment use:
