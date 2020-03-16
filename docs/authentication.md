@@ -1,11 +1,11 @@
 
 # Authenticating with the CE-API  
   
-All read operations in the Contribution Environment API are publicly accessible for everyone. However, in order to create, update, or delete nodes, the request must be authorized with a JWT token.
+All read operations in the Contributor Environment API are publicly accessible. However, in order to create, update, or delete nodes, the request **MUST BE** authenticated with a JWT token.
 
 ## Request a JWT token
 
-The Contribution Environment API has an endpoint to create a JWT token. This endpoint **MUST ONLY** be used in a secured environment since it uses a private API key which shouldn't be visible to users. Best practice for web applications is to request the JWT token in a backend environment and to only use the JWT token in the frontend.
+The Contributor Environment API has an endpoint to create a JWT token. This endpoint **MUST ONLY** be used in a secured environment since it uses a private API key which shouldn't be visible to users. Best practice for web applications is to request the JWT token in a backend environment and to only use the JWT token in the frontend.
 
 ### JWT Endpoint
 
@@ -79,7 +79,7 @@ request(options, function (error, response) {
 
 ### Authorization header
 
-The Contribution Environment API will obtain the token from the `Authorization` header with type `Bearer` for authentication. Make sure that this header is set for each request that needs authentication.
+The Contributor Environment API will obtain the token from the `Authorization` header with type `Bearer` for authentication. Make sure that this header is set for each request that needs authentication.
 
 For example:
 
@@ -133,4 +133,62 @@ In the GraphQL playground, you can manually add the `Authorization` header in th
 }
 ```
 
-![GraphQL Headers](../img/graphql-playground.png)
+![GraphQL Headers](../img/graphql-headers.png)
+
+## Environment variables
+
+The CE-API uses environment variables to configure the jwt secret key, expiration, auth keys, and issuer.
+
+### Auth keys
+
+Each client has an unique auth key which can be used to request a JWT token. This auth key is configured in the `JWT_AUTH_KEYS` environment variable. The value should be a collection with the following properties: id, apiKey and scopes.
+
+For example:
+
+```json
+[{ 
+  "id": "client-id", 
+  "apiKey": "jfBeQsMWo5y3AX1MaN8Vvzkkmkx2TUpVYohpwDXf6ck=",   
+  "scopes": ["*"]
+}]
+```
+
+### Adding a new auth key
+
+#### id
+
+First, you should decide what the id should be which will be associated with the auth key. This can be the common name of the company or person. E.g. our company name is `Video Dock B.V.`, so we will be using `videodock` for the id property.
+
+#### apiKey
+
+The apiKey is the **secret** key that only should be handed to the auth key owner in a secure way. Any string can be used for the apiKey, but we recommend using random generated string of characters. 
+
+If you have `openssl` installed, you can use the following command to generate a token: 
+
+```shell script
+$ openssl rand -base64 32
+```
+
+#### scopes
+
+The scopes property is an Array of strings which is being used to whitelist scopes for that auth key. This property should contain at least a single scope in order to work.
+
+If all scopes are allowed for the given auth key, you can use a wildcard like so:
+
+```json
+{
+  "scopes": ["*"]
+}
+```
+
+If an auth key should only have access to create/edit/delete persons in the Contributor Environment, you can use the following scopes:
+
+```json
+{
+  "scopes": [
+    "mutation:CreatePerson",
+    "mutation:UpdatePerson",
+    "mutation:DeletePerson"
+  ]
+}
+``` 
