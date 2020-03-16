@@ -17,7 +17,7 @@ For production environment use:
 
 `https://api.trompamusic.eu/jwt`
 
-> **NOTE:** API keys are not exchangeable between the test and production environment. Each environment will have its own unique API keys.
+> **NOTE:** API keys are not shared between the test and production environments. Each environment will have its own unique API keys.
 
 ### Parameters
 
