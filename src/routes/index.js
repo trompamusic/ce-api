@@ -10,7 +10,7 @@ const router = new Router()
 
 const JWT_ISSUER = process.env.JWT_ISSUER || 'https://trompamusic.eu'
 const JWT_SECRET = process.env.JWT_SECRET
-const JWT_AUTH_KEYS = process.env.JWT_AUTH_KEYS ? JSON.stringify(process.env.JWT_AUTH_KEYS) : []
+const JWT_AUTH_KEYS = process.env.JWT_AUTH_KEYS ? JSON.parse(process.env.JWT_AUTH_KEYS) : []
 const JWT_EXPIRES = process.env.JWT_EXPIRES || '1d'
 
 /**
