@@ -59,7 +59,8 @@
     "lint": "eslint src tests",
     "start": "nodemon --exec babel-node --watch src src/index.js",
     "start:prod": "node dist/index.js",
-    "test:functional": "CI=true jest /helpers.js tests/functional",
+    "test:unit": "jest ./src",
+    "test:functional": "CI=true jest ./tests/functional",
     "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
   },
   "husky": {
