@@ -22,8 +22,10 @@ const addDirectives = (schema) => {
       if (operation === 'Mutation') {
         const next = field.resolve
         field.resolve = (object, params, context, info) => {
-          // verify request with a generated scope, e.g. Mutation:DeleteControlAction, Mutation.CreatePerson, ...
-          verifyRequest(context, `${operation}:${fieldName}`)
+          // verify request with a generated scope, e.g. Mutation:ControlAction:Delete, Mutation:Person:Create, ...
+          const [, action, type] = fieldName.match(/^([A-Z][a-z]+)([A-Z]\w+)/)
+
+          verifyRequest(context, `${operation}:${type}:${action}`)
 
           return next(object, params, context, info)
         }

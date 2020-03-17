@@ -7,10 +7,10 @@ All read operations in the Contributor Environment API are publicly accessible. 
 
 The Contributor Environment API has an endpoint to create a JWT token. This endpoint **MUST ONLY** be used in a secured environment since it uses a private API key which shouldn't be visible to users. Best practice for web applications is to request the JWT token in a backend environment and to only use the JWT token in the frontend.
 
-For local development (using docker-compose), you can use the following token which will be valid until 03-16-2021.
+For local development (using docker-compose), you can use the following token which will be valid until 03-17-2021.
 
 ```text
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxvY2FsIiwic2NvcGVzIjpbIioiXSwiaWF0IjoxNTg0MzU3ODA4LCJleHAiOjE2MTU5MTU0MDgsImlzcyI6Imh0dHBzOi8vYXBpLnRyb21wYW11c2ljLmV1In0.DZbk8FwrBMWElqE8KBOG1Hd1M7ZVIwsNkOLhMz7BJ3M
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxvY2FsIiwic2NvcGVzIjpbIioiXSwiaWF0IjoxNTg0NDQwOTIwLCJleHAiOjE2MTU5OTg1MjAsImlzcyI6Imh0dHBzOi8vdHJvbXBhbXVzaWMuZXUifQ.LDMXlyB3REzOKyu1pytsonpuW6tBC1dsizkp7gUxZss
 ```
 
 ### JWT Endpoint
@@ -39,9 +39,13 @@ In order to obtain a JWT token you will need to have the following information:
 
 ### Scopes
 
-When requesting a JWT token, you can determine to which resources the token has access to. For example, if you only need to create a Person in the client side code, the following scope will only allow the client side code to create a person: `"scopes": ["Mutation:CreatePerson"]` 
+When requesting a JWT token, you can determine to which resources the token has access to. For example, if you only need to create a Person in the client side code, the following scope will only allow the client side code to create a person: `"scopes": ["Mutation:Person:Create"]` 
 
-The scope pattern uses the `Operation` and `Fieldname` with a Colon ":" in between. Globs are also supported to make it easier to obtain access to multiple resources or while developing. If you need access to all `Create` operations, you could use the following scopes: `"scopes": ["Mutation:Create*"]`
+The scope pattern exists out of the operation, type and action joined by a colon ":". The operation can be the following values: `Mutation`, `Query`, and `Subscription` (currently only the `Mutation` operation needs authorization). The type is equal to the Graphql schema type e.g. `Person` or `ControlAction`. However, there currently is a separate type for all relation properties. Examples are `MusicCompositionComposer` The action part controls which actions are allowed on the given type e.g. `Create`, `Add`, `Update`, `Merge`, `Remove`, and `Delete`. 
+
+> **note** The `Add` and `Remove` actions are used for relational mutations.
+
+Globs are also supported to make it easier to obtain access to multiple resources or while developing. If you need access to all `Create` operations, you could use the following scopes: `"scopes": ["Mutation:*:Create"]`.
 
 ### Expiration time
 
@@ -70,7 +74,7 @@ try {
 
 ### Response
 
-If the authentication is successfull the API will give the following JSON response:
+If the authentication is successful the API will give the following JSON response:
 
 ```json
 {
@@ -110,7 +114,7 @@ request(options, function (error, response) {
 
 ### Authorization header
 
-The Contributor Environment API will obtain the token from the `Authorization` header with type `Bearer` for authentication. Make sure that this header is set for each request that needs authentication.
+The Contributor Environment API will obtain the token from the `Authorization` header with type `Bearer`. Make sure that this header is set for each request that needs authorization.
 
 For example:
 
@@ -122,7 +126,7 @@ Authorization: Bearer xxxxxxxx.xxxxxxxx.xxxxxxxx
 
 ### Apollo
 
-In Apollo (client) you can set the authorization header in each request with the following code:
+In Apollo (client) you can set the authorization header for all requests with the following code:
 
 ```js
 import { ApolloClient } from 'apollo-client';
@@ -229,9 +233,19 @@ If an auth key should only have access to create/edit/delete persons in the Cont
 ```json
 {
   "scopes": [
-    "mutation:CreatePerson",
-    "mutation:UpdatePerson",
-    "mutation:DeletePerson"
+    "Mutation:Person:*"
+  ]
+}
+```
+ 
+Or
+
+```json
+{
+  "scopes": [
+    "Mutation:Person:Create",
+    "Mutation:Person:Update",
+    "Mutation:Person:Delete"
   ]
 }
 ``` 
