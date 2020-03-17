@@ -1,17 +1,11 @@
 import validator from 'validator'
 import { Router } from 'express'
-import { sign } from 'jsonwebtoken'
-import * as micromatch from 'micromatch'
 import { getDocument } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
+import { generateToken } from '../auth/auth'
 
 const router = new Router()
-
-const JWT_ISSUER = process.env.JWT_ISSUER || 'https://trompamusic.eu'
-const JWT_SECRET = process.env.JWT_SECRET
-const JWT_AUTH_KEYS = process.env.JWT_AUTH_KEYS ? JSON.parse(process.env.JWT_AUTH_KEYS) : []
-const JWT_EXPIRES = process.env.JWT_EXPIRES || '1d'
 
 /**
  * Health check endpoint
@@ -79,30 +73,13 @@ router.post('/jwt', async (req, res) => {
     })
   }
 
-  // check if key is valid
-  const keyPair = JWT_AUTH_KEYS.find(item => item.apiKey === apiKey && item.id === id)
+  try {
+    const jwt = generateToken(id, apiKey, scopes)
 
-  if (!keyPair) {
-    return res.status(403).send({ success: false, message: 'Forbidden' })
+    res.send({ success: true, jwt })
+  } catch (error) {
+    return res.status(403).send({ success: false, message: error.message })
   }
-
-  // verify if the requested scopes are allowed
-  for (let index = 0; index < scopes.length; index++) {
-    if (!micromatch.isMatch(scopes[index], keyPair.scopes)) {
-      return res.status(403).send({
-        success: false,
-        message: `You don't have access to the requested '${scopes[index]}' scope`
-      })
-    }
-  }
-
-  // generate token
-  const token = sign({ id, scopes }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES,
-    issuer: JWT_ISSUER
-  })
-
-  return res.send({ success: true, jwt: token })
 })
 
 export default router
