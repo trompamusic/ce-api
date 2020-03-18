@@ -2,8 +2,9 @@ import { makeAugmentedSchema } from 'neo4j-graphql-js'
 import { TransformRootFields, transformSchema } from 'graphql-tools'
 import concatenate from 'concatenate'
 import walkSync from 'walk-sync'
+import { generateScope } from './utils/schema'
 import { resolvers } from './resolvers'
-import { verifyRequest } from './auth'
+import { verifyRequest } from './auth/auth'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
@@ -22,8 +23,18 @@ const addDirectives = (schema) => {
       if (operation === 'Mutation') {
         const next = field.resolve
         field.resolve = (object, params, context, info) => {
-          // verify request with a generated scope, e.g. Mutation:DeleteControlAction, Mutation.CreatePerson, ...
-          verifyRequest(context, `${operation}:${fieldName}`)
+          // Verify request with a generated scope, for the following query:
+          //
+          // ```graphql
+          // mutation {
+          //   CreatePerson(...) {
+          //     identifier
+          //   }
+          // }
+          // ```
+          //
+          // The scope will be: `Mutation:Person:Create`.
+          verifyRequest(context, generateScope(operation, fieldName))
 
           return next(object, params, context, info)
         }
