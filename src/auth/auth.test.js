@@ -11,7 +11,7 @@ describe('verifyRequest', function () {
     }
   })
 
-  const signToken = (id, scopes, expiresIn) => jwt.sign({ id, scopes }, process.env.JWT_SECRET, { expiresIn });
+  const signToken = (id, scopes, expiresIn) => jwt.sign({ id, scopes }, process.env.JWT_SECRET, { expiresIn })
 
   const adminToken = signToken('admin', ['*'], '1d')
   const adminTokenExpired = signToken('admin', ['*'], '-1d')
