@@ -1,13 +1,56 @@
 import { makeAugmentedSchema } from 'neo4j-graphql-js'
-import { resolvers } from './resolvers'
+import { TransformRootFields, transformSchema } from 'graphql-tools'
 import concatenate from 'concatenate'
 import walkSync from 'walk-sync'
+import { generateScope } from './utils/schema'
+import { resolvers } from './resolvers'
+import { verifyRequest } from './auth/auth'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
-const graphQlFiles = walkSync(`${__dirname}/schema`, { directories: false, includeBasePath: true, globs: ['**/**/*.graphql'] })
+const graphQlFiles = walkSync(`${__dirname}/schema`, {
+  directories: false,
+  includeBasePath: true,
+  globs: ['**/**/*.graphql']
+})
 const typeDefs = concatenate.sync(graphQlFiles)
+
+const addDirectives = (schema) => {
+  return transformSchema(schema, [
+    new TransformRootFields((operation, fieldName, field) => {
+      // authentication is only needed for Mutations
+      if (operation === 'Mutation') {
+        const next = field.resolve
+        field.resolve = (object, params, context, info) => {
+          // Verify request with a generated scope, for the following query:
+          //
+          // ```graphql
+          // mutation {
+          //   CreatePerson(...) {
+          //     identifier
+          //   }
+          // }
+          // ```
+          //
+          // The scope will be: `Mutation:Person:Create`.
+          verifyRequest(context, generateScope(operation, fieldName))
+
+          return next(object, params, context, info)
+        }
+      }
+      return undefined
+    })
+  ])
+}
+
+const config = {
+  mutation: {
+    exclude: [
+      'Subscription'
+    ]
+  }
+}
 
 /*
  * Create an executable GraphQL schema object from GraphQL type definitions
@@ -16,15 +59,9 @@ const typeDefs = concatenate.sync(graphQlFiles)
  * in generated queries and/or mutations. Read more in the docs:
  * https://grandstack.io/docs/neo4j-graphql-js-api.html#makeaugmentedschemaoptions-graphqlschema
  */
-export const schema = makeAugmentedSchema({
+export const schema = addDirectives(makeAugmentedSchema({
+  allowUndefinedInResolve: true,
   typeDefs,
   resolvers,
-  allowUndefinedInResolve: true,
-  config: {
-    mutation: {
-      exclude: [
-        'Subscription'
-      ]
-    }
-  }
-})
+  config
+}))

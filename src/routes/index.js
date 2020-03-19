@@ -3,6 +3,7 @@ import { Router } from 'express'
 import { getDocument } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
+import { generateToken } from '../auth/auth'
 
 const router = new Router()
 
@@ -53,6 +54,32 @@ router.get('/:identifier', (req, res) => {
 
       res.status(statusCode).send(errorString)
     })
+})
+
+router.post('/jwt', async (req, res) => {
+  const { id, apiKey, scopes } = req.body
+
+  if (!id || !apiKey) {
+    return res.status(401).send({
+      success: false,
+      message: 'The `apiKey` or `id` property is missing in the request body'
+    })
+  }
+
+  if (!scopes || !Array.isArray(scopes) || !scopes.length) {
+    return res.status(401).send({
+      success: false,
+      message: 'The `scopes` property is missing or not an Array with at least one scope'
+    })
+  }
+
+  try {
+    const jwt = generateToken(id, apiKey, scopes)
+
+    res.send({ success: true, jwt })
+  } catch (error) {
+    return res.status(403).send({ success: false, message: error.message })
+  }
 })
 
 export default router

@@ -1,5 +1,9 @@
 # TROMPA Contributor Environment - GraphQL API
 
+## Documentation
+
+- [Authentication](docs/authentication.md)
+
 ## Quick Start
 
 #### System requirements
