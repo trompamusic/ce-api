@@ -1,4 +1,13 @@
+type _ThingCreateMutationPayload {
+  type: ThingInterfaceType!
+  identifier: ID!
+}
+
 type Subscription {
   ControlActionRequest(entryPointIdentifier: String!): ControlAction
   ControlActionMutation(identifier: String!): ControlAction
+  ThingCreateMutation(onTypes: [ThingInterfaceType!]): _ThingCreateMutationPayload
+  MediaObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
+  VideoObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
+  AudioObjectCreateMutation(encodingFormat: String): _ThingCreateMutationPayload
 }

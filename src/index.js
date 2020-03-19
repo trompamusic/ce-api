@@ -28,8 +28,11 @@ app.use('/', router)
 const server = new ApolloServer({
   schema: schema,
   context: ({ req }) => {
-    // make sure the `cookies` property is set (graphql-auth-directive will error if the `cookies` property is undefined)
+    // make sure the `cookies` property is set (graphql-auth-directive will error if the `cookies` property is
+    // undefined for websocket connections)
+    req = req || {}
     req.cookies = req.cookies || {}
+    req.headers = req.headers || {}
 
     return ({ driver, req })
   }
