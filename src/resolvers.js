@@ -5,20 +5,11 @@ import { PubSub } from 'graphql-subscriptions'
 
 export const pubsub = new PubSub()
 
-/*
- * Concatenate resolvers
- */
-let aggregatedResolvers = queryResolvers
-
-for (let key in mutationResolvers) {
-  if (mutationResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = mutationResolvers[key]
+export const resolvers = {
+  ...queryResolvers,
+  ...mutationResolvers,
+  ...subscriptionResolvers
 }
-
-for (let key in subscriptionResolvers) {
-  if (subscriptionResolvers.hasOwnProperty(key)) aggregatedResolvers[key] = subscriptionResolvers[key]
-}
-
-export const resolvers = aggregatedResolvers
 
 // retrieval function for node data, hydrated with private schemaType properties
 export function retrieveNodeData (node) {

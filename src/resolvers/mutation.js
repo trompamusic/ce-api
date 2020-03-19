@@ -1,5 +1,3 @@
-import { parse } from 'path'
-import walkSync from 'walk-sync'
 import { info, warning } from '../utils/logger'
 import { driver } from '../driver'
 import { retrieveNodeData, pubsub } from '../resolvers'
@@ -22,16 +20,6 @@ export const mutationResolvers = {
     CreateAudioObject: QueryAndPublishResolver.createResolver('AudioObject', 'AudioObjectCreateMutation')
   }
 }
-
-// add resolvers for all create mutations
-walkSync(`${__dirname}/../schema/type`, { directories: false, includeBasePath: true, globs: ['*.graphql'] })
-  .forEach(file => {
-    const { name } = parse(file)
-
-    if (!mutationResolvers.Mutation[`Create${name}`]) {
-      mutationResolvers.Mutation[`Create${name}`] = QueryAndPublishResolver.createResolver(name)
-    }
-  })
 
 /**
  * @param query
