@@ -14,6 +14,11 @@ const JWT_EXPIRES = process.env.JWT_EXPIRES || '1d'
  * @returns {Object}
  */
 export const verifyRequest = (context, scope) => {
+  // Disable authentication if the JWT_SECRET is missing.
+  if (!JWT_SECRET) {
+    return
+  }
+
   const req = context.req || context.request
   const token = req && (req.headers.authorization || req.headers.Authorization)
 
