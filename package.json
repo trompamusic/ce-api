@@ -11,16 +11,20 @@
   "dependencies": {
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
-    "apollo-server": "^2.9.15",
-    "apollo-server-express": "^2.9.15",
+    "apollo-server": "^2.11.0",
+    "apollo-server-express": "^2.11.0",
     "body-parser": "^1.19.0",
     "concatenate": "0.0.2",
     "cors": "^2.8.5",
     "express": "4.17.*",
     "graphql": "^14.5.8",
+    "graphql-auth-directives": "^2.2.0",
     "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.7",
+    "jsonwebtoken": "^8.5.1",
+    "micromatch": "^4.0.2",
     "neo4j-driver": "4.0.*",
-    "neo4j-graphql-js": "https://github.com/neo4j-graphql/neo4j-graphql-js#3e166629dfedcc8a8094851fd5d651f32650fb86",
+    "neo4j-graphql-js": "2.13.0",
     "validator": "12.1.*",
     "walk-sync": "2.0.*"
   },
@@ -46,12 +50,17 @@
     "jest": "^24.9.0",
     "lint-staged": "9.5.*",
     "node-fetch": "2.3.*",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
+    "build": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files",
+    "build:debug": "rimraf ./dist && babel ./src --out-dir ./dist --copy-files --source-maps",
     "lint": "eslint src tests",
     "start": "nodemon --exec babel-node --watch src src/index.js",
-    "test:functional": "CI=true jest tests/helpers.js tests/functional",
+    "start:prod": "node dist/index.js",
+    "test:unit": "jest ./src",
+    "test:functional": "CI=true jest ./tests/functional",
     "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
   },
   "husky": {

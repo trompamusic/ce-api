@@ -18,6 +18,7 @@ services:
 
   api:
     build: ./
+    command: ["npm", "start"]
     ports:
       - 4000:4000
     environment:
@@ -26,8 +27,11 @@ services:
       PORT: 4000
       NEO4J_USER: "neo4j"
       NEO4J_PASSWORD: "letmein"
+      JWT_SECRET: "not-so-secret"
+      JWT_AUTH_KEYS: "[{\"id\":\"local\",\"apiKey\":\"PZsG+oEW3K3QOoB5z0f30InzjXdBqM9LMtJa7BTg1xo=\",\"scopes\":[\"*\"]}]"
+      JWT_ISSUER: "https://api.trompamusic.eu"
+      JWT_EXPIRES: "1d"
       DEBUG: ce-api-*
-#      DEBUG: info
     volumes:
       - ./src:/app/src
     links:
