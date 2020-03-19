@@ -9,8 +9,10 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
-RUN npm build
-COPY . .
+
+COPY src src/
+COPY .babelrc ./
+RUN npm run build
 
 EXPOSE 80
 
