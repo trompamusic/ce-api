@@ -182,6 +182,7 @@ class RequestControlActionCommand {
         }
         // createdControlAction.entryPointIdentifier = template.identifier
         pubsub.publish('ControlActionRequest', { ControlActionRequest: createdControlAction, entryPointIdentifier: template.identifier })
+        pubsub.publish('ThingCreateMutation', { identifier: createdControlAction.identifier, type: 'ControlAction' })
 
         return createdControlAction
       })

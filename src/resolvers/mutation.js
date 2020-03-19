@@ -2,7 +2,6 @@ import { info, warning } from '../utils/logger'
 import { driver } from '../driver'
 import { retrieveNodeData, pubsub } from '../resolvers'
 import RequestControlActionCommand from '../commands/RequestControlActionCommand'
-import QueryAndPublishResolver from '../commands/QueryAndPublishResolver'
 import UpdateControlActionQuery from '../queries/UpdateControlActionQuery'
 
 export const mutationResolvers = {
@@ -14,10 +13,7 @@ export const mutationResolvers = {
     UpdateControlAction (object, params, ctx, resolveInfo) {
       const queryGenerator = new UpdateControlActionQuery(params, resolveInfo)
       return runQuery(queryGenerator.query, 'UpdateControlAction', 'ControlActionMutation')
-    },
-    CreateMediaObject: QueryAndPublishResolver.createResolver('MediaObject', 'MediaObjectCreateMutation'),
-    CreateVideoObject: QueryAndPublishResolver.createResolver('VideoObject', 'VideoObjectCreateMutation'),
-    CreateAudioObject: QueryAndPublishResolver.createResolver('AudioObject', 'AudioObjectCreateMutation')
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import { TransformRootFields } from 'graphql-tools'
-import QueryAndPublishResolver from '../commands/QueryAndPublishResolver'
+import { pubsub } from '../resolvers'
 
 // add custom subscription triggers for specific types (key)
 const customTypeTriggers = {
@@ -10,7 +10,12 @@ const customTypeTriggers = {
 
 export const subscriptionFieldTransformer = new TransformRootFields((operation, fieldName, field) => {
   // subscriptions are only triggered for mutations
-  if (operation !== 'Mutation') {
+  if (operation !== 'Mutation' || fieldName === 'RequestControlAction') {
+    return undefined
+  }
+
+  // ignore custom mutations with custom resolvers
+  if (fieldName === 'UpdateControlAction' || fieldName === 'RequestControlAction') {
     return undefined
   }
 
@@ -25,8 +30,42 @@ export const subscriptionFieldTransformer = new TransformRootFields((operation, 
       return next(object, params, context, resolveInfo)
     }
 
-    const resolve = QueryAndPublishResolver.createResolver(typeName, customTypeTriggers[typeName])
+    const selections = resolveInfo.fieldNodes[0] && resolveInfo.fieldNodes[0].selectionSet.selections
+    const hasIdentifier = selections && selections.find(({ name }) => name.value === 'identifier')
 
-    return resolve(object, params, context, resolveInfo)
+    // add identifier to selections
+    if (!hasIdentifier) {
+      resolveInfo.fieldNodes[0].selectionSet.selections.push({
+        kind: 'Field',
+        name: {
+          kind: 'Name',
+          value: 'identifier'
+        },
+        arguments: [],
+        directives: []
+      })
+    }
+
+    return next(object, params, context, resolveInfo).then(response => {
+      // remove the identifier so it doesn't end up in the response if the original request does not include it in
+      // its response
+      if (!hasIdentifier) {
+        const idx = selections.findIndex(({ name }) => name.value === 'identifier')
+
+        selections.splice(idx, 1)
+      }
+
+      // publish for subscriptions
+      if (response.identifier) {
+        // always trigger a ThingCreateMutation
+        pubsub.publish('ThingCreateMutation', { type: typeName, identifier: response.identifier })
+
+        if (customTypeTriggers[typeName]) {
+          pubsub.publish(customTypeTriggers[typeName], { type: typeName, identifier: response.identifier, params })
+        }
+      }
+
+      return response
+    })
   }
 })
