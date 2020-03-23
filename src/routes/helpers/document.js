@@ -2,11 +2,13 @@ import { info } from '../../utils/logger'
 import { driver } from '../../driver'
 import GetTypeQuery from '../../queries/GetTypeQuery'
 import GetFullNodeQuery from '../../queries/GetFullNodeQuery'
+import SchemaHelper from '../../helpers/SchemaHelper'
 
 export const getDocument = (identifier, host) => {
   const session = driver.session()
+  const schemaHelper = new SchemaHelper()
 
-  const getTypeQuery = new GetTypeQuery(identifier)
+  const getTypeQuery = new GetTypeQuery(identifier, schemaHelper.getTypeNames())
   const query = getTypeQuery.query
 
   info(`_findNodeType query: ${query}`)
