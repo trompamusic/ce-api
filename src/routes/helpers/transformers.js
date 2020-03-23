@@ -1,7 +1,6 @@
 import SchemaHelper from '../../helpers/SchemaHelper'
 import { warning } from '../../utils/logger'
 import { isDateTime } from 'neo4j-driver/lib/temporal-types'
-import { schema } from '../../schema'
 
 // Used scopes dict
 const scopedContexts = {
