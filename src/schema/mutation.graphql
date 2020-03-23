@@ -1,4 +1,3 @@
 type Mutation {
   RequestControlAction(identifier: ID, controlAction: RequestControlActionInput): ControlAction
-  UpdateControlAction(identifier: ID, actionStatus: ActionStatusType, error: String, url: String): ControlAction
 }
