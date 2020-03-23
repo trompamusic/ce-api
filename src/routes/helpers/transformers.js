@@ -1,6 +1,7 @@
 import SchemaHelper from '../../helpers/SchemaHelper'
 import { warning } from '../../utils/logger'
 import { isDateTime } from 'neo4j-driver/lib/temporal-types'
+import { schema } from '../../schema'
 
 // Used scopes dict
 const scopedContexts = {
@@ -30,6 +31,15 @@ export const transformJsonLD = (type, data) => {
     '@type': schemaTypes
   }
 
+  const convertScalarToPerson = value => {
+    const personProperty = /^https?/.test(value) ? 'url' : 'callSign'
+
+    return {
+      '@type': 'Person',
+      [personProperty]: value
+    }
+  }
+
   // Iterate all keys in the data document
   Object.keys(data).forEach(key => {
     // Get the property for the current key
@@ -55,6 +65,13 @@ export const transformJsonLD = (type, data) => {
           '@id': elementValue
         }
       }
+    }
+
+    // For the ControlAction we convert the `agent` property into a Person type
+    // The `agent` property is a String, which can either be an URL (vcard/webid) or the persons callSign
+    if (key === 'agent' || key === 'participant') {
+      elementValue = Array.isArray(elementValue) ? elementValue.map(convertScalarToPerson)
+        : convertScalarToPerson(elementValue)
     }
 
     // Iterate over all property scopes
