@@ -2,10 +2,10 @@
 interface ActionInterface {
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
-  #"https://schema.org/actionStatus"
-  #actionStatus: String
+  "https://schema.org/actionStatus"
+  actionStatus: ActionStatusType
   "https://schema.org/agent"
-  agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
+  agent: String
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -14,10 +14,10 @@ interface ActionInterface {
   instrument: [ThingInterface] @relation(name: "INSTRUMENT", direction: "OUT")
   "https://schema.org/location"
   location: [Place] @relation(name: "LOCATION", direction: "OUT")
-  "https://schema.org/object"
-  #  object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
-  #  "https://schema.org/participant"
-  participant: [LegalPersonInterface] @relation(name: "PARTICIPANT", direction: "OUT")
+  # "https://schema.org/object"
+  # object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
+  "https://schema.org/participant"
+  participant: [String]
   "https://schema.org/result"
   result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"

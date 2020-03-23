@@ -90,10 +90,10 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   endedAtTime: _Neo4jDateTime
   ##################################
   ### ActionInterface properties ###
-  #"https://schema.org/actionStatus"
-  #actionStatus: String
+  "https://schema.org/actionStatus"
+  actionStatus: ActionStatusType
   "https://schema.org/agent"
-  agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
+  agent: String
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -105,7 +105,7 @@ type Action implements MetadataInterface & ThingInterface & ActionInterface & Pr
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [LegalPersonInterface] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [String]
   "https://schema.org/result"
   result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"
