@@ -72,13 +72,13 @@ type Product implements MetadataInterface & SearchableInterface & ThingInterface
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
   ############################################
   ### ProvenanceEntityInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  "http://www.w3.org/ns/prov#wasGeneratedBy"
   wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  "http://www.w3.org/ns/prov#wasDerivedFrom"
   wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  "http://www.w3.org/ns/prov#wasAttributedTo"
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#used"
+  "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ##########################
   ### Product properties ###

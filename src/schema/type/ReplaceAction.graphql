@@ -1,4 +1,4 @@
-"https://schema.org/ReplaceAction,https://www.w3.org/TR/prov-o/#Activity"
+"https://schema.org/ReplaceAction,http://www.w3.org/ns/prov#Activity"
 type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
@@ -30,28 +30,28 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   url: URL
   ############################################
   ### ProvenanceEntityInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  "http://www.w3.org/ns/prov#wasGeneratedBy"
   wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  "http://www.w3.org/ns/prov#wasDerivedFrom"
   wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  "http://www.w3.org/ns/prov#wasAttributedTo"
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#used"
+  "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ##############################################
   ### ProvenanceActivityInterface properties ###
-  "https://www.w3.org/TR/prov-o/#startedAtTime"
+  "http://www.w3.org/ns/prov#startedAtTime"
   startedAtTime: _Neo4jDateTime
-  "https://www.w3.org/TR/prov-o/#wasInformedBy"
+  "http://www.w3.org/ns/prov#wasInformedBy"
   wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#endedAtTime"
+  "http://www.w3.org/ns/prov#endedAtTime"
   endedAtTime: _Neo4jDateTime
   ##################################
   ### ActionInterface properties ###
-  #"https://schema.org/actionStatus"
-  #actionStatus: String
+  "https://schema.org/actionStatus"
+  actionStatus: ActionStatusType
   "https://schema.org/agent"
-  agent: [LegalPersonInterface] @relation(name: "AGENT", direction: "OUT")
+  agent: String
   "https://schema.org/endTime"
   endTime: _Neo4jDateTime
   "https://schema.org/error"
@@ -63,7 +63,7 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   "https://schema.org/object"
   object: [ThingInterface] @relation(name: "OBJECT", direction: "OUT")
   "https://schema.org/participant"
-  participant: [LegalPersonInterface] @relation(name: "PARTICIPANT", direction: "OUT")
+  participant: [String]
   "https://schema.org/result"
   result: ThingInterface @relation(name: "RESULT", direction: "OUT")
   "https://schema.org/startTime"

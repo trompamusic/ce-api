@@ -1,4 +1,4 @@
-"https://schema.org/Person,https://www.w3.org/TR/prov-o/#Agent"
+"https://schema.org/Person,http://www.w3.org/ns/prov#Agent"
 type Person implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & LegalPersonInterface & PerformerInterface {
   ### Metadata properties ###
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
@@ -72,19 +72,19 @@ type Person implements MetadataInterface & SearchableInterface & ThingInterface 
   relatedMatch: [ThingInterface] @relation(name: "RELATED_MATCH", direction: "OUT")
   ############################################
   ### ProvenanceEntityInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasGeneratedBy"
+  "http://www.w3.org/ns/prov#wasGeneratedBy"
   wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasDerivedFrom"
+  "http://www.w3.org/ns/prov#wasDerivedFrom"
   wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#wasAttributedTo"
+  "http://www.w3.org/ns/prov#wasAttributedTo"
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#used"
+  "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
   ###########################################
   ### ProvenanceAgentInterface properties ###
-  "https://www.w3.org/TR/prov-o/#wasAssociatedWith"
+  "http://www.w3.org/ns/prov#wasAssociatedWith"
   wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
-  "https://www.w3.org/TR/prov-o/#actedOnBehalfOf"
+  "http://www.w3.org/ns/prov#actedOnBehalfOf"
   actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
   #########################
   ### Person properties ###

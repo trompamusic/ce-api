@@ -1,9 +1,13 @@
+import QueryHelper from '../helpers/QueryHelper'
+
 class GetTypeQuery {
   /**
    * @param identifier
+   * @param [typeNames]
    */
-  constructor (identifier) {
+  constructor (identifier, typeNames) {
     this.identifier = identifier
+    this.typeNames = typeNames
   }
 
   /**
@@ -21,7 +25,7 @@ class GetTypeQuery {
     return [
       `MATCH (\`n\`)`,
       `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
-      `RETURN \`n\` {\`_schemaType\`:HEAD(labels(\`n\`))} AS \`_payload\``
+      `RETURN \`n\` { ${QueryHelper.schemaTypeClause('n', this.typeNames)} } AS \`_payload\``
     ].join(' ')
   }
 }

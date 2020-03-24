@@ -74,6 +74,17 @@ class SchemaHelper {
   }
 
   /**
+   * Get all schema type names
+   * @returns {string[]}
+   */
+  getTypeNames () {
+    return Object
+      .values(this.schemaTypeMap)
+      .filter(type => type.astNode && type.astNode.kind === 'ObjectTypeDefinition' && !!type.astNode.interfaces.length)
+      .map(type => type.name)
+  }
+
+  /**
    * @param typeName
    * @returns {*}
    */

@@ -1,4 +1,4 @@
-"https://schema.org/Thing,https://www.w3.org/TR/prov-o/#Entity"
+"https://schema.org/Thing,http://www.w3.org/ns/prov#Entity"
 interface ThingInterface {
   "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
   identifier: ID
