@@ -46,11 +46,11 @@ type Rating implements ThingInterface {
     "https://schema.org/author"
     author: String
     "https://schema.org/bestRating"
-    bestRating: Int
+    bestRating: Int!
     "https://pending.schema.org/ratingExplanation"
     ratingExplanation: String
     "https://schema.org/ratingValue"
-    ratingValue: Int
+    ratingValue: Int!
     "https://schema.org/reviewAspect"
     reviewAspect: String
     "https://schema.org/worstRating"
