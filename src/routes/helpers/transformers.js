@@ -5,7 +5,7 @@ import { isDateTime } from 'neo4j-driver/lib/temporal-types'
 // Used scopes dict
 const scopedContexts = {
   dc: 'http://purl.org/dc/elements/1.1/',
-  prov: 'https://www.w3.org/TR/prov-o/#',
+  prov: 'http://www.w3.org/ns/prov#',
   skos: 'http://www.w3.org/2004/02/skos/core#',
   rdf: 'https://www.w3.org/2000/01/rdf-schema'
 }
