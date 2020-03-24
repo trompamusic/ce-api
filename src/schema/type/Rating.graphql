@@ -1,38 +1,20 @@
-"https://pending.schema.org/DefinedTerm"
-type DefinedTerm implements ThingInterface {
+"https://schema.org/Rating"
+type Rating implements ThingInterface {
     ### Metadata properties ###
     "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
     identifier: ID
     "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
     contributor: String
-    "http://purl.org/dc/elements/1.1/coverage"
-    coverage: String
     "http://purl.org/dc/elements/1.1/creator"
     creator: String!
-    "http://purl.org/dc/elements/1.1/date"
-    date: _Neo4jDate
     "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
     description: String
     "https://schema.org/disambiguatingDescription"
     disambiguatingDescription: String
-    "http://purl.org/dc/elements/1.1/format"
-    format: String
     "http://purl.org/dc/elements/1.1/language"
     language: AvailableLanguage
-    "http://purl.org/dc/elements/1.1/publisher"
-    publisher: String
-    "http://purl.org/dc/elements/1.1/relation"
-    relation: String
-    "http://purl.org/dc/elements/1.1/rights"
-    rights: String
-    "http://purl.org/dc/elements/1.1/source"
-    source: String
-    "http://purl.org/dc/elements/1.1/subject"
-    subject: String
     "http://purl.org/dc/elements/1.1/title"
     title: String
-    "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
-    type: String
     "http://purl.org/dc/terms/created"
     created: String
     "http://purl.org/dc/terms/modified"
@@ -59,12 +41,18 @@ type DefinedTerm implements ThingInterface {
     subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
     "https://schema.org/url"
     url: URL
-    ##############################
-    ### DefinedTerm properties ###
-    "https://pending.schema.org/termCode"
-    termCode: String!
-    # TODO: inDefinedTermSet can also be a URL, is this needed in the CE?
-    # TODO: This should only be a relation to one DefinedTermSet
-    "https://pending.schema.org/inDefinedTermSet"
-    inDefinedTermSet: [DefinedTermSet] @relation(name: "HAS_DEFINED_TERM", direction: "IN")
+    #########################
+    ### Rating properties ###
+    "https://schema.org/author"
+    author: String
+    "https://schema.org/bestRating"
+    bestRating: Int!
+    "https://pending.schema.org/ratingExplanation"
+    ratingExplanation: String
+    "https://schema.org/ratingValue"
+    ratingValue: Int!
+    "https://schema.org/reviewAspect"
+    reviewAspect: String
+    "https://schema.org/worstRating"
+    worstRating: Int
 }
