@@ -1,5 +1,6 @@
 import { TransformRootFields } from 'graphql-tools'
 import { pubsub } from '../resolvers'
+import { parseFieldName } from '../utils/schema'
 
 // add custom subscription triggers for specific types (key)
 const customTypeTriggers = {
@@ -10,12 +11,14 @@ const customTypeTriggers = {
 
 export const subscriptionFieldTransformer = new TransformRootFields((operation, fieldName, field) => {
   // subscriptions are only triggered for mutations
-  if (operation !== 'Mutation' || fieldName === 'RequestControlAction') {
+  if (operation !== 'Mutation') {
     return undefined
   }
 
-  // ignore custom mutations with custom resolvers
-  if (fieldName === 'UpdateControlAction' || fieldName === 'RequestControlAction') {
+  const { action } = parseFieldName(fieldName)
+
+  // ignore non Create mutations and custom mutations with custom resolvers
+  if (action !== 'Create' || fieldName === 'UpdateControlAction' || fieldName === 'RequestControlAction') {
     return undefined
   }
 
