@@ -5,6 +5,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import { debug } from './utils/logger'
 import router from './routes/index'
+import { runMigrations } from './migrations'
 import { driver } from './driver'
 import { schema } from './schema'
 
@@ -47,8 +48,11 @@ server.installSubscriptionHandlers(httpServer)
 // Listen for errors.
 app.on('error', error => debug(error))
 
-// Start the express and Apollo server
-httpServer.listen(SERVER_PORT, SERVER_HOST, () => {
-  // Log the server url.
-  console.log(`started server on ${SERVER_HOST}:${SERVER_PORT}`)
+// Run migrations
+runMigrations().then(() => {
+  // Start the express and Apollo server
+  httpServer.listen(SERVER_PORT, SERVER_HOST, () => {
+    // Log the server url.
+    console.log(`started server on ${SERVER_HOST}:${SERVER_PORT}`)
+  })
 })
