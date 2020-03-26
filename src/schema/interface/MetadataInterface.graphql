@@ -7,7 +7,7 @@ interface MetadataInterface {
   "http://purl.org/dc/elements/1.1/coverage"
   coverage: String
   "http://purl.org/dc/elements/1.1/creator"
-  creator: String
+  creator: String!
   "http://purl.org/dc/elements/1.1/date"
   date: _Neo4jDate
   "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
