@@ -1,5 +1,4 @@
 import walkSync from 'walk-sync'
-import { readFileSync } from 'fs'
 import { driver } from './driver'
 import retryPromise from './utils/retryPromise'
 import chalk from 'chalk'
