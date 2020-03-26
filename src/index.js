@@ -55,4 +55,6 @@ runMigrations().then(() => {
     // Log the server url.
     console.log(`started server on ${SERVER_HOST}:${SERVER_PORT}`)
   })
+}).catch(() => {
+  console.log('failed to start the server')
 })
