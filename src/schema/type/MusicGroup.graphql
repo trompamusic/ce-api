@@ -1,14 +1,14 @@
 "https://schema.org/MusicGroup,http://purl.org/ontology/mo/MusicGroup"
-type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface & PerformerInterface {
+type MusicGroup implements SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface & PerformerInterface {
   ### Metadata properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
-  contributor: String!
+  contributor: String
   "http://purl.org/dc/terms/coverage"
   coverage: String
   "http://purl.org/dc/terms/creator"
-  creator: String!
+  creator: String
   "http://purl.org/dc/terms/date"
   date: _Neo4jDate
   "http://purl.org/dc/terms/description,https://schema.org/description"
@@ -16,7 +16,7 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/terms/format"
-  format: String!
+  format: String
   "http://purl.org/dc/terms/language"
   language: AvailableLanguage
   "http://purl.org/dc/terms/publisher"
@@ -26,13 +26,17 @@ type MusicGroup implements MetadataInterface & SearchableInterface & ThingInterf
   "http://purl.org/dc/terms/rights"
   rights: String
   "http://purl.org/dc/terms/source"
-  source: String!
+  source: String
   "http://purl.org/dc/terms/subject"
   subject: String
   "http://purl.org/dc/terms/title"
   title: String
   "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
   ####################################
   ### SearchableInterface property ###
   _searchScore: Float

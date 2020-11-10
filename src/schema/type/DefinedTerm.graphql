@@ -8,7 +8,7 @@ type DefinedTerm implements ThingInterface {
     "http://purl.org/dc/terms/coverage"
     coverage: String
     "http://purl.org/dc/terms/creator"
-    creator: String!
+    creator: String
     "http://purl.org/dc/terms/date"
     date: _Neo4jDate
     "http://purl.org/dc/terms/description,https://schema.org/description"

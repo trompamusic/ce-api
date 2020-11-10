@@ -1,5 +1,7 @@
 "https://schema.org/Thing,http://www.w3.org/ns/prov#Entity"
 interface ThingInterface {
+  ########################
+  ### ThingInterface properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "https://schema.org/additionalType"
@@ -26,4 +28,38 @@ interface ThingInterface {
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://pending.schema.org/url"
   url: URL
+  ########################
+  ### MetadataInterface properties ###
+  "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
+  contributor: String
+  "http://purl.org/dc/terms/coverage"
+  coverage: String
+  "http://purl.org/dc/terms/creator"
+  creator: String
+  "http://purl.org/dc/terms/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/terms/description,https://schema.org/description"
+  description: String
+  "http://purl.org/dc/terms/format"
+  format: String
+  "http://purl.org/dc/terms/language"
+  language: AvailableLanguage
+  "http://purl.org/dc/terms/publisher,https://schema.org/publisher"
+  publisher: String
+  "http://purl.org/dc/terms/relation"
+  relation: String
+  "http://purl.org/dc/terms/rights"
+  rights: String
+  "http://purl.org/dc/terms/source"
+  source: String
+  "http://purl.org/dc/terms/subject"
+  subject: String
+  "http://purl.org/dc/terms/title"
+  title: String
+  "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+  type: String
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
 }

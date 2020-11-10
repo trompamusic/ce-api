@@ -28,6 +28,10 @@ type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntity
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
