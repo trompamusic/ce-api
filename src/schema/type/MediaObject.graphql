@@ -158,7 +158,7 @@ type MediaObject implements MetadataInterface & SearchableInterface & ThingInter
   isBasedOn: [CreativeWorkInterface] @relation(name: "IS_BASED_ON", direction: "OUT")
   #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
-  isPartOf: CreativeWorkInterface @relation(name: "IS_PART_OF", direction: "OUT")
+  isPartOf: CreativeWorkInterface @relation(name: "HAS_PART", direction: "IN")
   "https://schema.org/keywords"
   keywords: String
   #learningResourceType: String
