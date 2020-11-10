@@ -37,6 +37,7 @@ type ItemList implements ThingInterface {
   created: String
   "http://purl.org/dc/terms/modified"
   modified: String
+
   #################################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -45,8 +46,6 @@ type ItemList implements ThingInterface {
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
-  "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: String
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
@@ -61,6 +60,7 @@ type ItemList implements ThingInterface {
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   ################################
   ### ItemList properties ###
   "https://schema.org/itemListElement"

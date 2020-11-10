@@ -37,6 +37,7 @@ type Rating implements ThingInterface {
     created: String
     "http://purl.org/dc/terms/modified"
     modified: String
+
     #################################
     ### ThingInterface properties ###
     "https://schema.org/additionalType"
@@ -59,6 +60,7 @@ type Rating implements ThingInterface {
     subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
     "https://schema.org/url"
     url: URL
+
     #########################
     ### Rating properties ###
     "https://schema.org/author"

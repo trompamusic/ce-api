@@ -37,9 +37,11 @@ type Place implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   created: String
   "http://purl.org/dc/terms/modified"
   modified: String
+
   ####################################
   ### SearchableInterface property ###
   _searchScore: Float
+
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -62,6 +64,7 @@ type Place implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
@@ -74,6 +77,7 @@ type Place implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   narrowMatch: [Place]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -84,6 +88,7 @@ type Place implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ########################
   ### Place properties ###
   "https://schema.org/address"

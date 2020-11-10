@@ -28,6 +28,7 @@ interface ThingInterface {
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://pending.schema.org/url"
   url: URL
+
   ########################
   ### MetadataInterface properties ###
   "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
@@ -38,8 +39,6 @@ interface ThingInterface {
   creator: String
   "http://purl.org/dc/terms/date"
   date: _Neo4jDate
-  "http://purl.org/dc/terms/description,https://schema.org/description"
-  description: String
   "http://purl.org/dc/terms/format"
   format: String
   "http://purl.org/dc/terms/language"

@@ -62,6 +62,7 @@ type Intangible implements SearchableInterface & ThingInterface & ProvenanceEnti
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
@@ -74,6 +75,7 @@ type Intangible implements SearchableInterface & ThingInterface & ProvenanceEnti
   narrowMatch: [Intangible]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"

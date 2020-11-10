@@ -45,10 +45,6 @@ type Audience implements ThingInterface {
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
-  "http://purl.org/dc/terms/description,https://schema.org/description"
-  description: String
-  "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: String
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"

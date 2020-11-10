@@ -4,11 +4,11 @@ interface CreativeWorkInterface {
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
-  contributor: String!
+  contributor: String
   "http://purl.org/dc/terms/coverage"
   coverage: String
   "http://purl.org/dc/terms/creator"
-  creator: String!
+  creator: String
   "http://purl.org/dc/terms/date"
   date: _Neo4jDate
   "http://purl.org/dc/terms/description,https://schema.org/description"
@@ -16,7 +16,7 @@ interface CreativeWorkInterface {
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/terms/format"
-  format: String!
+  format: String
   "http://purl.org/dc/terms/language"
   language: AvailableLanguage
   "http://purl.org/dc/terms/publisher"
@@ -26,13 +26,18 @@ interface CreativeWorkInterface {
   "http://purl.org/dc/terms/rights"
   rights: String
   "http://purl.org/dc/terms/source"
-  source: String!
+  source: String
   "http://purl.org/dc/terms/subject"
   subject: String
   "http://purl.org/dc/terms/title"
   title: String
   "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
+
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -55,18 +60,20 @@ interface CreativeWorkInterface {
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [CreativeWork]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  broadMatch: [CreativeWorkInterface]  @relation(name: "BROAD_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [CreativeWork]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  closeMatch: [CreativeWorkInterface]  @relation(name: "CLOSE_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [CreativeWork]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  exactMatch: [CreativeWorkInterface]  @relation(name: "EXACT_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [CreativeWork]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  narrowMatch: [CreativeWorkInterface]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -77,27 +84,17 @@ interface CreativeWorkInterface {
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ###############################
   ### CreativeWork properties ###
   "https://schema.org/about"
   about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
-  #"https://schema.org/accessMode"
-  #accessMode: AccessMode
-  #"https://schema.org/accessModeSufficient"
-  #accessModeSufficient: AccessMode
-  #accessibilityAPI: String
-  #accessibilityControl: String
-  #accessibilityFeature: String
-  #accessibilityHazard: String
-  #accessibilitySummary: String
   "https://schema.org/accountablePerson"
   accountablePerson: [Person] @relation(name: "ACCOUNTABLE_PERSON", direction: "OUT")
-  #aggregateRating: AggregateRating
   "https://schema.org/alternativeHeadline"
   alternativeHeadline: String
   "https://schema.org/associatedMedia"
   associatedMedia: [MediaObjectInterface] @relation(name: "ASSOCIATED_MEDIA", direction: "OUT")
-  #audience: Audience
   "https://schema.org/audio"
   audio: [AudioObject] @relation(name: "AUDIO", direction: "OUT")
   "https://schema.org/author"
@@ -108,29 +105,16 @@ interface CreativeWorkInterface {
   character: [Person] @relation(name: "CHARACTER", direction: "IN")
   "https://schema.org/citation"
   citation: [CreativeWorkInterface] @relation(name: "CITATION", direction: "IN")
-  #"https://schema.org/comment"
-  #comment: Comment
-  #"https://schema.org/commentCount"
-  #commentCount: Int
-  #contentLocation: Place
-  #contentRating: Rating | String
-  #contentReferenceTime: _Neo4jDateTime
-  #contributor: String! | LegalPersonInterface @relation(name: "AUTHOR", direction: "OUT")
   "https://schema.org/copyrightHolder"
   copyrightHolder: [LegalPersonInterface] @relation(name: "COPYRIGHT_HOLDER", direction: "OUT")
   "https://schema.org/copyrightYear"
   copyrightYear: Int
-  #correction: String
-  #creator: String! | LegalPersonInterface @relation(name: "AUTHOR", direction: "OUT")
-  #dateCreated: _Neo4jDate
   "https://schema.org/dateModified"
   dateModified: _Neo4jDateTime
   "https://schema.org/datePublished"
   datePublished: _Neo4jDate
-  #discussionUrl: URL
+  "https://schema.org/editor"
   editor: [Person] @relation(name: "EDITOR", direction: "IN")
-  #educationalAlignment
-  #educationalUse
   "https://schema.org/encoding"
   encoding: [MediaObjectInterface] @relation(name: "ENCODING", direction: "IN")
   "https://schema.org/encodingFormat"
@@ -149,57 +133,36 @@ interface CreativeWorkInterface {
   headline: String
   "https://schema.org/inLanguage"
   inLanguage: String
-  #interactionStatistic
-  #interactivityType
   "https://schema.org/isBasedOn"
   isBasedOn: [CreativeWorkInterface] @relation(name: "IS_BASED_ON", direction: "OUT")
-  #isFamilyFriendly: Boolean
   "https://schema.org/isPartOf"
   isPartOf: CreativeWorkInterface @relation(name: "HAS_PART", direction: "IN")
   "https://schema.org/keywords"
   keywords: String
-  #learningResourceType: String
   "https://schema.org/license"
   license: URL
-  #locationCreated
   "https://schema.org/mainEntity"
   mainEntity: ThingInterface @relation(name: "MAIN_ENTITY", direction: "OUT")
-  #material
   "https://schema.org/mentions"
   mentions: [ThingInterface] @relation(name: "MENTIONS", direction: "OUT")
-  #offers:
   "https://schema.org/position"
   position: Int
   "https://schema.org/producer"
   producer: [LegalPersonInterface] @relation(name: "PRODUCER", direction: "IN")
-  #provider:
-  #publication:
   "https://schema.org/publisher"
   schema_publisher: [Organization] @relation(name: "PUBLISHER", direction: "IN")
-  #publisherImprint: OrganizationInterface
   "https://schema.org/publishingPrinciples"
   publishingPrinciples: URL
   "https://schema.org/recordedAt"
   recordedAt: Event @relation(name: "RECORDED_AT", direction: "OUT")
-  #releasedEvent:
-  #review:
-  #schemaVersion:
-  #sdDatePublished:
-  #sdLicense:
-  #sdPublisher:
   "https://schema.org/sourceOrganization"
   sourceOrganization: Organization @relation(name: "SOURCE_ORGANIZATION", direction: "IN")
-  #spatialCoverage:
-  #sponsor:
-  #temporalCoverage:
   "https://schema.org/text"
   text: String
   "https://schema.org/thumbnailUrl"
   thumbnailUrl: URL
-  #timeRequired:
   "https://schema.org/translator"
   translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: "IN")
-  #typicalAgeRange:
   "https://schema.org/version"
   version: String
   "https://schema.org/video"

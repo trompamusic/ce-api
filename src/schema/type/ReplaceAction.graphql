@@ -37,20 +37,15 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   created: String
   "http://purl.org/dc/terms/modified"
   modified: String
+
   ########################
   ### ThingInterface properties ###
-  "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
-  identifier: ID
   "https://schema.org/additionalType"
   additionalType: [String]
   "https://schema.org/additionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
-  "http://purl.org/dc/terms/description,https://schema.org/description"
-  description: String
-  "https://schema.org/disambiguatingDescription"
-  disambiguatingDescription: String
   "https://schema.org/image"
   image: URL
   "https://schema.org/mainEntityOfPage"
@@ -65,6 +60,20 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [ActionInterface]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [ActionInterface]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [ActionInterface]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [ActionInterface]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -75,6 +84,7 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ##############################################
   ### ProvenanceActivityInterface properties ###
   "http://www.w3.org/ns/prov#startedAtTime"
@@ -83,6 +93,7 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
   "http://www.w3.org/ns/prov#endedAtTime"
   endedAtTime: _Neo4jDateTime
+
   ##################################
   ### ActionInterface properties ###
   "https://schema.org/actionStatus"
@@ -107,10 +118,12 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
   #target: EntryPoint
+
   ###############################
   ### UpdateAction properties ###
   "https://schema.org/targetCollection"
   targetCollection: [ThingInterface] @relation(name: "TARGET_COLLECTION", direction: "OUT")
+
   ################################
   ### ReplaceAction properties ###
   "https://schema.org/replacee"

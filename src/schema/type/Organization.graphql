@@ -37,9 +37,11 @@ type Organization implements SearchableInterface & ThingInterface & ProvenanceEn
   created: String
   "http://purl.org/dc/terms/modified"
   modified: String
+
   ####################################
   ### SearchableInterface property ###
   _searchScore: Float
+
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -62,18 +64,20 @@ type Organization implements SearchableInterface & ThingInterface & ProvenanceEn
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [Organization]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  broadMatch: [LegalPersonInterface]  @relation(name: "BROAD_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [Organization]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  closeMatch: [LegalPersonInterface]  @relation(name: "CLOSE_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [Organization]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  exactMatch: [LegalPersonInterface]  @relation(name: "EXACT_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [Organization]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  narrowMatch: [LegalPersonInterface]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -84,12 +88,14 @@ type Organization implements SearchableInterface & ThingInterface & ProvenanceEn
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ###########################################
   ### ProvenanceAgentInterface properties ###
   "http://www.w3.org/ns/prov#wasAssociatedWith"
   wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "http://www.w3.org/ns/prov#actedOnBehalfOf"
   actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+
   ###############################
   ### Organization properties ###
   #actionableFeedbackPolicy

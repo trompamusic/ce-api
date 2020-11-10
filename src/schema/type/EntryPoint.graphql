@@ -37,9 +37,11 @@ type EntryPoint implements ThingInterface & ProvenanceEntityInterface {
   created: String
   "http://purl.org/dc/terms/modified"
   modified: String
+
   ####################################
   ### SearchableInterface property ###
   _searchScore: Float
+
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -62,6 +64,7 @@ type EntryPoint implements ThingInterface & ProvenanceEntityInterface {
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -72,6 +75,7 @@ type EntryPoint implements ThingInterface & ProvenanceEntityInterface {
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ### EntryPoint properties ###
   #############################
   "https://schema.org/actionApplication"
