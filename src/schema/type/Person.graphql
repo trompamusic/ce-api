@@ -1,4 +1,4 @@
-"https://schema.org/Person,http://www.w3.org/ns/prov#Agent"
+"https://schema.org/Person,http://purl.org/dc/terms/Agent,http://www.w3.org/ns/prov#Agent"
 type Person implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & LegalPersonInterface & PerformerInterface {
   ### Metadata properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
