@@ -1,37 +1,37 @@
 "https://schema.org/AudioObject,http://purl.org/ontology/mo/AudioFile"
 type AudioObject implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & CreativeWorkInterface & MediaObjectInterface {
   ### Metadata properties ###
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
-  "http://purl.org/dc/elements/1.1/contributor,https://schema.org/contributor"
+  "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
   contributor: String!
-  "http://purl.org/dc/elements/1.1/coverage"
+  "http://purl.org/dc/terms/coverage"
   coverage: String
-  "http://purl.org/dc/elements/1.1/creator"
+  "http://purl.org/dc/terms/creator"
   creator: String!
-  "http://purl.org/dc/elements/1.1/date"
+  "http://purl.org/dc/terms/date"
   date: _Neo4jDate
-  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  "http://purl.org/dc/terms/description,https://schema.org/description"
   description: String
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
-  "http://purl.org/dc/elements/1.1/format"
+  "http://purl.org/dc/terms/format"
   format: String!
-  "http://purl.org/dc/elements/1.1/language"
+  "http://purl.org/dc/terms/language"
   language: AvailableLanguage
-  "http://purl.org/dc/elements/1.1/publisher"
+  "http://purl.org/dc/terms/publisher"
   publisher: String
-  "http://purl.org/dc/elements/1.1/relation"
+  "http://purl.org/dc/terms/relation"
   relation: String
-  "http://purl.org/dc/elements/1.1/rights"
+  "http://purl.org/dc/terms/rights"
   rights: String
-  "http://purl.org/dc/elements/1.1/source"
+  "http://purl.org/dc/terms/source"
   source: String!
-  "http://purl.org/dc/elements/1.1/subject"
+  "http://purl.org/dc/terms/subject"
   subject: String
-  "http://purl.org/dc/elements/1.1/title"
+  "http://purl.org/dc/terms/title"
   title: String
-  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
   ####################################
   ### SearchableInterface property ###

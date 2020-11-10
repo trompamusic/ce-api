@@ -1,13 +1,13 @@
 "https://schema.org/PropertyValueSpecification"
 type PropertyValueSpecification implements ThingInterface {
   ### Metadata properties ###
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
-  "http://purl.org/dc/elements/1.1/title"
+  "http://purl.org/dc/terms/title"
   title: String
-  "http://purl.org/dc/elements/1.1/type,https://www.w3.org/2000/01/rdf-schema#type"
+  "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
-  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  "http://purl.org/dc/terms/description,https://schema.org/description"
   description: String
   #################################
   ### ThingInterface properties ###

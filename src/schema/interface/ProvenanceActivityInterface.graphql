@@ -1,6 +1,6 @@
 "http://www.w3.org/ns/prov#Activity"
 interface ProvenanceActivityInterface {
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://www.w3.org/ns/prov#startedAtTime"
   startedAtTime: _Neo4jDateTime

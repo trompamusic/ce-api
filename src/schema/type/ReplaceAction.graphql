@@ -2,7 +2,7 @@
 type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntityInterface & ProvenanceActivityInterface {
   ########################
   ### ThingInterface properties ###
-  "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
+  "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "https://schema.org/additionalType"
   additionalType: [String]
@@ -10,7 +10,7 @@ type ReplaceAction implements ThingInterface & ActionInterface & ProvenanceEntit
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
   "https://schema.org/alternateName"
   alternateName: String
-  "http://purl.org/dc/elements/1.1/description,https://schema.org/description"
+  "http://purl.org/dc/terms/description,https://schema.org/description"
   description: String
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
