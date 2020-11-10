@@ -16,16 +16,6 @@ The easiest way to start the CE API including a Neo4j database, is by using Dock
 docker-compose up --build
 ```
 
-#### Search indexes
-
-In order to enable Neo4j search queries, we need to create a node index. Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
-
-```
-CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
-```
-
-TODO: this should be added to the startup process eventually.
-
 ## Development
 
 #### System requirements
@@ -51,19 +41,11 @@ Set your Neo4j connection credentials in your environment variables. For example
 export NEO4J_URI="bolt://127.0.0.1:7687"
 export NEO4J_USER="neo4j"
 export NEO4J_PASSWORD="letmein"
-export GRAPHQL_LISTEN_PORT=4000
-export GRAPHQL_URI="http://localhost:4000"
 ```
 
 #### Neo4j instance:
 
 Download and install [Neo4j Desktop](https://neo4j.com/download/). Follow the [manual](https://neo4j.com/developer/neo4j-desktop/#_installing_and_starting_neo4j_desktop) to create a new database using the example configuration values.
-
-Run the following Cypher query after the Neo4j instance has started in the Neo4j Browser (http://localhost:7474/browser/):
-
-```
-CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person','CreativeWork','Article','DigitalDocument','MediaObject','Review','AudioObject','DataDownload','Dataset','ImageObject','MusicComposition','MusicPlaylist','MusicRecording','VideoObject','Event','Organization','MusicGroup','Product','Place'],['title','creator','description','subject'],{eventually_consistent:true, analyzer:'english'})
-```
 
 #### Start the GraphQL service:
 
