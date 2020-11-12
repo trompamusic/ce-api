@@ -16,7 +16,7 @@ class SearchQuery {
    */
   get query () {
     return [
-      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateIndexQueryClause(this._generateSubStringClause())}")`,
+      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateQueryClause()}")`,
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
       `RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: \`score\` }`,
@@ -27,43 +27,53 @@ class SearchQuery {
   }
 
   /**
+   * @param field
+   * @returns {string}
+   * @private
+   */
+  _generateFieldSubStringClause (field) {
+    // empty substring
+    if (!this.params.substring) {
+      return `${field}:/.*/`
+    }
+
+    const subString = this.params.substring.replace(/[^A-Za-z0-9]/g, '')
+
+    // prepare search substring
+    return `${field}:'/${subString}.*/' OR ${field}:'${subString}~'`
+  }
+
+  /**
    * @returns {string}
    * @private
    */
   _generateSubStringClause () {
     // empty substring
     if (!this.params.substring) {
-      return '/.*/'
+      return `/.*/`
     }
+
+    const subString = this.params.substring.replace(/[^A-Za-z0-9\s]/g, '')
 
     // prepare search substring
-    let subStringClause = `${this.params.substring.replace(/[^A-Za-z0-9]/g, ' ')}~`
-
-    if (subStringClause.includes(' ')) {
-      subStringClause = `'${subStringClause}'`
-    }
-
-    return subStringClause
+    return `'/${subString}.*/' OR '${subString}~'`
   }
 
   /**
-   * @param subStringClause
    * @returns {*|string}
    * @private
    */
-  _generateIndexQueryClause (subStringClause) {
+  _generateQueryClause () {
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
-    let indexQueryClause = subStringClause
     if (this.doEvaluateFieldSubset) {
       const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => { return field.name })
-      let queryClauses = []
-      fieldNames.map(field => {
-        queryClauses.push(`${field}:${subStringClause}`)
-      })
-      indexQueryClause = queryClauses.join(' OR ')
+
+      return fieldNames
+        .map(field => this._generateFieldSubStringClause(field))
+        .join(' OR ')
     }
 
-    return indexQueryClause
+    return this._generateSubStringClause()
   }
 
   /**
