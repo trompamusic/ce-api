@@ -1,3 +1,19 @@
+## 1.1.0 (2020-11-12)
+
+* feat(project): run Neo4j migrations before starting the server ([b05622e](https://github.com/trompamusic/ce-api/commit/b05622e))
+* feat(project): update dc terms and rdf urls ([7b88001](https://github.com/trompamusic/ce-api/commit/7b88001))
+* feat(schema): add dc terms Agent to Person type ([b8da7b2](https://github.com/trompamusic/ce-api/commit/b8da7b2)), closes [#111](https://github.com/trompamusic/ce-api/issues/111)
+* feat(schema): allow creator and endTime properties in RequestControlAction ([b1a4453](https://github.com/trompamusic/ce-api/commit/b1a4453))
+* feat(schema): remove pending from subjectOf and url ([2cfb886](https://github.com/trompamusic/ce-api/commit/2cfb886))
+* feat(search): improve the search algorithm ([d638f2c](https://github.com/trompamusic/ce-api/commit/d638f2c))
+* fix(project): fix migrations failing due to Cypher issues ([1529872](https://github.com/trompamusic/ce-api/commit/1529872))
+* fix(project): fix mixed schema/data migrations not working ([b4dbb27](https://github.com/trompamusic/ce-api/commit/b4dbb27))
+* fix(schema): make isPartOf the inverse of hasPart ([e3f92bd](https://github.com/trompamusic/ce-api/commit/e3f92bd))
+* chore(project): remove debug line ([b5baf60](https://github.com/trompamusic/ce-api/commit/b5baf60))
+* chore(project): remove unused import ([ef7fc3f](https://github.com/trompamusic/ce-api/commit/ef7fc3f))
+
+
+
 ## 1.0.0 (2020-04-21)
 
 * fix: add necessary labels to requested ControlActions ([d5fbe57](https://github.com/trompamusic/ce-api/commit/d5fbe57))
