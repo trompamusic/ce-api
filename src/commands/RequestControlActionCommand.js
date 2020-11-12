@@ -207,6 +207,10 @@ class RequestControlActionCommand {
         return (typeof properties[key] !== 'object' && !['identifier', '_schemaType'].includes(key))
       })
       .map(key => {
+        if (key === 'endTime') {
+          return `\`${key}\`: datetime("${potentialActionProps[key] || properties[key]}")`
+        }
+
         return `\`${key}\`:"${potentialActionProps[key] || properties[key]}"`
       })
       .join(', ')
