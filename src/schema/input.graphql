@@ -11,6 +11,8 @@ input PotentialActionInput {
   title: String
   description: String
   url: String
+  creator: String
+  endTime: String
 }
 
 input PropertyValueInput {
