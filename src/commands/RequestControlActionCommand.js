@@ -227,7 +227,7 @@ class RequestControlActionCommand {
       `\`propertyID\`:"${templateProperty.identifier}"`,
       `\`description\`:"${templateProperty.description}"`,
       `\`title\`:"${templateProperty.title}"`,
-      `\`name\`:"${templateProperty.title}"`,
+      `\`name\`:"${templateProperty.name}"`,
       `\`valueReference\`:"${requestProperty.nodeType}"`
     ]
 
