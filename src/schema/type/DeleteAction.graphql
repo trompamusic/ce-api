@@ -24,10 +24,57 @@ type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntity
   potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
   sameAs: URL
-  "https://schema.org/subjectOf"
+  "https://pending.schema.org/subjectOf"
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
-  "https://schema.org/url"
+  "https://pending.schema.org/url"
   url: URL
+
+  ########################
+  ### MetadataInterface properties ###
+  "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
+  contributor: String
+  "http://purl.org/dc/terms/coverage"
+  coverage: String
+  "http://purl.org/dc/terms/creator"
+  creator: String
+  "http://purl.org/dc/terms/date"
+  date: _Neo4jDate
+  "http://purl.org/dc/terms/format"
+  format: String
+  "http://purl.org/dc/terms/language"
+  language: AvailableLanguage
+  "http://purl.org/dc/terms/publisher,https://schema.org/publisher"
+  publisher: String
+  "http://purl.org/dc/terms/relation"
+  relation: String
+  "http://purl.org/dc/terms/rights"
+  rights: String
+  "http://purl.org/dc/terms/source"
+  source: String
+  "http://purl.org/dc/terms/subject"
+  subject: String
+  "http://purl.org/dc/terms/title"
+  title: String
+  "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+  type: String
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
+
+  #######################
+  ### SKOS properties ###
+  "http://www.w3.org/2004/02/skos/core#broadMatch"
+  broadMatch: [ActionInterface]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#closeMatch"
+  closeMatch: [ActionInterface]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#exactMatch"
+  exactMatch: [ActionInterface]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#narrowMatch"
+  narrowMatch: [ActionInterface]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  "http://www.w3.org/2004/02/skos/core#relatedMatch"
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -38,6 +85,7 @@ type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntity
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ##############################################
   ### ProvenanceActivityInterface properties ###
   "http://www.w3.org/ns/prov#startedAtTime"
@@ -46,6 +94,7 @@ type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntity
   wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
   "http://www.w3.org/ns/prov#endedAtTime"
   endedAtTime: _Neo4jDateTime
+
   ##################################
   ### ActionInterface properties ###
   "https://schema.org/actionStatus"
@@ -70,6 +119,7 @@ type DeleteAction implements ThingInterface & ActionInterface & ProvenanceEntity
   startTime: _Neo4jDateTime
   #"https://schema.org/EntryPoint"
   #target: EntryPoint
+
   ###############################
   ### UpdateAction properties ###
   "https://schema.org/targetCollection"

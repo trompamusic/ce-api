@@ -1,4 +1,4 @@
 type Query {
   personBySubstring(substring: String!): [Person] @cypher(statement: "MATCH (p:Person) WHERE p.name CONTAINS $substring RETURN p")
-  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [MetadataInterfaceType], offset: Int = 0, first: Int = -1): [MetadataInterface]
+  searchMetadataText(substring: String!, onFields: [SearchableMetadataFields], onTypes: [SearchableInterfaceType], offset: Int = 0, first: Int = -1): [SearchableInterface]
 }

@@ -5,6 +5,32 @@ enum LegalPersonType {
   MusicGroup
 }
 
+
+# TODO auto generate
+enum SearchableInterfaceType {
+  Action
+  Article
+  AudioObject
+  DataDownload
+  Dataset
+  DigitalDocument
+  Event
+  ImageObject
+  MediaObject
+  MusicAlbum
+  MusicComposition
+  MusicGroup
+  MusicPlaylist
+  MusicRecording
+  Organization
+  Person
+  Place
+  Product
+  Review
+  SoftwareApplication
+  VideoObject
+}
+
 # TODO auto generate
 enum ThingInterfaceType {
   Person
@@ -40,30 +66,6 @@ enum ThingInterfaceType {
   Property
   PropertyValue
   PropertyValueSpecification
-}
-
-# TODO auto generate
-enum MetadataInterfaceType {
-  Action
-  Person
-  CreativeWork
-  Article
-  DigitalDocument
-  MediaObject
-  Review
-  AudioObject
-  DataDownload
-  Dataset
-  ImageObject
-  MusicComposition
-  MusicPlaylist
-  MusicRecording
-  VideoObject
-  Event
-  Organization
-  MusicGroup
-  Product
-  Place
 }
 
 # TODO auto generate

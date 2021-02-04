@@ -1,14 +1,14 @@
 "https://schema.org/Organization,http://www.w3.org/ns/prov#Agent"
-type Organization implements MetadataInterface & SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface {
+type Organization implements SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & OrganizationInterface & LegalPersonInterface {
   ### Metadata properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
-  contributor: String!
+  contributor: String
   "http://purl.org/dc/terms/coverage"
   coverage: String
   "http://purl.org/dc/terms/creator"
-  creator: String!
+  creator: String
   "http://purl.org/dc/terms/date"
   date: _Neo4jDate
   "http://purl.org/dc/terms/description,https://schema.org/description"
@@ -16,7 +16,7 @@ type Organization implements MetadataInterface & SearchableInterface & ThingInte
   "https://schema.org/disambiguatingDescription"
   disambiguatingDescription: String
   "http://purl.org/dc/terms/format"
-  format: String!
+  format: String
   "http://purl.org/dc/terms/language"
   language: AvailableLanguage
   "http://purl.org/dc/terms/publisher"
@@ -26,16 +26,22 @@ type Organization implements MetadataInterface & SearchableInterface & ThingInte
   "http://purl.org/dc/terms/rights"
   rights: String
   "http://purl.org/dc/terms/source"
-  source: String!
+  source: String
   "http://purl.org/dc/terms/subject"
   subject: String
   "http://purl.org/dc/terms/title"
   title: String
   "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
+  "http://purl.org/dc/terms/created"
+  created: String
+  "http://purl.org/dc/terms/modified"
+  modified: String
+
   ####################################
   ### SearchableInterface property ###
   _searchScore: Float
+
   ########################
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
@@ -58,18 +64,20 @@ type Organization implements MetadataInterface & SearchableInterface & ThingInte
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
   url: URL
+
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [Organization]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  broadMatch: [LegalPersonInterface]  @relation(name: "BROAD_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [Organization]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  closeMatch: [LegalPersonInterface]  @relation(name: "CLOSE_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [Organization]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  exactMatch: [LegalPersonInterface]  @relation(name: "EXACT_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [Organization]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  narrowMatch: [LegalPersonInterface]  @relation(name: "NARROW_MATCH", direction: "OUT")
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
@@ -80,12 +88,14 @@ type Organization implements MetadataInterface & SearchableInterface & ThingInte
   wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+
   ###########################################
   ### ProvenanceAgentInterface properties ###
   "http://www.w3.org/ns/prov#wasAssociatedWith"
   wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
   "http://www.w3.org/ns/prov#actedOnBehalfOf"
   actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+
   ###############################
   ### Organization properties ###
   #actionableFeedbackPolicy
