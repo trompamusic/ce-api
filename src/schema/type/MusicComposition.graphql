@@ -210,6 +210,10 @@ type MusicComposition implements MetadataInterface & SearchableInterface & Thing
   video: [VideoObject] @relation(name: "VIDEO", direction: "OUT")
   "https://schema.org/workExample"
   workExample: [CreativeWorkInterface] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
+  "https://schema.org/workExample"
+  workExampleMediaObject: [MediaObject] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
+  "https://schema.org/workExample"
+  workExampleAudioObject: [AudioObject] @relation(name: "EXAMPLE_OF_WORK", direction: "IN")
   "https://bib.schema.org/workTranslation"
   workTranslation: [CreativeWorkInterface] @relation(name: "WORK_TRANSLATION", direction: "OUT")
   #######################################
