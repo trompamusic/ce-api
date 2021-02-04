@@ -220,7 +220,6 @@ enum ValuePattern {
   Int
   Float
   Boolean
-  URL
   Duration
   _Neo4jDate
   _Neo4jDateTime
@@ -261,7 +260,6 @@ enum ValueReference {
   Int
   Float
   Boolean
-  URL
   Duration
   _Neo4jDate
   _Neo4jDateTime
@@ -312,7 +310,6 @@ enum ValidAdditionalPropertyNodeValueType {
   Int
   Float
   Boolean
-  URL
   Duration
   _Neo4jDate
   _Neo4jDateTime

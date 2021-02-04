@@ -51,7 +51,7 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/alternateName"
   alternateName: String
   "https://schema.org/image"
-  image: URL
+  image: String
   "https://schema.org/mainEntityOfPage"
   mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
   "https://schema.org/name"
@@ -59,11 +59,11 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/potentialAction"
   potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
   "https://schema.org/sameAs"
-  sameAs: URL
+  sameAs: String
   "https://schema.org/subjectOf"
   subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
   "https://schema.org/url"
-  url: URL
+  url: String
 
   #######################
   ### SKOS properties ###
@@ -144,7 +144,7 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/keywords"
   keywords: String
   "https://schema.org/license"
-  license: URL
+  license: String
   "https://schema.org/mainEntity"
   mainEntity: ThingInterface @relation(name: "MAIN_ENTITY", direction: "OUT")
   "https://schema.org/mentions"
@@ -156,7 +156,7 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/publisher"
   schema_publisher: [Organization] @relation(name: "PUBLISHER", direction: "IN")
   "https://schema.org/publishingPrinciples"
-  publishingPrinciples: URL
+  publishingPrinciples: String
   "https://schema.org/recordedAt"
   recordedAt: Event @relation(name: "RECORDED_AT", direction: "OUT")
   "https://schema.org/sourceOrganization"
@@ -164,7 +164,7 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/text"
   text: String
   "https://schema.org/thumbnailUrl"
-  thumbnailUrl: URL
+  thumbnailUrl: String
   "https://schema.org/translator"
   translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: "IN")
   "https://schema.org/version"
@@ -185,11 +185,11 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   "https://schema.org/contentSize"
   contentSize: String
   "https://schema.org/contentUrl"
-  contentUrl: URL
+  contentUrl: String
   "https://schema.org/duration"
   duration: Duration
   "https://schema.org/embedUrl"
-  embedUrl: URL
+  embedUrl: String
   "https://schema.org/encodesCreativeWork"
   encodesCreativeWork: [CreativeWorkInterface] @relation(name: "ENCODES_CREATIVE_WORK", direction: "OUT")
   "https://schema.org/height"
