@@ -7,7 +7,7 @@ class SearchQuery {
     this.params = params
     this.resolveInfo = resolveInfo
 
-    this.doEvaluateTypeSubset = !(!(this.params.onTypes instanceof Array) || this.params.onTypes.length === 0 || this.params.onTypes.length === this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.length)
+    this.doEvaluateTypeSubset = !(!(this.params.onTypes instanceof Array) || this.params.onTypes.length === 0 || this.params.onTypes.length === this.resolveInfo.schema._typeMap.SearchableInterfaceType._values.length)
     this.doEvaluateFieldSubset = !(!(this.params.onFields instanceof Array) || this.params.onFields.length === 0 || this.params.onFields.length === this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.length)
   }
 
@@ -84,7 +84,7 @@ class SearchQuery {
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
-      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.MetadataInterfaceType._values.map(type => { return `'${type.name}'` })
+      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.SearchableInterfaceType._values.map(type => { return `'${type.name}'` })
       typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
     }
 
