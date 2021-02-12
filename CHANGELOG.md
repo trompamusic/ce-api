@@ -1,3 +1,18 @@
+## 1.2.0 (2021-02-12)
+
+* fix(search): fix allResults query error ([da7f85f](https://github.com/trompamusic/ce-api/commit/da7f85f))
+* Add EXAMPLE_OF_WORK relations that link directly to Audio/MediaObject ([3d4f9a8](https://github.com/trompamusic/ce-api/commit/3d4f9a8))
+* copy name field from Property to PropertyValue ([17b5798](https://github.com/trompamusic/ce-api/commit/17b5798))
+* Remove custom URL scalar ([8be87f2](https://github.com/trompamusic/ce-api/commit/8be87f2))
+* chore(deps-dev): bump node-fetch from 2.3.0 to 2.6.1 ([2af8452](https://github.com/trompamusic/ce-api/commit/2af8452))
+* chore(deps): bump ini from 1.3.5 to 1.3.8 ([6e0302d](https://github.com/trompamusic/ce-api/commit/6e0302d))
+* chore(schema): fix schema errors and update neo4j-graphql-js ([3214aef](https://github.com/trompamusic/ce-api/commit/3214aef))
+* refactor(schema): use SearchableInterface for searchMetadataText query ([c8003c5](https://github.com/trompamusic/ce-api/commit/c8003c5))
+* feat(project): remove CreativeWork type from schema ([aa9ad2f](https://github.com/trompamusic/ce-api/commit/aa9ad2f))
+* feat(schema): merge Thing and Metadata interface ([084e0f4](https://github.com/trompamusic/ce-api/commit/084e0f4))
+
+
+
 ## 1.1.0 (2020-11-12)
 
 * feat(project): run Neo4j migrations before starting the server ([b05622e](https://github.com/trompamusic/ce-api/commit/b05622e))
