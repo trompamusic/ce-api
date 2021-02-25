@@ -213,4 +213,6 @@ type MusicPlaylist implements SearchableInterface & ThingInterface & ProvenanceE
   numTracks: Int #aggregate from track property
   "https://schema.org/track"
   track: MusicRecording @relation(name: "MUSIC_RECORDING", direction: "OUT")
+  "https://schema.org/track"
+  trackItemList: ItemList @relation(name: "ITEM_LIST", direction: "OUT")
 }
