@@ -1,0 +1,127 @@
+{
+  "head": {
+    "@type": [
+      "https://schema.org/DigitalDocument"
+    ]
+  },
+  "properties": {
+    "identifier": [
+      "http://purl.org/dc/terms/identifier",
+      "https://schema.org/identifier"
+    ],
+    "contributor": [
+      "http://purl.org/dc/terms/contributor",
+      "https://schema.org/contributor"
+    ],
+    "coverage": [
+      "http://purl.org/dc/terms/coverage"
+    ],
+    "creator": [
+      "http://purl.org/dc/terms/creator"
+    ],
+    "date": [
+      "http://purl.org/dc/terms/date"
+    ],
+    "description": [
+      "http://purl.org/dc/terms/description",
+      "https://schema.org/description"
+    ],
+    "disambiguatingDescription": [
+      "https://schema.org/disambiguatingDescription"
+    ],
+    "format": [
+      "http://purl.org/dc/terms/format"
+    ],
+    "language": [
+      "http://purl.org/dc/terms/language"
+    ],
+    "publisher": [
+      "http://purl.org/dc/terms/publisher"
+    ],
+    "relation": [
+      "http://purl.org/dc/terms/relation"
+    ],
+    "rights": [
+      "http://purl.org/dc/terms/rights"
+    ],
+    "source": [
+      "http://purl.org/dc/terms/source"
+    ],
+    "subject": [
+      "http://purl.org/dc/terms/subject"
+    ],
+    "title": [
+      "http://purl.org/dc/terms/title"
+    ],
+    "type": [
+      "http://purl.org/dc/terms/type",
+      "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    ],
+    "created": [
+      "http://purl.org/dc/terms/created"
+    ],
+    "modified": [
+      "http://purl.org/dc/terms/modified"
+    ],
+    "additionalType": [
+      "https://schema.org/additionalType"
+    ],
+    "additionalProperty": [
+      "https://schema.org/additionalProperty"
+    ],
+    "alternateName": [
+      "https://schema.org/alternateName"
+    ],
+    "image": [
+      "https://schema.org/image"
+    ],
+    "mainEntityOfPage": [
+      "https://schema.org/mainEntityOfPage"
+    ],
+    "name": [
+      "https://schema.org/name"
+    ],
+    "potentialAction": [
+      "https://schema.org/potentialAction"
+    ],
+    "sameAs": [
+      "https://schema.org/sameAs"
+    ],
+    "subjectOf": [
+      "https://schema.org/subjectOf"
+    ],
+    "url": [
+      "https://schema.org/url"
+    ],
+    "broadMatch": [
+      "http://www.w3.org/2004/02/skos/core#broadMatch"
+    ],
+    "closeMatch": [
+      "http://www.w3.org/2004/02/skos/core#closeMatch"
+    ],
+    "exactMatch": [
+      "http://www.w3.org/2004/02/skos/core#exactMatch"
+    ],
+    "narrowMatch": [
+      "http://www.w3.org/2004/02/skos/core#narrowMatch"
+    ],
+    "relatedMatch": [
+      "http://www.w3.org/2004/02/skos/core#relatedMatch"
+    ],
+    "occupationLocation": [
+      "https://schema.org/occupationLocation"
+    ],
+    "occupationalCategory": [
+      "https://schema.org/occupationalCategory"
+    ],
+    "qualifications": [
+      "https://schema.org/qualifications"
+    ],
+    "responsibilities": [
+      "https://schema.org/responsibilities"
+    ],
+    "skills": [
+      "https://schema.org/skills"
+    ]
+  }
+}
