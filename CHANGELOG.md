@@ -1,3 +1,14 @@
+## 1.3.0 (2021-02-26)
+
+* chore(MusicPlaylist): rename relation name to be more specific ([e5b7e7c](https://github.com/trompamusic/ce-api/commit/e5b7e7c))
+* feat(project): update dependencies with vulnerabilities ([df1420c](https://github.com/trompamusic/ce-api/commit/df1420c))
+* feat(project): update Docker to use node-14.16.0 ([6959c18](https://github.com/trompamusic/ce-api/commit/6959c18))
+* feat(schema): Align ItemListOrder enum with schema.org values ([ea66dda](https://github.com/trompamusic/ce-api/commit/ea66dda))
+* fix: multiple control actions generated when match query returns multiple items ([2b1de56](https://github.com/trompamusic/ce-api/commit/2b1de56)), closes [#138](https://github.com/trompamusic/ce-api/issues/138)
+* fix(MusicPlaylist): add trackItemList property ([e4e9ebd](https://github.com/trompamusic/ce-api/commit/e4e9ebd))
+
+
+
 ## 1.2.0 (2021-02-12)
 
 * fix(search): fix allResults query error ([da7f85f](https://github.com/trompamusic/ce-api/commit/da7f85f))
