@@ -339,8 +339,7 @@ enum ValidAdditionalPropertyNodeValueType {
 }
 
 enum ItemListOrder {
-  ascending
-  descending
-  unordered
-  ordered
+  ItemListOrderAscending
+  ItemListOrderDescending
+  ItemListUnordered
 }
