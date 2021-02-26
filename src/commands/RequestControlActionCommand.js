@@ -107,7 +107,9 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreateQuery (template, requestInput) {
-    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => { return `\`${object.alias}\`` }).join(', ')}` : ``
+    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => {
+      return `\`${object.alias}\``
+    }).join(', ')}` : ``
     const propertySelections = this._generateMatchPropertyNodes(requestInput)
 
     return [
@@ -172,7 +174,7 @@ class RequestControlActionCommand {
     info(createQuery)
 
     return this.session.run(createQuery)
-    // retrieve ControlAction return
+      // retrieve ControlAction return
       .then(result => {
         const payloads = result.records.map(record => {
           return record.get('_payload')
@@ -182,7 +184,10 @@ class RequestControlActionCommand {
           return Promise.reject(new Error('Failed to create ControlAction'))
         }
         // createdControlAction.entryPointIdentifier = template.identifier
-        pubsub.publish('ControlActionRequest', { ControlActionRequest: createdControlAction, entryPointIdentifier: template.identifier })
+        pubsub.publish('ControlActionRequest', {
+          ControlActionRequest: createdControlAction,
+          entryPointIdentifier: template.identifier
+        })
         pubsub.publish('ThingCreateMutation', { identifier: createdControlAction.identifier, type: 'ControlAction' })
 
         return createdControlAction
@@ -293,36 +298,42 @@ class RequestControlActionCommand {
       switch (templateProperty._schemaType) {
         case 'Property':
           // find matching property in requestInput
-          let matchingRequestProperty = false
-          requestInput.propertyObject.map(requestProperty => {
-            if (requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier) {
-              matchingRequestProperty = requestProperty
-              return true
-            }
-            return false
+          const matchingRequestProperty = requestInput.propertyObject.find(requestProperty => {
+            return requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
           })
+
           if (!matchingRequestProperty) {
             throw Error('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           // compose PropertyValue clause
           return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestProperty.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})`
         case 'PropertyValueSpecification':
-          let matchingRequestPropertyValue = false
-          requestInput.propertyValueObject.map(requestPropertyValue => {
-            if (requestPropertyValue.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier) {
-              matchingRequestPropertyValue = requestPropertyValue
-              return true
-            }
-            return false
+          const matchingRequestPropertyValue = requestInput.propertyValueObject.find(requestPropertyValue => {
+            return requestPropertyValue.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier
           })
+
           // compose PropertyValue clause
           if (typeof matchingRequestPropertyValue === 'object') {
+            const valuesClause = this._composeControlActionPropertyValueClause(templateProperty, matchingRequestPropertyValue)
+
             // compose PropertyValue clause
-            return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestPropertyValue.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyValueClause(templateProperty, matchingRequestPropertyValue)}})`
+            return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestPropertyValue.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
           }
+
           // throw error if this property is required
           if (templateProperty.valueRequired === true) {
             throw Error('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
+          }
+
+          // use the default value if given in the template PropertyValue
+          if (typeof templateProperty.defaultValue !== 'undefined') {
+            const valuesClause = this._composeControlActionPropertyValueClause(templateProperty, {
+              value: templateProperty.defaultValue,
+              valuePattern: templateProperty.valuePattern
+            })
+
+            // use a random PropertyValue alias, we are not referring to it
+            return `(\`controlAction\`)${objectRelationClause}(\`propertyValue_${Math.round(Math.random() * 100)}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
           }
           return
         default:
