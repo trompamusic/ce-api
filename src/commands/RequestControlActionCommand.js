@@ -1,52 +1,57 @@
+import { UserInputError } from 'apollo-server'
 import { info, warning } from '../utils/logger'
 import QueryHelper from '../helpers/QueryHelper'
-import { driver } from '../driver'
-import { pubsub } from '../resolvers'
 
 class RequestControlActionCommand {
   /**
    * @param params
-   * @param resolveInfo
+   * @param selectionSet
+   * @param session
+   * @param pubsub
    */
-  constructor (params, resolveInfo) {
+  constructor (params, selectionSet, session, pubsub) {
     this.params = params
-    this.resolveInfo = resolveInfo
-    this.session = driver.session()
+    this.selectionSet = selectionSet
+    this.session = session
+    this.pubsub = pubsub
     this.queryHelper = new QueryHelper()
   }
 
   /**
-   * @returns {Promise<StatementResult | never>}
+   * @returns {Promise}
    */
-  get create () {
+  async perform () {
+    // obtain the request input
     const requestInput = this._retrieveRequestInput()
+
+    // get template data from Neo4j DB
+    const template = await this._getTemplateData(requestInput)
+
+    // validate the request input against the template data
+    this._validateRequestInput(template, requestInput)
+
+    // create the ControlAction and relations
+    return this._createControlAction(template, requestInput)
+  }
+
+  /**
+   * @param requestInput
+   * @return {Promise<{identifier}|any>}
+   * @private
+   */
+  async _getTemplateData (requestInput) {
     const entryPointQuery = this._generateTemplateQuery(requestInput)
     info(entryPointQuery)
-    return this.session.run(entryPointQuery)
-      // retrieve template ControlAction
-      .then(result => {
-        const payloads = result.records.map(record => {
-          return record.get('_payload')
-        })
 
-        const template = payloads[0]
-        if (typeof template !== 'object' || typeof template.identifier !== 'string' || template.identifier !== requestInput.entryPointIdentifier) {
-          return Promise.reject(new Error('Template EntryPoint/ControlAction was not found'))
-        }
+    const result = await this.session.run(entryPointQuery)
 
-        return template
-      })
-      // validate request payload against template and create requested ControlAction
-      .then(template => {
-        this._validateRequestInput(template, requestInput)
+    const template = result && result.records[0].get('_payload')
 
-        return this._createControlAction(template, requestInput)
-      }, reason => {
-        throw reason
-      })
-      .catch(function (error) {
-        throw Error(error.toString())
-      })
+    if (!template || !template.identifier || template.identifier !== requestInput.entryPointIdentifier) {
+      throw new UserInputError('Template EntryPoint/ControlAction was not found')
+    }
+
+    return template
   }
 
   /**
@@ -55,29 +60,30 @@ class RequestControlActionCommand {
    */
   _retrieveRequestInput () {
     const requestInput = this.params.controlAction
-    if (typeof requestInput !== 'object' || typeof requestInput.entryPointIdentifier !== 'string' || typeof requestInput.potentialActionIdentifier !== 'string') {
-      throw Error('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
+
+    if (!requestInput || !requestInput.entryPointIdentifier || !requestInput.potentialActionIdentifier) {
+      throw new UserInputError('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
     }
 
-    let nodeCounter = 1
+    let count = 1
+
     // hydrate propertyObject aliases
     if (Array.isArray(requestInput.propertyObject)) {
-      requestInput.propertyObject = requestInput.propertyObject.map(node => {
-        node.alias = `node_${nodeCounter}`
-        node.propertyValueAlias = `propertyValue_${nodeCounter}`
-        nodeCounter++
+      requestInput.propertyObject = requestInput.propertyObject.map((node, index) => ({
+        ...node,
+        alias: `node_${index + count}`,
+        propertyValueAlias: `propertyValue_${index + count}`
+      }))
 
-        return node
-      })
+      count += requestInput.propertyObject.length
     }
+
     // hydrate propertyValueObject aliases
     if (Array.isArray(requestInput.propertyValueObject)) {
-      requestInput.propertyValueObject = requestInput.propertyValueObject.map(node => {
-        node.propertyValueAlias = `propertyValue_${nodeCounter}`
-        nodeCounter++
-
-        return node
-      })
+      requestInput.propertyValueObject = requestInput.propertyValueObject.map((node, index) => ({
+        ...node,
+        propertyValueAlias: `propertyValue_${index + count}`
+      }))
     }
 
     return requestInput
@@ -107,7 +113,9 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreateQuery (template, requestInput) {
-    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => { return `\`${object.alias}\`` }).join(', ')}` : ``
+    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => {
+      return `\`${object.alias}\``
+    }).join(', ')}` : ``
     const propertySelections = this._generateMatchPropertyNodes(requestInput)
 
     return [
@@ -142,7 +150,7 @@ class RequestControlActionCommand {
     })
 
     if (requestPropertyValidity.includes(false)) {
-      throw Error('Request error: one or more passed propertyObjects do not match potential action properties')
+      throw new UserInputError('Request error: one or more passed propertyObjects do not match potential action properties')
     }
 
     // check request propertyObjects against template properties
@@ -155,7 +163,7 @@ class RequestControlActionCommand {
     })
 
     if (requestPropertyValueValidity.includes(false)) {
-      throw Error('Request error: one or more passed propertyValueObjects do not match potential action properties')
+      throw new UserInputError('Request error: one or more passed propertyValueObjects do not match potential action properties')
     }
 
     return true
@@ -164,32 +172,34 @@ class RequestControlActionCommand {
   /**
    * @param template
    * @param requestInput
-   * @returns {Promise<StatementResult | never>}
+   * @returns {Promise}
    * @private
    */
-  _createControlAction (template, requestInput) {
+  async _createControlAction (template, requestInput) {
     const createQuery = this._generateCreateQuery(template, requestInput)
     info(createQuery)
 
-    return this.session.run(createQuery)
-    // retrieve ControlAction return
-      .then(result => {
-        const payloads = result.records.map(record => {
-          return record.get('_payload')
-        })
-        const createdControlAction = payloads[0]
-        if (typeof createdControlAction !== 'object') {
-          return Promise.reject(new Error('Failed to create ControlAction'))
-        }
-        // createdControlAction.entryPointIdentifier = template.identifier
-        pubsub.publish('ControlActionRequest', { ControlActionRequest: createdControlAction, entryPointIdentifier: template.identifier })
-        pubsub.publish('ThingCreateMutation', { identifier: createdControlAction.identifier, type: 'ControlAction' })
+    const result = await this.session.run(createQuery)
 
-        return createdControlAction
-      })
-      .catch(function (error) {
-        throw Error(error.toString())
-      })
+    const payloads = result && result.records.map(record => {
+      return record.get('_payload')
+    })
+
+    const createdControlAction = payloads && payloads[0]
+
+    if (!createdControlAction) {
+      throw new Error('Failed to create ControlAction')
+    }
+
+    // createdControlAction.entryPointIdentifier = template.identifier
+    this.pubsub.publish('ControlActionRequest', {
+      ControlActionRequest: createdControlAction,
+      entryPointIdentifier: template.identifier
+    })
+
+    this.pubsub.publish('ThingCreateMutation', { identifier: createdControlAction.identifier, type: 'ControlAction' })
+
+    return createdControlAction
   }
 
   /**
@@ -302,7 +312,7 @@ class RequestControlActionCommand {
             return false
           })
           if (!matchingRequestProperty) {
-            throw Error('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
+            throw new UserInputError('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           // compose PropertyValue clause
           return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestProperty.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})`
@@ -322,7 +332,7 @@ class RequestControlActionCommand {
           }
           // throw error if this property is required
           if (templateProperty.valueRequired === true) {
-            throw Error('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
+            throw new UserInputError('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           return
         default:
@@ -362,7 +372,7 @@ class RequestControlActionCommand {
   _generateReturnClause (template, requestInput) {
     let segments = [
       `RETURN \`controlAction\` {`,
-      this.queryHelper.selectedPropertiesClause('ControlAction', 'controlAction', this.resolveInfo.fieldNodes[0].selectionSet),
+      this.queryHelper.selectedPropertiesClause('ControlAction', 'controlAction', this.selectionSet),
       `} AS _payload`
     ]
 

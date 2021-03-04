@@ -1,0 +1,40 @@
+{
+  "controlAction": {
+    "potentialActionIdentifier": "1883f5f6-2359-48e6-83bd-f665dc151b7f",
+    "entryPointIdentifier": "d3c4b30a-a013-4465-8431-7283a907bef7",
+    "propertyObject": [
+      {
+        "nodeIdentifier": "9ce11f4f-ed5b-43b0-ab07-d9299d6ad52e",
+        "potentialActionPropertyIdentifier": "22833b28-b02d-4dcc-a05f-43deae0795bd",
+        "nodeType": "DigitalDocument"
+      },
+      {
+        "nodeIdentifier": "b6d351f0-f051-44b7-aa35-6cf93510314c",
+        "potentialActionPropertyIdentifier": "64b32b94-9897-426e-9400-6e2a3ae670c0",
+        "nodeType": "DigitalDocument"
+      }
+    ],
+    "propertyValueObject": [
+      {
+        "value": "ttl",
+        "potentialActionPropertyValueSpecificationIdentifier": "f45c851c-dc5f-4b46-adc5-6614697a3a49",
+        "valuePattern": "String"
+      },
+      {
+        "value": "0",
+        "potentialActionPropertyValueSpecificationIdentifier": "e9c8292b-181e-4b64-87da-05c79ac43a49",
+        "valuePattern": "String"
+      },
+      {
+        "value": "1",
+        "potentialActionPropertyValueSpecificationIdentifier": "a44a6797-4699-4566-b224-b6b06d660d42",
+        "valuePattern": "String"
+      },
+      {
+        "value": "1",
+        "potentialActionPropertyValueSpecificationIdentifier": "c64fccc5-6bd2-4884-b52e-6605533eb59d",
+        "valuePattern": "String"
+      }
+    ]
+  }
+}
