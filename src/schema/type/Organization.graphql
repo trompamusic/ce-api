@@ -141,7 +141,7 @@ type Organization implements SearchableInterface & ThingInterface & ProvenanceEn
   #knowsAbout
   #knowsLanguage
   "https://schema.org/legalName"
-  legalName: String!
+  legalName: String
   "https://schema.org/leiCode"
   leiCode: String
   "https://schema.org/location"
