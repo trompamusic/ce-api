@@ -27,7 +27,7 @@ app.use('/', router)
 // instance into the context object so it is available in the
 // generated resolvers to connect to the database.
 const server = new ApolloServer({
-  schema: schema,
+  schema,
   context: ({ req }) => {
     // make sure the `cookies` property is set (graphql-auth-directive will error if the `cookies` property is
     // undefined for websocket connections)
@@ -48,13 +48,18 @@ server.installSubscriptionHandlers(httpServer)
 // Listen for errors.
 app.on('error', error => debug(error))
 
-// Run migrations
-runMigrations().then(() => {
-  // Start the express and Apollo server
+async function startup () {
+  // Run migrations
+  await runMigrations()
+
+  // Start the http server
   httpServer.listen(SERVER_PORT, SERVER_HOST, () => {
     // Log the server url.
-    console.log(`started server on ${SERVER_HOST}:${SERVER_PORT}`)
+    console.log(`started server on http://${SERVER_HOST}:${SERVER_PORT}`)
   })
-}).catch(() => {
+}
+
+// Startup
+startup().catch(() => {
   console.log('failed to start the server')
 })

@@ -5,7 +5,7 @@ interface ProvenanceActivityInterface {
   "http://www.w3.org/ns/prov#startedAtTime"
   startedAtTime: _Neo4jDateTime
   "http://www.w3.org/ns/prov#wasInformedBy"
-  wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: "OUT")
+  wasInformedBy: [ActionInterface] @relation(name: "WAS_INFORMED_BY", direction: OUT)
   "http://www.w3.org/ns/prov#endedAtTime"
   endedAtTime: _Neo4jDateTime
 }
