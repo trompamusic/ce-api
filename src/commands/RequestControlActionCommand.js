@@ -313,13 +313,8 @@ class RequestControlActionCommand {
             return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestPropertyValue.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
           }
 
-          // throw error if this property is required
-          if (templateProperty.valueRequired === true) {
-            throw new UserInputError('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
-          }
-
           // use the default value if given in the template PropertyValue
-          if (typeof templateProperty.defaultValue !== 'undefined') {
+          if (typeof templateProperty.defaultValue !== 'undefined' && templateProperty.defaultValue !== null) {
             const valuesClause = this._composeControlActionPropertyValueClause(templateProperty, {
               value: templateProperty.defaultValue,
               valuePattern: templateProperty.valuePattern
@@ -327,6 +322,11 @@ class RequestControlActionCommand {
 
             // use a random PropertyValue alias, we are not referring to it
             return `(\`controlAction\`)${objectRelationClause}(\`propertyValue_${Math.round(Math.random() * 100)}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
+          }
+
+          // throw error if this property is required
+          if (templateProperty.valueRequired === true) {
+            throw new UserInputError('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           return
         default:
