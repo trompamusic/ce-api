@@ -37,10 +37,10 @@ class SearchQuery {
       return `${field}:/.*/`
     }
 
-    const subString = this.params.substring.replace(/[^A-Za-z0-9]/g, '')
+    const subString = this.params.substring.replace(/[^A-Za-z0-9.\-\s]/g, '')
 
     // prepare search substring
-    return `${field}:'/${subString}.*/' OR ${field}:'${subString}~'`
+    return `${field}:'${subString}' OR ${field}:'${subString}~'`
   }
 
   /**
@@ -53,10 +53,10 @@ class SearchQuery {
       return `/.*/`
     }
 
-    const subString = this.params.substring.replace(/[^A-Za-z0-9\s]/g, '')
+    const subString = this.params.substring.replace(/[^A-Za-z0-9.\-\s]/g, '')
 
     // prepare search substring
-    return `'/${subString}.*/' OR '${subString}~'`
+    return `'${subString}' OR '${subString}~'`
   }
 
   /**
