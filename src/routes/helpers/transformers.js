@@ -7,7 +7,22 @@ const scopedContexts = {
   dc: 'http://purl.org/dc/terms/',
   prov: 'http://www.w3.org/ns/prov#',
   skos: 'http://www.w3.org/2004/02/skos/core#',
-  rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+  bib: 'https://bib.schema.org/'
+}
+
+/**
+ * Convert the given value to a Person type with either an URL or callSign value
+ * @param value
+ * @return {Object}
+ */
+const convertScalarToPerson = value => {
+  const personProperty = /^https?/.test(value) ? 'url' : 'callSign'
+
+  return {
+    '@type': 'Person',
+    [personProperty]: value
+  }
 }
 
 /**
@@ -18,8 +33,13 @@ const scopedContexts = {
  */
 export const transformJsonLD = (type, data) => {
   const schemaHelper = new SchemaHelper()
-  const schemaTypes = schemaHelper.getTypeDescription(type).split(',')
   const prefixes = Object.keys(scopedContexts)
+
+  const config = require(`./jsonld/${type}.json`)
+
+  if (!config) {
+    throw new Error(`JSON LD not supported for type "${type}"`)
+  }
 
   // Base JSON-LD document
   const jsonLdData = {
@@ -27,16 +47,7 @@ export const transformJsonLD = (type, data) => {
       'https://schema.org/',
       scopedContexts
     ],
-    '@type': schemaTypes
-  }
-
-  const convertScalarToPerson = value => {
-    const personProperty = /^https?/.test(value) ? 'url' : 'callSign'
-
-    return {
-      '@type': 'Person',
-      [personProperty]: value
-    }
+    ...config.head
   }
 
   // Iterate all keys in the data document
@@ -73,8 +84,10 @@ export const transformJsonLD = (type, data) => {
         : convertScalarToPerson(elementValue)
     }
 
+    const jsonldProperty = config.properties[key] || []
+
     // Iterate over all property scopes
-    property.description.split(',').forEach(uri => {
+    jsonldProperty.forEach(uri => {
       // Find the scope in the predefined scoped context dictionary
       const prefix = prefixes.find(prefix => uri.indexOf(scopedContexts[prefix]) === 0)
 

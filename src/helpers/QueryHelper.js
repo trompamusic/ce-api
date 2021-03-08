@@ -99,14 +99,7 @@ class QueryHelper {
           break
         }
         segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
-        segments.push(
-          interfaceTypeNames.map(interfaceTypeName => {
-            if (depth <= 1) {
-              return this._nodePropertyURIClause(typeName, alias, fieldName, interfaceTypeName, host)
-            } else {
-              info(`Interface fieldType ${interfaceTypeName} fields`)
-            }
-          }).filter(Boolean).join(' + '))
+        segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
         segments.push(`${isListType ? `` : `)`}`)
         break
       case 'GraphQLUnionType':

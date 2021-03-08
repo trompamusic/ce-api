@@ -1,0 +1,307 @@
+{
+  "head": {
+    "@type": [
+      "https://schema.org/DigitalDocument"
+    ]
+  },
+  "properties": {
+    "identifier": [
+      "http://purl.org/dc/terms/identifier",
+      "https://schema.org/identifier"
+    ],
+    "contributor": [
+      "http://purl.org/dc/terms/contributor",
+      "https://schema.org/contributor"
+    ],
+    "coverage": [
+      "http://purl.org/dc/terms/coverage"
+    ],
+    "creator": [
+      "http://purl.org/dc/terms/creator"
+    ],
+    "date": [
+      "http://purl.org/dc/terms/date"
+    ],
+    "description": [
+      "http://purl.org/dc/terms/description",
+      "https://schema.org/description"
+    ],
+    "disambiguatingDescription": [
+      "https://schema.org/disambiguatingDescription"
+    ],
+    "format": [
+      "http://purl.org/dc/terms/format"
+    ],
+    "language": [
+      "http://purl.org/dc/terms/language"
+    ],
+    "publisher": [
+      "http://purl.org/dc/terms/publisher"
+    ],
+    "relation": [
+      "http://purl.org/dc/terms/relation"
+    ],
+    "rights": [
+      "http://purl.org/dc/terms/rights"
+    ],
+    "source": [
+      "http://purl.org/dc/terms/source"
+    ],
+    "subject": [
+      "http://purl.org/dc/terms/subject"
+    ],
+    "title": [
+      "http://purl.org/dc/terms/title"
+    ],
+    "type": [
+      "http://purl.org/dc/terms/type",
+      "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    ],
+    "created": [
+      "http://purl.org/dc/terms/created"
+    ],
+    "modified": [
+      "http://purl.org/dc/terms/modified"
+    ],
+    "additionalType": [
+      "https://schema.org/additionalType"
+    ],
+    "additionalProperty": [
+      "https://schema.org/additionalProperty"
+    ],
+    "alternateName": [
+      "https://schema.org/alternateName"
+    ],
+    "image": [
+      "https://schema.org/image"
+    ],
+    "mainEntityOfPage": [
+      "https://schema.org/mainEntityOfPage"
+    ],
+    "name": [
+      "https://schema.org/name"
+    ],
+    "potentialAction": [
+      "https://schema.org/potentialAction"
+    ],
+    "sameAs": [
+      "https://schema.org/sameAs"
+    ],
+    "subjectOf": [
+      "https://schema.org/subjectOf"
+    ],
+    "url": [
+      "https://schema.org/url"
+    ],
+    "broadMatch": [
+      "http://www.w3.org/2004/02/skos/core#broadMatch"
+    ],
+    "closeMatch": [
+      "http://www.w3.org/2004/02/skos/core#closeMatch"
+    ],
+    "exactMatch": [
+      "http://www.w3.org/2004/02/skos/core#exactMatch"
+    ],
+    "narrowMatch": [
+      "http://www.w3.org/2004/02/skos/core#narrowMatch"
+    ],
+    "relatedMatch": [
+      "http://www.w3.org/2004/02/skos/core#relatedMatch"
+    ],
+    "wasGeneratedBy": [
+      "http://www.w3.org/ns/prov#wasGeneratedBy"
+    ],
+    "wasDerivedFrom": [
+      "http://www.w3.org/ns/prov#wasDerivedFrom"
+    ],
+    "wasAttributedTo": [
+      "http://www.w3.org/ns/prov#wasAttributedTo"
+    ],
+    "used": [
+      "http://www.w3.org/ns/prov#used"
+    ],
+    "about": [
+      "https://schema.org/about"
+    ],
+    "accountablePerson": [
+      "https://schema.org/accountablePerson"
+    ],
+    "alternativeHeadline": [
+      "https://schema.org/alternativeHeadline"
+    ],
+    "associatedMedia": [
+      "https://schema.org/associatedMedia"
+    ],
+    "audio": [
+      "https://schema.org/audio"
+    ],
+    "author": [
+      "https://schema.org/author"
+    ],
+    "award": [
+      "https://schema.org/award"
+    ],
+    "character": [
+      "https://schema.org/character"
+    ],
+    "citation": [
+      "https://schema.org/citation"
+    ],
+    "copyrightHolder": [
+      "https://schema.org/copyrightHolder"
+    ],
+    "copyrightYear": [
+      "https://schema.org/copyrightYear"
+    ],
+    "dateModified": [
+      "https://schema.org/dateModified"
+    ],
+    "datePublished": [
+      "https://schema.org/datePublished"
+    ],
+    "editor": [
+      "https://schema.org/editor"
+    ],
+    "encoding": [
+      "https://schema.org/encoding"
+    ],
+    "encodingFormat": [
+      "https://schema.org/encodingFormat"
+    ],
+    "exampleOfWork": [
+      "https://schema.org/exampleOfWork"
+    ],
+    "expires": [
+      "https://schema.org/expires"
+    ],
+    "funder": [
+      "https://schema.org/funder"
+    ],
+    "genre": [
+      "https://schema.org/genre"
+    ],
+    "hasPart": [
+      "https://schema.org/hasPart"
+    ],
+    "headline": [
+      "https://schema.org/headline"
+    ],
+    "inLanguage": [
+      "https://schema.org/inLanguage"
+    ],
+    "isBasedOn": [
+      "https://schema.org/isBasedOn"
+    ],
+    "isPartOf": [
+      "https://schema.org/isPartOf"
+    ],
+    "keywords": [
+      "https://schema.org/keywords"
+    ],
+    "license": [
+      "https://schema.org/license"
+    ],
+    "mainEntity": [
+      "https://schema.org/mainEntity"
+    ],
+    "mentions": [
+      "https://schema.org/mentions"
+    ],
+    "position": [
+      "https://schema.org/position"
+    ],
+    "producer": [
+      "https://schema.org/producer"
+    ],
+    "schema_publisher": [
+      "https://schema.org/publisher"
+    ],
+    "publishingPrinciples": [
+      "https://schema.org/publishingPrinciples"
+    ],
+    "recordedAt": [
+      "https://schema.org/recordedAt"
+    ],
+    "sourceOrganization": [
+      "https://schema.org/sourceOrganization"
+    ],
+    "text": [
+      "https://schema.org/text"
+    ],
+    "thumbnailUrl": [
+      "https://schema.org/thumbnailUrl"
+    ],
+    "translator": [
+      "https://schema.org/translator"
+    ],
+    "version": [
+      "https://schema.org/version"
+    ],
+    "video": [
+      "https://schema.org/video"
+    ],
+    "workExample": [
+      "https://schema.org/workExample"
+    ],
+    "workTranslation": [
+      "https://bib.schema.org/workTranslation"
+    ],
+    "associatedArticle": [
+      "https://schema.org/associatedArticle"
+    ],
+    "bitrate": [
+      "https://schema.org/bitrate"
+    ],
+    "contentSize": [
+      "https://schema.org/contentSize"
+    ],
+    "contentUrl": [
+      "https://schema.org/contentUrl"
+    ],
+    "duration": [
+      "https://schema.org/duration"
+    ],
+    "embedUrl": [
+      "https://schema.org/embedUrl"
+    ],
+    "encodesCreativeWork": [
+      "https://schema.org/encodesCreativeWork"
+    ],
+    "height": [
+      "https://schema.org/height"
+    ],
+    "playerType": [
+      "https://schema.org/playerType"
+    ],
+    "productionCompany": [
+      "https://schema.org/productionCompany"
+    ],
+    "regionsAllowed": [
+      "https://schema.org/regionsAllowed"
+    ],
+    "requiresSubscription": [
+      "https://schema.org/requiresSubscription"
+    ],
+    "uploadDate": [
+      "https://schema.org/uploadDate"
+    ],
+    "width": [
+      "https://schema.org/width"
+    ],
+    "byArtist": [
+      "https://schema.org/byArtist"
+    ],
+    "inAlbum": [
+      "https://schema.org/inAlbum"
+    ],
+    "inPlaylist": [
+      "https://schema.org/inPlaylist"
+    ],
+    "isrcCode": [
+      "https://schema.org/isrcCode"
+    ],
+    "recordingOf": [
+      "https://schema.org/recordingOf"
+    ]
+  }
+}
