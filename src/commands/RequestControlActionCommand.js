@@ -1,3 +1,4 @@
+import { UserInputError } from 'apollo-server'
 import { info, warning } from '../utils/logger'
 import QueryHelper from '../helpers/QueryHelper'
 import { driver } from '../driver'
@@ -31,7 +32,7 @@ class RequestControlActionCommand {
 
         const template = payloads[0]
         if (typeof template !== 'object' || typeof template.identifier !== 'string' || template.identifier !== requestInput.entryPointIdentifier) {
-          return Promise.reject(new Error('Template EntryPoint/ControlAction was not found'))
+          throw new UserInputError('Template EntryPoint/ControlAction was not found')
         }
 
         return template
@@ -41,11 +42,6 @@ class RequestControlActionCommand {
         this._validateRequestInput(template, requestInput)
 
         return this._createControlAction(template, requestInput)
-      }, reason => {
-        throw reason
-      })
-      .catch(function (error) {
-        throw Error(error.toString())
       })
   }
 
@@ -56,7 +52,7 @@ class RequestControlActionCommand {
   _retrieveRequestInput () {
     const requestInput = this.params.controlAction
     if (typeof requestInput !== 'object' || typeof requestInput.entryPointIdentifier !== 'string' || typeof requestInput.potentialActionIdentifier !== 'string') {
-      throw Error('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
+      throw new UserInputError('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
     }
 
     let nodeCounter = 1
@@ -142,7 +138,7 @@ class RequestControlActionCommand {
     })
 
     if (requestPropertyValidity.includes(false)) {
-      throw Error('Request error: one or more passed propertyObjects do not match potential action properties')
+      throw new UserInputError('Request error: one or more passed propertyObjects do not match potential action properties')
     }
 
     // check request propertyObjects against template properties
@@ -155,7 +151,7 @@ class RequestControlActionCommand {
     })
 
     if (requestPropertyValueValidity.includes(false)) {
-      throw Error('Request error: one or more passed propertyValueObjects do not match potential action properties')
+      throw new UserInputError('Request error: one or more passed propertyValueObjects do not match potential action properties')
     }
 
     return true
@@ -186,9 +182,6 @@ class RequestControlActionCommand {
         pubsub.publish('ThingCreateMutation', { identifier: createdControlAction.identifier, type: 'ControlAction' })
 
         return createdControlAction
-      })
-      .catch(function (error) {
-        throw Error(error.toString())
       })
   }
 
@@ -302,7 +295,7 @@ class RequestControlActionCommand {
             return false
           })
           if (!matchingRequestProperty) {
-            throw Error('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
+            throw new UserInputError('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           // compose PropertyValue clause
           return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestProperty.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})`
@@ -322,7 +315,7 @@ class RequestControlActionCommand {
           }
           // throw error if this property is required
           if (templateProperty.valueRequired === true) {
-            throw Error('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
+            throw new UserInputError('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
           return
         default:
