@@ -3,7 +3,7 @@ interface ProvenanceAgentInterface {
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://www.w3.org/ns/prov#wasAssociatedWith"
-  wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: "OUT")
+  wasAssociatedWith: [LegalPersonInterface] @relation(name: "WAS_ASSOCIATED_WITH", direction: OUT)
   "http://www.w3.org/ns/prov#actedOnBehalfOf"
-  actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: "OUT")
+  actedOnBehalfOf: [LegalPersonInterface] @relation(name: "ACTED_ON_BEHALF_OF", direction: OUT)
 }

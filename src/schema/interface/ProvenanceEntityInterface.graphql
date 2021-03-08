@@ -3,11 +3,11 @@ interface ProvenanceEntityInterface {
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID
   "http://www.w3.org/ns/prov#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: OUT)
   "http://www.w3.org/ns/prov#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
   "http://www.w3.org/ns/prov#wasAttributedTo"
-  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
   "http://www.w3.org/ns/prov#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: OUT)
 }

@@ -2,7 +2,7 @@
 type Event implements SearchableInterface & ThingInterface & ProvenanceEntityInterface {
   ### Metadata properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
-  identifier: ID
+  identifier: ID @id
   "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
   contributor: String
   "http://purl.org/dc/terms/coverage"
@@ -47,64 +47,64 @@ type Event implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   "https://schema.org/additionalType"
   additionalType: [String]
   "https://schema.org/additionalProperty"
-  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: "OUT")
+  additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: OUT)
   "https://schema.org/alternateName"
   alternateName: String
   "https://schema.org/image"
   image: String
   "https://schema.org/mainEntityOfPage"
-  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: "OUT")
+  mainEntityOfPage: [CreativeWorkInterface] @relation(name: "MAIN_ENTITY_OF_PAGE", direction: OUT)
   "https://schema.org/name"
   name: String
   "https://schema.org/potentialAction"
-  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: "OUT")
+  potentialAction: [ActionInterface] @relation(name: "POTENTIAL_ACTION", direction: OUT)
   "https://schema.org/sameAs"
   sameAs: String
   "https://schema.org/subjectOf"
-  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: "OUT")
+  subjectOf: [CreativeWorkInterface] @relation(name: "SUBJECT_OF", direction: OUT)
   "https://schema.org/url"
   url: String
 
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [Event]  @relation(name: "BROAD_MATCH", direction: "OUT")
+  broadMatch: [Event]  @relation(name: "BROAD_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [Event]  @relation(name: "CLOSE_MATCH", direction: "OUT")
+  closeMatch: [Event]  @relation(name: "CLOSE_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [Event]  @relation(name: "EXACT_MATCH", direction: "OUT")
+  exactMatch: [Event]  @relation(name: "EXACT_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [Event]  @relation(name: "NARROW_MATCH", direction: "OUT")
+  narrowMatch: [Event]  @relation(name: "NARROW_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
-  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: "OUT")
+  relatedMatch: [ThingInterface]  @relation(name: "RELATED_MATCH", direction: OUT)
 
   ############################################
   ### ProvenanceEntityInterface properties ###
   "http://www.w3.org/ns/prov#wasGeneratedBy"
-  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: "OUT")
+  wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: OUT)
   "http://www.w3.org/ns/prov#wasDerivedFrom"
-  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: "OUT")
+  wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
   "http://www.w3.org/ns/prov#wasAttributedTo"
-  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: "OUT")
+  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
   "http://www.w3.org/ns/prov#used"
-  used: [ThingInterface] @relation(name: "USED", direction: "OUT")
+  used: [ThingInterface] @relation(name: "USED", direction: OUT)
 
   ########################
   ### Event properties ###
   "https://schema.org/about"
-  about: [ThingInterface] @relation(name: "ABOUT", direction: "OUT")
+  about: [ThingInterface] @relation(name: "ABOUT", direction: OUT)
   "https://schema.org/actor"
-  actor: [Person]  @relation(name: "ACTOR", direction: "IN")
+  actor: [Person]  @relation(name: "ACTOR", direction: IN)
   #aggregateRating: AggregateRating
   "https://schema.org/attendee"
-  attendee: [Person] @relation(name: "ATTENDEE", direction: "IN")
+  attendee: [Person] @relation(name: "ATTENDEE", direction: IN)
   #audience: Audience
   "https://schema.org/composer"
-  composer: [LegalPersonInterface] @relation(name: "COMPOSER", direction: "IN")
+  composer: [LegalPersonInterface] @relation(name: "COMPOSER", direction: IN)
   #"https://schema.org/contributor"
-  #contributor: LegalPersonInterface @relation(name: "CONTRIBUTOR", direction: "IN")
+  #contributor: LegalPersonInterface @relation(name: "CONTRIBUTOR", direction: IN)
   "https://schema.org/director"
-  director: [Person]  @relation(name: "DIRECTOR", direction: "IN")
+  director: [Person]  @relation(name: "DIRECTOR", direction: IN)
   "https://schema.org/doortime"
   doorTime: _Neo4jDateTime
   #duration: Duration
@@ -112,39 +112,39 @@ type Event implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   endDate: _Neo4jDateTime
   #eventStatus: EventStatusType
   "https://schema.org/funder"
-  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: "IN")
+  funder: [LegalPersonInterface] @relation(name: "FUNDER", direction: IN)
   "https://schema.org/inLanguage"
   inLanguage: String
   "https://schema.org/isAccessibleForFree"
   isAccessibleForFree: Boolean
   "https://schema.org/location"
-  location: [Place] @relation(name: "LOCATION", direction: "OUT")
+  location: [Place] @relation(name: "LOCATION", direction: OUT)
   "https://schema.org/maximumAttendeeCapacity"
   maximumAttendeeCapacity: Int
   #offers: Offer
   "https://schema.org/organizer"
-  organizer: [LegalPersonInterface] @relation(name: "ORGANIZER", direction: "IN")
+  organizer: [LegalPersonInterface] @relation(name: "ORGANIZER", direction: IN)
   "https://schema.org/PerformerInterface"
-  performer: [PerformerInterface] @relation(name: "PerformerInterface", direction: "IN")
+  performer: [PerformerInterface] @relation(name: "PerformerInterface", direction: IN)
   #previousStartDate: _Neo4jDate
   "https://schema.org/recordedIn"
-  recordedIn: [CreativeWorkInterface] @relation(name: "RECORDED_IN", direction: "OUT")
+  recordedIn: [CreativeWorkInterface] @relation(name: "RECORDED_IN", direction: OUT)
   #remainingAttendeeCapacity: Integer
   "https://schema.org/review"
   review: [Review]
   "https://schema.org/sponsor"
-  sponsor: [LegalPersonInterface] @relation(name: "SPONSOR", direction: "OUT")
+  sponsor: [LegalPersonInterface] @relation(name: "SPONSOR", direction: OUT)
   "https://schema.org/startDate"
   startDate: _Neo4jDateTime
   "https://schema.org/subEvent"
-  subEvent: [Event] @relation(name: "SUB_EVENT", direction: "OUT")
+  subEvent: [Event] @relation(name: "SUB_EVENT", direction: OUT)
   "https://schema.org/superEvent"
   superEvent: Event
   "https://schema.org/translator"
-  translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: "IN")
+  translator: [LegalPersonInterface] @relation(name: "TRANSLATOR", direction: IN)
   #typicalAgeRange: Text
   "https://schema.org/workFeatured"
-  workFeatured: [CreativeWorkInterface] @relation(name: "WORK_FEATURED", direction: "OUT")
+  workFeatured: [CreativeWorkInterface] @relation(name: "WORK_FEATURED", direction: OUT)
   "https://schema.org/workPerformed"
-  workPerformed: [CreativeWorkInterface]  @relation(name: "WORK_PERFORMED", direction: "OUT")
+  workPerformed: [CreativeWorkInterface]  @relation(name: "WORK_PERFORMED", direction: OUT)
 }
