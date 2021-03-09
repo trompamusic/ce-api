@@ -1,3 +1,19 @@
+## 1.4.0 (2021-03-09)
+
+* chore(project): remove deprecated environment variable ([98af0b0](https://github.com/trompamusic/ce-api/commit/98af0b0))
+* chore(project): use default value before validating valueRequired ([9f700a8](https://github.com/trompamusic/ce-api/commit/9f700a8))
+* feat(jsonld):  use configs instead of descriptions for JSON-LD output ([b6f1e9c](https://github.com/trompamusic/ce-api/commit/b6f1e9c))
+* feat(project): throw UserInputError on validation errors ([de858b5](https://github.com/trompamusic/ce-api/commit/de858b5)), closes [#129](https://github.com/trompamusic/ce-api/issues/129)
+* feat(project): update neo4j and neo4j-graphql-js ([1459d27](https://github.com/trompamusic/ce-api/commit/1459d27))
+* feat(project): use default values when requesting a control action ([9950c40](https://github.com/trompamusic/ce-api/commit/9950c40))
+* feat(QueryHelper): simplify interface matcher ([76e9f84](https://github.com/trompamusic/ce-api/commit/76e9f84))
+* feat(schema): Make Organization.legalName optional ([d2c0fb6](https://github.com/trompamusic/ce-api/commit/d2c0fb6))
+* feat(search): improve search results for searchMetadataText ([d5f144b](https://github.com/trompamusic/ce-api/commit/d5f144b))
+* feat(search): improve search without specific type ([df051e2](https://github.com/trompamusic/ce-api/commit/df051e2))
+* fix(project): make migrations backwards compatible ([b2ba53f](https://github.com/trompamusic/ce-api/commit/b2ba53f))
+
+
+
 ## 1.3.0 (2021-02-26)
 
 * chore(MusicPlaylist): rename relation name to be more specific ([e5b7e7c](https://github.com/trompamusic/ce-api/commit/e5b7e7c))
