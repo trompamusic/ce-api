@@ -16,7 +16,7 @@ class SearchQuery {
    */
   get query () {
     return [
-      `CALL db.index.fulltext.queryNodes("metadataSearchFields", "${this._generateQueryClause()}")`,
+      `CALL db.index.fulltext.queryNodes('metadataSearchFields', '${this._generateQueryClause()}')`,
       `YIELD \`node\`, \`score\``,
       this._generateTypeClause(),
       `RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: \`score\` }`,
@@ -40,7 +40,7 @@ class SearchQuery {
     const subString = this.params.substring.replace(/[^A-Za-z0-9.\-\s]/g, '')
 
     // prepare search substring
-    return `${field}:'${subString}' OR ${field}:'${subString}~'`
+    return `${field}:(\\\\"${subString}~\\\\" OR \\\\"${subString}*\\\\")`
   }
 
   /**
@@ -56,7 +56,7 @@ class SearchQuery {
     const subString = this.params.substring.replace(/[^A-Za-z0-9.\-\s]/g, '')
 
     // prepare search substring
-    return `'${subString}' OR '${subString}~'`
+    return `\\\\"${subString}~\\\\" OR \\\\"${subString}*\\\\"`
   }
 
   /**
