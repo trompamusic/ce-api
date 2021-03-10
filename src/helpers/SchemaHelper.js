@@ -44,7 +44,7 @@ class SchemaHelper {
    * @returns {*|Array<GraphQLObjectType>}
    */
   findInterface (interfaceName) {
-    return this.schema._implementations[interfaceName]
+    return this.schema._implementationsMap[interfaceName]
   }
 
   /**
