@@ -1,3 +1,6 @@
+import { Kind } from 'graphql/language/kinds'
+import { buildName } from 'neo4j-graphql-js/dist/augment/ast'
+
 /**
  * Parse the given field name into an action and type
  * @param {string} fieldName
@@ -23,3 +26,20 @@ export const generateScope = (mutation, fieldName) => {
 
   return `${mutation}:${type}:${action}`
 }
+
+/**
+ * Build an ObjectField AST node
+ * @param name
+ * @param kind
+ * @param value
+ * @return {{kind: "ObjectField", name: *, value: {kind, block: boolean, value}}}
+ */
+export const buildPropertyValue = (name, kind, value) => ({
+  kind: Kind.OBJECT_FIELD,
+  name: buildName({ name: name }),
+  value: {
+    kind: kind,
+    value: value,
+    block: false
+  }
+})

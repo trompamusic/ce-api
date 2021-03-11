@@ -34,9 +34,9 @@ type Dataset implements SearchableInterface & ThingInterface & ProvenanceEntityI
   "http://purl.org/dc/terms/type,http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   type: String
   "http://purl.org/dc/terms/created"
-  created: String
+  created: _Neo4jDateTime
   "http://purl.org/dc/terms/modified"
-  modified: String
+  modified: _Neo4jDateTime
 
   ####################################
   ### SearchableInterface property ###

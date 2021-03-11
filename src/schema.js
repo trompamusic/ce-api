@@ -5,6 +5,7 @@ import walkSync from 'walk-sync'
 import { resolvers } from './resolvers'
 import { authenticationFieldTransformer } from './transformers/authenticationFieldTransformer'
 import { subscriptionFieldTransformer } from './transformers/subscriptionFieldTransformer'
+import { createdUpdatedFieldTransformer } from './transformers/createdUpdatedFieldTransformer'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
@@ -46,6 +47,7 @@ export const schema = transformSchema(
   }),
   [
     subscriptionFieldTransformer,
-    authenticationFieldTransformer
+    authenticationFieldTransformer,
+    createdUpdatedFieldTransformer,
   ]
 )
