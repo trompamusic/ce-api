@@ -1,3 +1,14 @@
+## 1.5.0 (2021-03-11)
+
+* chore(project): update modified for merge action ([c7fb21f](https://github.com/trompamusic/ce-api/commit/c7fb21f))
+* feat(project): automatically set created and modified properties ([3029fb1](https://github.com/trompamusic/ce-api/commit/3029fb1)), closes [#112](https://github.com/trompamusic/ce-api/issues/112)
+* feat(schema): Add Rating "templates" ([ef53fb9](https://github.com/trompamusic/ce-api/commit/ef53fb9))
+* feat(schema): Use Neo4j DateTime type for created and modfied fields ([021ea58](https://github.com/trompamusic/ce-api/commit/021ea58))
+* fix(api): fix error when requesting a node ([6158127](https://github.com/trompamusic/ce-api/commit/6158127))
+* fix(search): search query improvements ([1bbff3a](https://github.com/trompamusic/ce-api/commit/1bbff3a))
+
+
+
 ## 1.4.0 (2021-03-09)
 
 * chore(project): remove deprecated environment variable ([98af0b0](https://github.com/trompamusic/ce-api/commit/98af0b0))
