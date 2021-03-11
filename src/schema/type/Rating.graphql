@@ -1,5 +1,5 @@
 "https://schema.org/Rating"
-type Rating implements ThingInterface {
+type Rating implements ThingInterface & ProvenanceEntityInterface {
     ### Metadata properties ###
     "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
     identifier: ID @id
@@ -61,6 +61,17 @@ type Rating implements ThingInterface {
     "https://schema.org/url"
     url: String
 
+    ############################################
+    ### ProvenanceEntityInterface properties ###
+    "http://www.w3.org/ns/prov#wasGeneratedBy"
+    wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: OUT)
+    "http://www.w3.org/ns/prov#wasDerivedFrom"
+    wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
+    "http://www.w3.org/ns/prov#wasAttributedTo"
+    wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
+    "http://www.w3.org/ns/prov#used"
+    used: [ThingInterface] @relation(name: "USED", direction: OUT)
+
     #########################
     ### Rating properties ###
     "https://schema.org/author"
@@ -70,7 +81,7 @@ type Rating implements ThingInterface {
     "https://pending.schema.org/ratingExplanation"
     ratingExplanation: String
     "https://schema.org/ratingValue"
-    ratingValue: Int!
+    ratingValue: Int
     "https://schema.org/reviewAspect"
     reviewAspect: String
     "https://schema.org/worstRating"
