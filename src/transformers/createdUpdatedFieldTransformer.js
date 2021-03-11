@@ -51,7 +51,7 @@ export const createdUpdatedFieldTransformer = new TransformRootFields((operation
         fieldNode.arguments.push(buildArgument({ name: buildName({ name: 'created' }), value }))
       }
 
-      if (action === 'Create' || action === 'Update' || action === 'Update') {
+      if (action === 'Create' || action === 'Update' || action === 'Merge') {
         fieldNode.arguments.push(buildArgument({ name: buildName({ name: 'modified' }), value }))
       }
 
