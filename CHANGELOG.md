@@ -1,3 +1,11 @@
+## <small>1.5.1 (2021-03-12)</small>
+
+* fix(project): fix error when updating or creating a node without created and modified properties ([e4cbcb3](https://github.com/trompamusic/ce-api/commit/e4cbcb3))
+* fix(search): register all searchable types with fulltext search dynamically ([45bfb6e](https://github.com/trompamusic/ce-api/commit/45bfb6e))
+* chore(project): add docker-compose.debug.yml ([8cb1796](https://github.com/trompamusic/ce-api/commit/8cb1796))
+
+
+
 ## 1.5.0 (2021-03-11)
 
 * chore(project): update modified for merge action ([c7fb21f](https://github.com/trompamusic/ce-api/commit/c7fb21f))
