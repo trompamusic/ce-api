@@ -18,6 +18,15 @@ export const createdUpdatedFieldTransformer = new TransformRootFields((operation
   const next = field.resolve
 
   field.resolve = (object, params, context, info) => {
+    const returnTypeFields = info.returnType.getFields()
+    const hasModifiedField = !!returnTypeFields['modified']
+    const hasCreatedField = !!returnTypeFields['created']
+
+    // returnType is missing either the created or modified fields
+    if (!hasModifiedField || !hasCreatedField) {
+      return next(object, params, context, info)
+    }
+
     info.fieldNodes = info.fieldNodes.map(fieldNode => {
       const createdIndex = fieldNode.arguments.findIndex(argument => argument.name.value === 'created')
       const modifiedIndex = fieldNode.arguments.findIndex(argument => argument.name.value === 'modified')
