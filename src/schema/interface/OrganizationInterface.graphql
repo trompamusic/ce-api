@@ -146,7 +146,7 @@ interface OrganizationInterface {
   "https://schema.org/member"
   member: [LegalPersonInterface] @relation(name: "MEMBER", direction: IN)
   "https://schema.org/memberOf"
-  memberOf: [Organization] @relation(name: "MEMBER_OF", direction: OUT)
+  memberOf: [Organization] @relation(name: "MEMBER", direction: OUT)
   #naics
   "https://schema.org/numberOfEmployees"
   numberOfEmployees: Int

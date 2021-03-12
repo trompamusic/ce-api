@@ -159,7 +159,7 @@ type Person implements SearchableInterface & ThingInterface & ProvenanceEntityIn
   knowsLanguage: String
   #makesOffer
   "https://schema.org/memberOf"
-  memberOf: [Organization] @relation(name: "MEMBER_OF", direction: OUT)
+  memberOf: [Organization] @relation(name: "MEMBER", direction: OUT)
 #  "https://schema.org/naics"
 #  naics
   "https://schema.org/nationality"
