@@ -1,5 +1,6 @@
 import { assertSchema } from 'neo4j-graphql-js'
 import { schema } from '../schema'
+import { info } from '../utils/logger'
 
 /**
  * @param {Transaction} transactions
@@ -26,11 +27,13 @@ export default async (transactions, driver) => {
   // run the assertSchema which creates all constraints based on the @id directives
   await assertSchema({ schema, driver, debug: false, dropExisting: true })
 
+  const searchableTypeMap = schema.getType('SearchableInterfaceType').getValues().map(value => value.name)
+  const searchableFieldsMap = schema.getType('SearchableMetadataFields').getValues().map(value => value.name)
+
+  const query = `CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ${JSON.stringify(searchableTypeMap)}, ${JSON.stringify(searchableFieldsMap)})`
+
+  info(`Fulltext query: ${query}`)
+
   // create index transaction
-  transactions.run(`
-    CALL db.index.fulltext.createNodeIndex('metadataSearchFields', ['Person', 'CreativeWork', 'Article', 'DigitalDocument',
-   'MediaObject', 'Review', 'AudioObject', 'DataDownload', 'Dataset', 'ImageObject', 'MusicComposition', 'MusicPlaylist',
-   'MusicRecording', 'VideoObject', 'Event', 'Organization', 'MusicGroup', 'Product', 'Place'], ['title', 'creator',
-   'description', 'subject'])
-  `)
+  transactions.run(query)
 }

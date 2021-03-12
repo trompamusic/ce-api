@@ -11,6 +11,7 @@ enum SearchableInterfaceType {
   Action
   Article
   AudioObject
+  CreativeWork
   DataDownload
   Dataset
   DigitalDocument
