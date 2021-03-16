@@ -6,6 +6,7 @@ import { resolvers } from './resolvers'
 import { authenticationFieldTransformer } from './transformers/authenticationFieldTransformer'
 import { subscriptionFieldTransformer } from './transformers/subscriptionFieldTransformer'
 import { createdUpdatedFieldTransformer } from './transformers/createdUpdatedFieldTransformer'
+import { additionalTypeFieldTransformer } from './transformers/additionalTypeFieldTransformer'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
@@ -49,5 +50,6 @@ export const schema = transformSchema(
     subscriptionFieldTransformer,
     authenticationFieldTransformer,
     createdUpdatedFieldTransformer,
+    additionalTypeFieldTransformer
   ]
 )
