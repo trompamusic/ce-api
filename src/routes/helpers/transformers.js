@@ -86,7 +86,8 @@ export const transformJsonLD = (type, data) => {
     // For the ControlAction we convert the `agent` property into a Person type
     // The `agent` property is a String, which can either be an URL (vcard/webid) or the persons callSign
     if (key === 'agent' || key === 'participant') {
-      elementValue = Array.isArray(elementValue) ? elementValue.map(convertScalarToPerson)
+      elementValue = Array.isArray(elementValue)
+        ? elementValue.map(convertScalarToPerson)
         : convertScalarToPerson(elementValue)
     }
 

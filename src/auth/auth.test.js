@@ -5,9 +5,11 @@ import { AuthorizationError } from 'graphql-auth-directives'
 describe('verifyRequest', function () {
   const makeContext = (jwt) => ({
     req: {
-      headers: jwt ? ({
-        Authorization: `Bearer ${jwt}`
-      }) : {}
+      headers: jwt
+        ? ({
+            Authorization: `Bearer ${jwt}`
+          })
+        : {}
     }
   })
 

@@ -16,7 +16,7 @@ export const getDocument = (identifier, host) => {
   return session.run(query)
     // find a node with matching identifier
     .then(typeResult => {
-      let rt = typeResult.records.map(record => {
+      const rt = typeResult.records.map(record => {
         return record.get('_payload')
       })
       // only interpret the first result
@@ -49,7 +49,7 @@ const getNodeProperties = (session, type, identifier, host) => {
   return session.run(query)
     .then(fullResult => {
       // find the node with all properties and 1st order relations
-      let rt = fullResult.records.map(record => {
+      const rt = fullResult.records.map(record => {
         return record.get('_payload')
       })
       // only interpret the first result

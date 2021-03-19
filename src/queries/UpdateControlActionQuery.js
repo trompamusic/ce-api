@@ -16,19 +16,19 @@ class UpdateControlActionQuery {
    * @returns {string}
    */
   get query () {
-    let setPropertyClauses = []
+    const setPropertyClauses = []
     Object.entries(this.params).forEach(([key, value]) => {
       setPropertyClauses.push(`${key}: "${value}"`)
     })
 
-    const alias = `controlAction`
+    const alias = 'controlAction'
 
     return [
       `MATCH (\`${alias}\`:\`ControlAction\`{identifier: "${this.params.identifier}"})`,
       `SET \`${alias}\` += {${setPropertyClauses.join(', ')}}`,
       `RETURN \`${alias}\` {`,
       this.queryHelper.selectedPropertiesClause(this.baseType, alias, this.baseNode.selectionSet),
-      `} AS \`_payload\``
+      '} AS `_payload`'
     ].join(' ')
   }
 }

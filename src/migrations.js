@@ -1,3 +1,4 @@
+import { join } from 'path'
 import walkSync from 'walk-sync'
 import { driver } from './driver'
 import retryPromise from './utils/retryPromise'
@@ -8,7 +9,7 @@ import chalk from 'chalk'
  * @returns {Promise<void>}
  */
 export const runMigrations = async () => {
-  const migrationFiles = walkSync(`${__dirname}/migrations`, {
+  const migrationFiles = walkSync(join(__dirname, '/migrations'), {
     directories: false,
     includeBasePath: true,
     globs: ['*.js']

@@ -10,7 +10,7 @@ export const queryResolvers = {
       info(`query: ${query}`)
 
       // fetch and process search results
-      let session = driver.session()
+      const session = driver.session()
       return session.run(query, params)
         .then(result => {
           return result.records.map(record => record.get('node'))
