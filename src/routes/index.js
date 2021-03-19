@@ -19,7 +19,7 @@ router.get('/health', (req, res) => {
  */
 router.get('/:identifier', (req, res) => {
   const { identifier } = req.params
-  const accept = req.headers['accept'] || 'application/json'
+  const accept = req.headers.accept || 'application/json'
 
   // Validate the identifier
   if (!validator.isUUID(identifier)) {

@@ -1,3 +1,4 @@
+import { join } from 'path'
 import { makeAugmentedSchema } from 'neo4j-graphql-js'
 import { transformSchema } from 'graphql-tools'
 import concatenate from 'concatenate'
@@ -10,7 +11,7 @@ import { createdUpdatedFieldTransformer } from './transformers/createdUpdatedFie
 /*
  * Determine type definitions from which to auto generate queries and mutations
  */
-const graphQlFiles = walkSync(`${__dirname}/schema`, {
+const graphQlFiles = walkSync(join(__dirname, '/schema'), {
   directories: false,
   includeBasePath: true,
   globs: ['**/**/*.graphql']
@@ -48,6 +49,6 @@ export const schema = transformSchema(
   [
     subscriptionFieldTransformer,
     authenticationFieldTransformer,
-    createdUpdatedFieldTransformer,
+    createdUpdatedFieldTransformer
   ]
 )

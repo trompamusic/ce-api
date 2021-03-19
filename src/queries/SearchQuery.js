@@ -17,12 +17,12 @@ class SearchQuery {
   get query () {
     return [
       `CALL db.index.fulltext.queryNodes('metadataSearchFields', '${this._generateQueryClause()}')`,
-      `YIELD \`node\`, \`score\``,
+      'YIELD `node`, `score`',
       this._generateTypeClause(),
-      `RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: \`score\` }`,
-      `ORDER BY \`score\` DESC`,
-      this.params.offset > 0 ? `SKIP toInteger($offset)` : ``,
-      this.params.first > -1 ? `LIMIT toInteger($first)` : ``
+      'RETURN node { .*, FRAGMENT_TYPE: HEAD(labels(node)), _searchScore: `score` }',
+      'ORDER BY `score` DESC',
+      this.params.offset > 0 ? 'SKIP toInteger($offset)' : '',
+      this.params.first > -1 ? 'LIMIT toInteger($first)' : ''
     ].join(' ')
   }
 
@@ -50,7 +50,7 @@ class SearchQuery {
   _generateSubStringClause () {
     // empty substring
     if (!this.params.substring) {
-      return `/.*/`
+      return '/.*/'
     }
 
     const subString = this.params.substring.replace(/[^A-Za-z0-9.\-\s]/g, '')
@@ -85,7 +85,7 @@ class SearchQuery {
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
       const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.SearchableInterfaceType._values.map(type => { return `'${type.name}'` })
-      typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join(`', '`)}']`
+      typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join('\', \'')}']`
     }
 
     return typeClause

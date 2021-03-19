@@ -23,7 +23,7 @@ class GetTypeQuery {
    */
   _generateQuery () {
     return [
-      `MATCH (\`n\`)`,
+      'MATCH (`n`)',
       `WHERE \`n\`.\`identifier\` = "${this.identifier}"`,
       `RETURN \`n\` { ${QueryHelper.schemaTypeClause('n', this.typeNames)} } AS \`_payload\``
     ].join(' ')

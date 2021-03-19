@@ -4,7 +4,7 @@ import SchemaHelper from './SchemaHelper'
 import StringHelper from './StringHelper'
 
 const bracketRegExString = '^\\[.*?\\]$'
-const paginationParameters = { 'offset': 'SKIP', 'first': 'LIMIT' }
+const paginationParameters = { offset: 'SKIP', first: 'LIMIT' }
 
 class QueryHelper {
   /**
@@ -25,7 +25,7 @@ class QueryHelper {
   typeFieldsClause (typeName, alias, host, depth = 2) {
     if (depth <= 0) {
       info('typeFieldsClause depth reached')
-      return `DEPTH REACHED`
+      return 'DEPTH REACHED'
     }
 
     const typeFields = this.schemaHelper.getTypeFields(typeName)
@@ -64,10 +64,10 @@ class QueryHelper {
     const type = this.schemaHelper.getSchemaType(fieldTypeName)
     if (typeof type === 'undefined') {
       warning(`unknown type encountered: ${fieldTypeName}`)
-      return `UNKNOWN TYPE`
+      return 'UNKNOWN TYPE'
     }
 
-    let segments = []
+    const segments = []
     const className = type.constructor.name
     switch (className) {
       case 'GraphQLScalarType':
@@ -83,31 +83,32 @@ class QueryHelper {
       case 'GraphQLObjectType':
         // return _Neo4j classes (datetime etc) as Scalars not Objects
         if (fieldTypeName.startsWith('_Neo4j')) {
-          info(`_Neo4j class detected`)
+          info('_Neo4j class detected')
           segments.push(QueryHelper.scalarPropertyClause(fieldName, alias))
         } else if (depth <= 1) {
-          segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+          segments.push(`\`${fieldName}\`:${isListType ? '' : 'HEAD('}`)
           segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
-          segments.push(`${isListType ? `` : `)`}`)
+          segments.push(`${isListType ? '' : ')'}`)
         } else {
           info(`Object fieldType ${fieldTypeName} fields`)
         }
         break
-      case 'GraphQLInterfaceType':
+      case 'GraphQLInterfaceType': {
         const interfaceTypeNames = this.schemaHelper.findInterfaceImplementingTypes(fieldTypeName)
         if (!interfaceTypeNames || interfaceTypeNames.length <= 0) {
           break
         }
-        segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+        segments.push(`\`${fieldName}\`:${isListType ? '' : 'HEAD('}`)
         segments.push(this._nodePropertyURIClause(typeName, alias, fieldName, fieldTypeName, host))
-        segments.push(`${isListType ? `` : `)`}`)
+        segments.push(`${isListType ? '' : ')'}`)
         break
-      case 'GraphQLUnionType':
+      }
+      case 'GraphQLUnionType': {
         const unionType = this.schemaHelper.findUnionType(fieldTypeName)
         if (!unionType || unionType._types.length <= 0) {
           break
         }
-        segments.push(`\`${fieldName}\`:${isListType ? `` : `HEAD(`}`)
+        segments.push(`\`${fieldName}\`:${isListType ? '' : 'HEAD('}`)
         segments.push(
           unionType._types.map(unionType => {
             if (depth <= 1) {
@@ -115,9 +116,11 @@ class QueryHelper {
             } else {
               info(`Union fieldType ${unionType.name} fields`)
             }
+            return undefined
           }).filter(Boolean).join(' + '))
-        segments.push(`${isListType ? `` : `)`}`)
+        segments.push(`${isListType ? '' : ')'}`)
         break
+      }
       default:
         warning(`unknown type class encountered: ${fieldTypeName}`)
         break
@@ -133,23 +136,24 @@ class QueryHelper {
    * @returns {string}
    */
   selectedPropertiesClause (parentType, parentAlias, selectionSet) {
-    let scalarPropertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
+    const scalarPropertyClauses = [`\`_schemaType\`:HEAD(labels(\`${parentAlias}\`))`]
 
     if (selectionSet.kind !== 'SelectionSet') {
       throw Error('Property clause generation needs a selectionSet')
     }
 
-    selectionSet.selections.map(selection => {
+    selectionSet.selections.forEach(selection => {
       switch (selection.kind) {
-        case 'Field':
+        case 'Field': {
           const nodeClause = this.selectedPropertyClause(parentType, parentAlias, selection)
           if (typeof nodeClause === 'string') {
             scalarPropertyClauses.push(nodeClause)
           }
           break
+        }
         case 'InlineFragment':
           if (selection.typeCondition.kind === 'NamedType' && selection.typeCondition.name.value === parentType) {
-            selection.selectionSet.selections.map(namedTypeSelection => {
+            selection.selectionSet.selections.forEach(namedTypeSelection => {
               const nodeClause = this.selectedPropertyClause(parentType, parentAlias, namedTypeSelection)
               if (typeof nodeClause === 'string') {
                 scalarPropertyClauses.push(nodeClause)
@@ -162,7 +166,7 @@ class QueryHelper {
       }
     })
 
-    return scalarPropertyClauses.filter(Boolean).join(`, `)
+    return scalarPropertyClauses.filter(Boolean).join(', ')
   }
 
   /**
@@ -237,7 +241,7 @@ class QueryHelper {
           QueryHelper.relationClause(relationDetails),
           `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
           this.selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
-          `}]`
+          '}]'
         ].join(' ')
       }).join(' + ')
     } else {
@@ -247,7 +251,7 @@ class QueryHelper {
         QueryHelper.relationClause(relationDetails),
         `(\`${alias}\`:\`${propertyTypeName}\`) | {`,
         this.selectedPropertiesClause(propertyTypeName, alias, selection.selectionSet),
-        `}]`
+        '}]'
       ].join(' ')
     }
 
@@ -281,7 +285,7 @@ class QueryHelper {
   generatePaginationClause (params) {
     let paginationClause = ''
 
-    for (let paginationParam in paginationParameters) {
+    for (const paginationParam in paginationParameters) {
       if (paginationParam in params) {
         paginationClause += ` ${paginationParameters[paginationParam]} ${params[paginationParam]}`
       }
@@ -298,7 +302,7 @@ class QueryHelper {
     let conditionalClause = ''
 
     // process all parameters, except pagination parameters
-    for (let param in params) {
+    for (const param in params) {
       // ignore pagination parameters
       if (param in paginationParameters) {
         continue
@@ -316,9 +320,9 @@ class QueryHelper {
    * @returns {string}
    */
   static relationClause (relationDetails, alias, invert) {
-    let clause = `-[${(typeof alias === 'string') ? `\`${alias}\`` : ``}:\`${relationDetails['name']}\`]-`
+    let clause = `-[${(typeof alias === 'string') ? `\`${alias}\`` : ''}:\`${relationDetails.name}\`]-`
 
-    switch (relationDetails['direction'].toString().toUpperCase()) {
+    switch (relationDetails.direction.toString().toUpperCase()) {
       case 'OUT':
         clause = `${(invert) ? '<' : ''}${clause}${(invert) ? '' : '>'}`
         break
@@ -370,7 +374,7 @@ class QueryHelper {
     const relatedNodeAlias = `${parentAlias}_${propertyTypeAlias}`
     return [
       `[(\`${parentAlias}\`)${this.generateRelationClause(parentTypeName, propertyName)}(\`${relatedNodeAlias}\`:\`${propertyTypeName}\`)`,
-      `|`,
+      '|',
       `"${host.replace(/\/$|$/, '/')}"+\`${relatedNodeAlias}\`.\`identifier\` ]`
     ].join(' ')
   }
