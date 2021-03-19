@@ -1,12 +1,12 @@
 import { join } from 'path'
 import { makeAugmentedSchema } from 'neo4j-graphql-js'
 import { transformSchema } from 'graphql-tools'
-import concatenate from 'concatenate'
 import walkSync from 'walk-sync'
 import { resolvers } from './resolvers'
 import { authenticationFieldTransformer } from './transformers/authenticationFieldTransformer'
 import { subscriptionFieldTransformer } from './transformers/subscriptionFieldTransformer'
 import { createdUpdatedFieldTransformer } from './transformers/createdUpdatedFieldTransformer'
+import concatenate from './utils/concatenate'
 
 /*
  * Determine type definitions from which to auto generate queries and mutations
@@ -16,7 +16,7 @@ const graphQlFiles = walkSync(join(__dirname, '/schema'), {
   includeBasePath: true,
   globs: ['**/**/*.graphql']
 })
-const typeDefs = concatenate.sync(graphQlFiles)
+const typeDefs = concatenate(graphQlFiles)
 
 const config = {
   query: {

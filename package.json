@@ -1,9 +1,10 @@
 {
-  "private": true,
+  "private": false,
   "name": "ce-api",
   "version": "1.5.1",
   "description": "API Node.js application for TROMPA Contributor Environment",
   "main": "src/index.js",
+  "license": "Apache-2.0",
   "repository": {
     "type": "GIT",
     "url": "https://github.com/trompamusic/ce-api"
@@ -15,13 +16,13 @@
     "apollo-server-express": "^2.21.0",
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
-    "concatenate": "0.0.2",
     "cors": "^2.8.5",
     "express": "4.17.1",
     "graphql": "^15.5.0",
     "graphql-auth-directives": "^2.2.2",
     "graphql-tag": "^2.11.0",
     "graphql-tools": "^4.0.8",
+    "js-green-licenses": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "micromatch": "^4.0.2",
     "neo4j-driver": "4.2.1",
@@ -62,7 +63,8 @@
     "start:prod": "node dist/index.js",
     "test:unit": "jest ./src",
     "test:functional": "CI=true jest ./tests/functional",
-    "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md"
+    "version": "conventional-changelog -i CHANGELOG.md -s && git add -A CHANGELOG.md",
+    "check-licenses": "jsgl --local ./"
   },
   "husky": {
     "hooks": {
