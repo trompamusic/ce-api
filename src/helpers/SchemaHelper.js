@@ -142,7 +142,7 @@ class SchemaHelper {
    * @param propertyType
    */
   static retrievePropertyTypeRelationDetails (propertyType) {
-    let relationDetails = {}
+    const relationDetails = {}
 
     const directives = propertyType.astNode.directives
     if (directives instanceof Array === false) {
@@ -153,7 +153,7 @@ class SchemaHelper {
       const directive = directives[di]
       if (directive.name.value === 'relation') {
         const directiveArguments = directive.arguments
-        directiveArguments.map(directiveArgument => {
+        directiveArguments.forEach(directiveArgument => {
           if (directiveArgument.kind === 'Argument') {
             switch (directiveArgument.name.value.toString()) {
               case 'name':

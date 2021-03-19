@@ -19,8 +19,8 @@ export const createdUpdatedFieldTransformer = new TransformRootFields((operation
 
   field.resolve = (object, params, context, info) => {
     const returnTypeFields = info.returnType.getFields()
-    const hasModifiedField = !!returnTypeFields['modified']
-    const hasCreatedField = !!returnTypeFields['created']
+    const hasModifiedField = !!returnTypeFields.modified
+    const hasCreatedField = !!returnTypeFields.created
 
     // returnType is missing either the created or modified fields
     if (!hasModifiedField || !hasCreatedField) {

@@ -88,11 +88,11 @@ class RequestControlActionCommand {
     return [
       `MATCH (sa:SoftwareApplication)<-[:ACTION_APPLICATION]-(ep:EntryPoint {identifier:"${requestInput.entryPointIdentifier}"})-[:POTENTIAL_ACTION]->(ca:ControlAction {identifier:"${requestInput.potentialActionIdentifier}"})`,
       `RETURN ep {${QueryHelper.schemaTypeClause('ep')}, identifier:ep.identifier, name:ep.name, contributor:ep.contributor, title:ep.title, creator:ep.creator, source:ep.source, subject:ep.subject, format:ep.format, language:ep.language,`,
-      `actionApplication:sa,`,
+      'actionApplication:sa,',
       `potentialAction:{${QueryHelper.schemaTypeClause('ca')}, identifier:ca.identifier, name:ca.name, contributor:ca.contributor, title:ca.title, description:ca.description, creator:ca.creator, source:ca.source, subject:ca.subject, format:ca.format, language:ca.language, actionStatus:ca.actionStatus, url:ca.url,`,
       `object:[(ca)-[:\`OBJECT\`]->(\`controlActionTemplate_property\`:\`Property\`) | { ${QueryHelper.schemaTypeClause('controlActionTemplate_property', ['Property'])}, \`identifier\`:\`controlActionTemplate_property\`.\`identifier\`, \`title\`:\`controlActionTemplate_property\`.\`title\`, \`name\`:\`controlActionTemplate_property\`.\`name\`, \`description\`:\`controlActionTemplate_property\`.\`description\`, \`rangeIncludes\`:\`controlActionTemplate_property\`.\`rangeIncludes\`, \`valueRequired\`:\`controlActionTemplate_property\`.\`valueRequired\` }]`,
       `+ [(ca)-[:\`OBJECT\`]->(\`controlActionTemplate_propertyValueSpecification\`:\`PropertyValueSpecification\`) | { ${QueryHelper.schemaTypeClause('controlActionTemplate_propertyValueSpecification', ['PropertyValueSpecification'])}, \`identifier\`:\`controlActionTemplate_propertyValueSpecification\`.\`identifier\`, \`title\`:\`controlActionTemplate_propertyValueSpecification\`.\`title\`, \`name\`:\`controlActionTemplate_propertyValueSpecification\`.\`name\`,\`valueName\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueName\`, \`valueRequired\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueRequired\`, \`defaultValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`defaultValue\`, \`stepValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`stepValue\`, \`disambiguatingDescription\`:\`controlActionTemplate_propertyValueSpecification\`.\`disambiguatingDescription\`, \`minValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`maxValue\`, \`multipleValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`multipleValue\`, \`readonlyValue\`:\`controlActionTemplate_propertyValueSpecification\`.\`readonlyValue\`, \`valueMaxLength\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueMaxLength\`, \`valueMinLength\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueMinLength\`, \`valuePattern\`:\`controlActionTemplate_propertyValueSpecification\`.\`valuePattern\`, \`valueRequired\`:\`controlActionTemplate_propertyValueSpecification\`.\`valueRequired\` }]`,
-      `}} AS _payload`
+      '}} AS _payload'
     ].join(' ')
   }
 
@@ -103,16 +103,18 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreateQuery (template, requestInput) {
-    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0) ? `, ${requestInput.propertyObject.map(object => {
+    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0)
+      ? `, ${requestInput.propertyObject.map(object => {
       return `\`${object.alias}\``
-    }).join(', ')}` : ``
+    }).join(', ')}`
+      : ''
     const propertySelections = this._generateMatchPropertyNodes(requestInput)
 
     return [
       `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"})`,
       propertySelections ? `, ${propertySelections}` : '',
       `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
-      `LIMIT 1`,
+      'LIMIT 1',
       `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\`:\`ActionInterface\`:\`ProvenanceActivityInterface\`:\`ProvenanceEntityInterface\`:\`ThingInterface\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
       `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
@@ -129,13 +131,9 @@ class RequestControlActionCommand {
    */
   _validateRequestInput (template, requestInput) {
     // check request propertyObjects against template properties
-    let requestPropertyValidity = (requestInput.propertyObject || []).map(requestProperty => {
+    const requestPropertyValidity = (requestInput.propertyObject || []).map(requestProperty => {
       return template.potentialAction.object.some(templateProperty => {
-        if (
-          templateProperty._schemaType === 'Property' && requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
-        ) {
-          return true
-        }
+        return templateProperty._schemaType === 'Property' && requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
       })
     })
 
@@ -144,11 +142,9 @@ class RequestControlActionCommand {
     }
 
     // check request propertyObjects against template properties
-    let requestPropertyValueValidity = (requestInput.propertyValueObject || []).map(requestProperty => {
+    const requestPropertyValueValidity = (requestInput.propertyValueObject || []).map(requestProperty => {
       return template.potentialAction.object.some(templateProperty => {
-        if (templateProperty._schemaType === 'PropertyValueSpecification' && requestProperty.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier) {
-          return true
-        }
+        return templateProperty._schemaType === 'PropertyValueSpecification' && requestProperty.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier
       })
     })
 
@@ -225,8 +221,8 @@ class RequestControlActionCommand {
    * @private
    */
   _composeControlActionPropertyClause (templateProperty, requestProperty) {
-    let segments = [
-      `\`identifier\`: apoc.create.uuid()`,
+    const segments = [
+      '`identifier`: apoc.create.uuid()',
       `\`propertyID\`:"${templateProperty.identifier}"`,
       `\`description\`:"${templateProperty.description}"`,
       `\`title\`:"${templateProperty.title}"`,
@@ -245,8 +241,8 @@ class RequestControlActionCommand {
    * @private
    */
   _composeControlActionPropertyValueClause (templateProperty, requestPropertyValue) {
-    let segments = [
-      `\`identifier\`: apoc.create.uuid()`,
+    const segments = [
+      '`identifier`: apoc.create.uuid()',
       `\`propertyID\`:"${templateProperty.identifier}"`,
       `\`description\`:"${templateProperty.description}"`,
       `\`title\`:"${templateProperty.title}"`,
@@ -289,7 +285,7 @@ class RequestControlActionCommand {
     const segments = template.potentialAction.object.map(templateProperty => {
       // find matching property in requestInput
       switch (templateProperty._schemaType) {
-        case 'Property':
+        case 'Property': {
           // find matching property in requestInput
           const matchingRequestProperty = requestInput.propertyObject.find(requestProperty => {
             return requestProperty.potentialActionPropertyIdentifier === templateProperty.identifier
@@ -300,7 +296,8 @@ class RequestControlActionCommand {
           }
           // compose PropertyValue clause
           return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestProperty.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})`
-        case 'PropertyValueSpecification':
+        }
+        case 'PropertyValueSpecification': {
           const matchingRequestPropertyValue = requestInput.propertyValueObject.find(requestPropertyValue => {
             return requestPropertyValue.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier
           })
@@ -328,10 +325,13 @@ class RequestControlActionCommand {
           if (templateProperty.valueRequired === true) {
             throw new UserInputError('Required value property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
-          return
+          return undefined
+        }
         default:
           warning('Unknown potentialAction template object encountered')
       }
+
+      return undefined
     })
     if (segments.length <= 0) {
       return ''
@@ -350,7 +350,7 @@ class RequestControlActionCommand {
       return ''
     }
 
-    let segments = requestProperties.map(requestProperty => {
+    const segments = requestProperties.map(requestProperty => {
       return `(\`${requestProperty.propertyValueAlias}\`)${this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')}(\`${requestProperty.alias}\`)`
     })
 
@@ -364,10 +364,10 @@ class RequestControlActionCommand {
    * @private
    */
   _generateReturnClause (template, requestInput) {
-    let segments = [
-      `RETURN \`controlAction\` {`,
+    const segments = [
+      'RETURN `controlAction` {',
       this.queryHelper.selectedPropertiesClause('ControlAction', 'controlAction', this.resolveInfo.fieldNodes[0].selectionSet),
-      `} AS _payload`
+      '} AS _payload'
     ]
 
     return segments.join(' ')
