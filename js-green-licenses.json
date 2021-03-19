@@ -12,5 +12,9 @@
     "LAGPL",
     "WTFPL",
     "ZLIB"
+  ],
+  "packageAllowlist": [
+    "text-encoding-utf-8",
+    "valid-url"
   ]
 }
