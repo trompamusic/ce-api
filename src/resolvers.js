@@ -13,7 +13,7 @@ export const resolvers = {
 
 // retrieval function for node data, hydrated with private schemaType properties
 export function retrieveNodeData (node) {
-  let data = node.properties
+  const data = node.properties
   const labels = node.labels
   if (labels instanceof Array && labels.length > 0) {
     data._schemaType = labels.shift()

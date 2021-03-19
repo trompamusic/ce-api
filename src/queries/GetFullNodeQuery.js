@@ -31,7 +31,7 @@ class GetFullNodeQuery {
    * @private
    */
   _generateQuery () {
-    const alias = `node`
+    const alias = 'node'
     return [
       `MATCH (\`${alias}\`:\`${this.type}\`)`,
       `WHERE \`${alias}\`.\`identifier\` = "${this.identifier}"`,
