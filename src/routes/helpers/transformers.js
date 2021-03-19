@@ -50,6 +50,12 @@ export const transformJsonLD = (type, data) => {
     ...config.head
   }
 
+  // extend the `@type` field with all stored additionalTypes. These are validated before saved, so we can safely assume
+  // the values are valid URLs.
+  if (Array.isArray(data.additionalType)) {
+    jsonLdData['@type'] = [...jsonLdData['@type'], ...data.additionalType]
+  }
+
   // Iterate all keys in the data document
   Object.keys(data).forEach(key => {
     // Get the property for the current key
