@@ -7,8 +7,13 @@ class SearchQuery {
     this.params = params
     this.resolveInfo = resolveInfo
 
-    this.doEvaluateTypeSubset = !(!(this.params.onTypes instanceof Array) || this.params.onTypes.length === 0 || this.params.onTypes.length === this.resolveInfo.schema._typeMap.SearchableInterfaceType._values.length)
-    this.doEvaluateFieldSubset = !(!(this.params.onFields instanceof Array) || this.params.onFields.length === 0 || this.params.onFields.length === this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.length)
+    this.searchableInterfaceType = this.resolveInfo.schema.getType('SearchableInterfaceType')
+    this.searchableMetadataFields = this.resolveInfo.schema.getType('SearchableMetadataFields')
+
+    const { onTypes, onFields } = this.params
+
+    this.doEvaluateTypeSubset = Array.isArray(onTypes) && onTypes.length && onTypes.length !== this.searchableInterfaceType.getValues().length
+    this.doEvaluateFieldSubset = Array.isArray(onFields) && onFields.length && onFields.length !== this.searchableMetadataFields.getValues().length
   }
 
   /**
@@ -66,7 +71,7 @@ class SearchQuery {
   _generateQueryClause () {
     // if only a subset of fields need to be evaluated: build query clause for [substring]~ on all eligible fields
     if (this.doEvaluateFieldSubset) {
-      const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.resolveInfo.schema._typeMap.SearchableMetadataFields._values.map(field => { return field.name })
+      const fieldNames = this.doEvaluateFieldSubset ? this.params.onFields : this.searchableMetadataFields.getValues().map(field => { return field.name })
 
       return fieldNames
         .map(field => this._generateFieldSubStringClause(field))
@@ -84,7 +89,7 @@ class SearchQuery {
     // if only a subset of types need to be evaluated: build type clause for [substring]~ on all eligible fields
     let typeClause = ''
     if (this.doEvaluateTypeSubset) {
-      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.resolveInfo.schema._typeMap.SearchableInterfaceType._values.map(type => { return `'${type.name}'` })
+      const typeNames = this.doEvaluateTypeSubset ? this.params.onTypes : this.searchableInterfaceType.getValues().map(type => { return `'${type.name}'` })
       typeClause = `WHERE HEAD(labels(\`node\`)) IN ['${typeNames.join('\', \'')}']`
     }
 

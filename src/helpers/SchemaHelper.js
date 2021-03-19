@@ -4,7 +4,6 @@ import { info, warning } from '../utils/logger'
 class SchemaHelper {
   constructor (schema) {
     this.schema = (typeof schema === 'object') ? schema : defaultSchema
-    this.schemaTypeMap = this.schema._typeMap
   }
 
   /**
@@ -13,12 +12,12 @@ class SchemaHelper {
    * @returns {GraphQLField<*, *>|GraphQLInputField}
    */
   findPropertyType (parentType, propertyName) {
-    const typeMap = this.schema._typeMap[parentType]
+    const typeMap = this.schema.getType(parentType)
     if (typeof typeMap === 'undefined') {
       throw Error('Type could not be retrieved from schema')
     }
 
-    const propertyType = typeMap._fields[propertyName]
+    const propertyType = typeMap.getFields()[propertyName]
     if (typeof propertyType === 'undefined') {
       throw Error('Property type could not be retrieved from schema')
     }
@@ -32,7 +31,7 @@ class SchemaHelper {
    */
   findInterfaceImplementingTypes (interfaceName) {
     const implementations = this.findInterface(interfaceName)
-    if (implementations instanceof Array === false || !implementations.length) {
+    if (!Array.isArray(implementations) || !implementations.length) {
       return null
     }
 
@@ -44,7 +43,7 @@ class SchemaHelper {
    * @returns {*|Array<GraphQLObjectType>}
    */
   findInterface (interfaceName) {
-    return this.schema._implementationsMap[interfaceName]
+    return this.schema.getImplementations(interfaceName)
   }
 
   /**
@@ -52,7 +51,8 @@ class SchemaHelper {
    * @returns {*}
    */
   findPossibleTypes (unionName) {
-    const possibleTypes = this.schema._possibleTypeMap[unionName]
+    const possibleTypes = this.schema.getImplementations(unionName)
+
     if (typeof possibleTypes !== 'object') {
       return null
     }
@@ -79,7 +79,7 @@ class SchemaHelper {
    */
   getTypeNames () {
     return Object
-      .values(this.schemaTypeMap)
+      .values(this.schema.getTypeMap())
       .filter(type => type.astNode && type.astNode.kind === 'ObjectTypeDefinition' && !!type.astNode.interfaces.length)
       .map(type => type.name)
   }
@@ -90,7 +90,8 @@ class SchemaHelper {
    */
   getTypeFields (typeName) {
     const schemaType = this.getSchemaType(typeName)
-    const typeFields = schemaType._fields
+    const typeFields = schemaType && schemaType.getFields()
+
     if (typeof typeFields === 'undefined') {
       info('No typeFields (type could be scalar)')
       return null
@@ -130,7 +131,7 @@ class SchemaHelper {
    * @returns {*}
    */
   getSchemaType (typeName) {
-    const schemaType = this.schemaTypeMap[typeName]
+    const schemaType = this.schema.getType(typeName)
     if (typeof schemaType === 'undefined') {
       throw Error('Type could not be retrieved from schema')
     }
@@ -145,7 +146,7 @@ class SchemaHelper {
     const relationDetails = {}
 
     const directives = propertyType.astNode.directives
-    if (directives instanceof Array === false) {
+    if (!Array.isArray(directives)) {
       throw Error('Type property directives could not be retrieved from schema')
     }
 
