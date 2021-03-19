@@ -1,5 +1,8 @@
 # TROMPA Contributor Environment - GraphQL API
 
+[![Known Vulnerabilities][snyk-image]][snyk-url]
+[![Code Style][cst-image]][cst-url]
+
 ## Documentation
 
 - [Authentication](docs/authentication.md)
@@ -87,3 +90,8 @@ Commits must validate to the [Angular Commit Guidelines](https://github.com/angu
 ### Pull request
 
 If you would like to submit a proposal/change/fix, submit a Pull request to the [trompamusic/ce-api](https://github.com/trompamusic/ce-api) repository.
+
+[snyk-image]: https://snyk.io/test/github/trompamusic/ce-api/badge.svg
+[snyk-url]: https://snyk.io/test/github/trompamusic/ce-api
+[cst-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[cst-url]: https://standardjs.com/
