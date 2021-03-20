@@ -20,7 +20,7 @@
     "express": "4.17.1",
     "graphql": "^15.5.0",
     "graphql-auth-directives": "^2.2.2",
-    "graphql-tag": "^2.11.0",
+    "graphql-tag": "^2.12.1",
     "graphql-tools": "^4.0.8",
     "js-green-licenses": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
