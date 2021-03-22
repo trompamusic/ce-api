@@ -20,7 +20,7 @@ class RequestControlActionCommand {
    * @returns {Promise<StatementResult | never>}
    */
   get create () {
-    const requestInput = this._retrieveRequestInput()
+    const requestInput = this.params.controlAction
     const entryPointQuery = this._generateTemplateQuery(requestInput)
     info(entryPointQuery)
     return this.session.run(entryPointQuery)
@@ -46,37 +46,20 @@ class RequestControlActionCommand {
   }
 
   /**
-   * @returns {Object}
+   * Get aliases for the given property identifier
+   * @param template
+   * @param propertyIdentifier
+   * @return {{templatePropertyAlias: string, nodeAlias: string, propertyAlias: string}}
    * @private
    */
-  _retrieveRequestInput () {
-    const requestInput = this.params.controlAction
-    if (typeof requestInput !== 'object' || typeof requestInput.entryPointIdentifier !== 'string' || typeof requestInput.potentialActionIdentifier !== 'string') {
-      throw new UserInputError('Request Input error: either empty or missing `entryPointIdentifier` or `potentialActionIdentifier` parameter')
+  _getAliasesForProperty (template, propertyIdentifier) {
+    const count = template.potentialAction.object.findIndex(({ identifier }) => identifier === propertyIdentifier) + 1
+
+    return {
+      templatePropertyAlias: `templateProperty_${count}`,
+      propertyAlias: `property_${count}`,
+      nodeAlias: `node_${count}`
     }
-
-    let nodeCounter = 1
-    // hydrate propertyObject aliases
-    if (Array.isArray(requestInput.propertyObject)) {
-      requestInput.propertyObject = requestInput.propertyObject.map(node => {
-        node.alias = `node_${nodeCounter}`
-        node.propertyValueAlias = `propertyValue_${nodeCounter}`
-        nodeCounter++
-
-        return node
-      })
-    }
-    // hydrate propertyValueObject aliases
-    if (Array.isArray(requestInput.propertyValueObject)) {
-      requestInput.propertyValueObject = requestInput.propertyValueObject.map(node => {
-        node.propertyValueAlias = `propertyValue_${nodeCounter}`
-        nodeCounter++
-
-        return node
-      })
-    }
-
-    return requestInput
   }
 
   /**
@@ -103,22 +86,17 @@ class RequestControlActionCommand {
    * @private
    */
   _generateCreateQuery (template, requestInput) {
-    const nodeAliasesClause = (Array.isArray(requestInput.propertyObject) && requestInput.propertyObject.length > 0)
-      ? `, ${requestInput.propertyObject.map(object => {
-      return `\`${object.alias}\``
-    }).join(', ')}`
-      : ''
-    const propertySelections = this._generateMatchPropertyNodes(requestInput)
+    const { selections, aliases } = this._generatePropertyMatchClauses(requestInput, template)
 
     return [
       `MATCH (\`entryPoint\`:\`EntryPoint\` {\`identifier\`:"${requestInput.entryPointIdentifier}"})${this.queryHelper.generateRelationClause('EntryPoint', 'potentialAction')}(\`potentialControlAction\`:\`ControlAction\` {\`identifier\`:"${requestInput.potentialActionIdentifier}"})`,
-      propertySelections ? `, ${propertySelections}` : '',
-      `WITH \`entryPoint\`, \`potentialControlAction\`${nodeAliasesClause}`,
+      selections ? `, ${selections}` : '',
+      `WITH \`entryPoint\`, \`potentialControlAction\`${aliases ? `, ${aliases}` : ''}`,
       'LIMIT 1',
       `CREATE (\`entryPoint\`)${this.queryHelper.generateRelationClause('ControlAction', 'target', null, true)}(\`controlAction\`:\`ControlAction\`:\`ActionInterface\`:\`ProvenanceActivityInterface\`:\`ProvenanceEntityInterface\`:\`ThingInterface\` {${this._generateControlActionPropertyClause(template.potentialAction)}})${this.queryHelper.generateRelationClause('ControlAction', 'wasDerivedFrom')}(\`potentialControlAction\`)`,
-      `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${nodeAliasesClause}`,
+      `WITH \`entryPoint\`, \`potentialControlAction\`, \`controlAction\`${aliases ? `, ${aliases}` : ''}`,
       this._generateCreatePropertyValuesClause(template, requestInput),
-      this._generateNodeValueRelationsClause(requestInput.propertyObject),
+      this._generateNodeValueRelationsClause(requestInput.propertyObject, template),
       this._generateReturnClause(template, requestInput)
     ].filter(line => typeof line === 'string' && line.length > 0).join(' ')
   }
@@ -256,17 +234,31 @@ class RequestControlActionCommand {
 
   /**
    * @param requestInput
-   * @returns {string}
+   * @param template
+   * @returns {Object}
    * @private
    */
-  _generateMatchPropertyNodes (requestInput) {
-    if (!Array.isArray(requestInput.propertyObject) || !requestInput.propertyObject.length > 0) {
-      return ''
-    }
+  _generatePropertyMatchClauses (requestInput, template) {
+    // create match clauses for all template property
+    const propertyMatchClauses = template.potentialAction.object.map(object => {
+      const { templatePropertyAlias } = this._getAliasesForProperty(template, object.identifier)
 
-    return requestInput.propertyObject.map(node => {
-      return `(\`${node.alias}\`:\`${node.nodeType}\` {\`identifier\`:"${node.nodeIdentifier}"})`
-    }).join(', ')
+      return [templatePropertyAlias, `(\`${templatePropertyAlias}\`:\`${object._schemaType}\` {\`identifier\`:"${object.identifier}"})`]
+    })
+
+    // create match clauses for each Property node
+    const nodeMatchClauses = (requestInput.propertyObject || []).map(node => {
+      const { nodeAlias } = this._getAliasesForProperty(template, node.potentialActionPropertyIdentifier)
+
+      return [nodeAlias, `(\`${nodeAlias}\`:\`${node.nodeType}\` {\`identifier\`:"${node.nodeIdentifier}"})`]
+    })
+
+    const allPairs = [...propertyMatchClauses, ...nodeMatchClauses]
+
+    return {
+      selections: allPairs.map(([, query]) => query).join(', '),
+      aliases: allPairs.map(([alias]) => `\`${alias}\``).join(', ')
+    }
   }
 
   /**
@@ -294,20 +286,31 @@ class RequestControlActionCommand {
           if (!matchingRequestProperty) {
             throw new UserInputError('Required node property is missing from input: ' + templateProperty.identifier + ' ' + templateProperty.title)
           }
+
+          const { templatePropertyAlias, propertyAlias } = this._getAliasesForProperty(template, templateProperty.identifier)
+
+          const wasDerivedFromRelationClause = this.queryHelper.generateRelationClause('PropertyValue', 'wasDerivedFrom')
+          const wasDerivedFromClause = `${wasDerivedFromRelationClause}(\`${templatePropertyAlias}\`)`
+
           // compose PropertyValue clause
-          return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestProperty.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})`
+          return `(\`controlAction\`)${objectRelationClause}(\`${propertyAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${this._composeControlActionPropertyClause(templateProperty, matchingRequestProperty)}})${wasDerivedFromClause}`
         }
         case 'PropertyValueSpecification': {
           const matchingRequestPropertyValue = requestInput.propertyValueObject.find(requestPropertyValue => {
             return requestPropertyValue.potentialActionPropertyValueSpecificationIdentifier === templateProperty.identifier
           })
 
+          const { templatePropertyAlias, propertyAlias } = this._getAliasesForProperty(template, templateProperty.identifier)
+
+          const wasDerivedFromRelationClause = this.queryHelper.generateRelationClause('PropertyValue', 'wasDerivedFrom')
+          const wasDerivedFromClause = `${wasDerivedFromRelationClause}(\`${templatePropertyAlias}\`)`
+
           // compose PropertyValue clause
           if (typeof matchingRequestPropertyValue === 'object') {
             const valuesClause = this._composeControlActionPropertyValueClause(templateProperty, matchingRequestPropertyValue)
 
             // compose PropertyValue clause
-            return `(\`controlAction\`)${objectRelationClause}(\`${matchingRequestPropertyValue.propertyValueAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
+            return `(\`controlAction\`)${objectRelationClause}(\`${propertyAlias}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})${wasDerivedFromClause}`
           }
 
           // use the default value if given in the template PropertyValue
@@ -318,7 +321,7 @@ class RequestControlActionCommand {
             })
 
             // use a random PropertyValue alias, we are not referring to it
-            return `(\`controlAction\`)${objectRelationClause}(\`propertyValue_${Math.round(Math.random() * 100)}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})`
+            return `(\`controlAction\`)${objectRelationClause}(\`propertyValue_${Math.round(Math.random() * 100)}\`:\`PropertyValue\`:\`ThingInterface\` {${valuesClause}})${wasDerivedFromClause}`
           }
 
           // throw error if this property is required
@@ -342,16 +345,18 @@ class RequestControlActionCommand {
 
   /**
    * @param requestProperties
+   * @param template
    * @returns {string}
    * @private
    */
-  _generateNodeValueRelationsClause (requestProperties) {
+  _generateNodeValueRelationsClause (requestProperties, template) {
     if (!Array.isArray(requestProperties) || requestProperties.length <= 0) {
       return ''
     }
 
     const segments = requestProperties.map(requestProperty => {
-      return `(\`${requestProperty.propertyValueAlias}\`)${this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')}(\`${requestProperty.alias}\`)`
+      const { propertyAlias, nodeAlias } = this._getAliasesForProperty(template, requestProperty.potentialActionPropertyIdentifier)
+      return `(\`${propertyAlias}\`)${this.queryHelper.generateRelationClause('PropertyValue', 'nodeValue')}(\`${nodeAlias}\`)`
     })
 
     return `CREATE ${segments.join(', ')}`

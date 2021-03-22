@@ -20,15 +20,15 @@
     "express": "4.17.1",
     "graphql": "^15.5.0",
     "graphql-auth-directives": "^2.2.2",
-    "graphql-tag": "^2.11.0",
+    "graphql-tag": "^2.12.1",
     "graphql-tools": "^4.0.8",
     "js-green-licenses": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "micromatch": "^4.0.2",
-    "neo4j-driver": "4.2.1",
+    "neo4j-driver": "4.2.2",
     "neo4j-graphql-js": "^2.19.2",
     "validator": "12.2.0",
-    "walk-sync": "2.0.2"
+    "walk-sync": "2.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.10",

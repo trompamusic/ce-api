@@ -93,6 +93,18 @@
     "url": [
       "https://schema.org/url"
     ],
+    "wasGeneratedBy": [
+      "http://www.w3.org/ns/prov#wasGeneratedBy"
+    ],
+    "wasDerivedFrom": [
+      "http://www.w3.org/ns/prov#wasDerivedFrom"
+    ],
+    "wasAttributedTo": [
+      "http://www.w3.org/ns/prov#wasAttributedTo"
+    ],
+    "used": [
+      "http://www.w3.org/ns/prov#used"
+    ],
     "propertyID": [
       "https://schema.org/propertyID"
     ],
