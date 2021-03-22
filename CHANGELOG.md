@@ -1,3 +1,24 @@
+## 1.6.0 (2021-03-22)
+
+* fix: upgrade graphql-tag from 2.11.0 to 2.12.1 ([3a53241](https://github.com/trompamusic/ce-api/commit/3a53241))
+* fix: upgrade neo4j-driver from 4.2.1 to 4.2.2 ([19f0727](https://github.com/trompamusic/ce-api/commit/19f0727))
+* fix: upgrade validator from 12.1.0 to 12.2.0 ([3483048](https://github.com/trompamusic/ce-api/commit/3483048))
+* fix: upgrade walk-sync from 2.0.2 to 2.2.0 ([ff13b9c](https://github.com/trompamusic/ce-api/commit/ff13b9c))
+* feat(jsonld): extend @type with additionalType ([8513e9f](https://github.com/trompamusic/ce-api/commit/8513e9f)), closes [#85](https://github.com/trompamusic/ce-api/issues/85)
+* feat(project): add green licenses check ([cfcb70f](https://github.com/trompamusic/ce-api/commit/cfcb70f))
+* feat(project): create property and propertyValue `wasDerivedFrom` relation ([3587415](https://github.com/trompamusic/ce-api/commit/3587415))
+* feat(project): update dependencies ([dbef14b](https://github.com/trompamusic/ce-api/commit/dbef14b))
+* feat(schema): add skos:broader to DefinedTerm ([40b25c7](https://github.com/trompamusic/ce-api/commit/40b25c7))
+* feat(schema): Add Web Annotations ([17d4834](https://github.com/trompamusic/ce-api/commit/17d4834))
+* feat(schema): make memberOf and member inverses ([7b52dde](https://github.com/trompamusic/ce-api/commit/7b52dde))
+* chore(project): add green licenses allow list and replace concatenate dependency ([25974c6](https://github.com/trompamusic/ce-api/commit/25974c6))
+* chore(project): fix eslint warnings ([c95fc49](https://github.com/trompamusic/ce-api/commit/c95fc49))
+* chore(project): prevent usage of private properties ([38730f3](https://github.com/trompamusic/ce-api/commit/38730f3))
+* chore(project): run yarn install in github action ([d6f2b9e](https://github.com/trompamusic/ce-api/commit/d6f2b9e))
+* doc(project): add snyk and code style badges ([8e96690](https://github.com/trompamusic/ce-api/commit/8e96690))
+
+
+
 ## <small>1.5.1 (2021-03-12)</small>
 
 * fix(project): fix error when updating or creating a node without created and modified properties ([e4cbcb3](https://github.com/trompamusic/ce-api/commit/e4cbcb3))
