@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "ce-api",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "API Node.js application for TROMPA Contributor Environment",
   "main": "src/index.js",
   "license": "Apache-2.0",

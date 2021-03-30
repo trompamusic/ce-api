@@ -1,3 +1,10 @@
+## <small>1.6.1 (2021-03-30)</small>
+
+* fix(project): fix wrong month for created/modified fields ([1a8ff72](https://github.com/trompamusic/ce-api/commit/1a8ff72))
+* chore(project): update JWT development token ([ad031ef](https://github.com/trompamusic/ce-api/commit/ad031ef))
+
+
+
 ## 1.6.0 (2021-03-22)
 
 * fix: upgrade graphql-tag from 2.11.0 to 2.12.1 ([3a53241](https://github.com/trompamusic/ce-api/commit/3a53241))
