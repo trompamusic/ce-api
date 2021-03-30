@@ -46,7 +46,7 @@ export const createdUpdatedFieldTransformer = new TransformRootFields((operation
         kind: Kind.OBJECT,
         fields: [
           buildPropertyValue('year', Kind.INT, date.getUTCFullYear()),
-          buildPropertyValue('month', Kind.INT, date.getUTCMonth()),
+          buildPropertyValue('month', Kind.INT, date.getUTCMonth() + 1),
           buildPropertyValue('day', Kind.INT, date.getUTCDate()),
           buildPropertyValue('hour', Kind.INT, date.getUTCHours()),
           buildPropertyValue('minute', Kind.INT, date.getUTCMinutes()),
