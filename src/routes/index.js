@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { Router } from 'express'
-import { getDocument } from './helpers/document'
+import { getDocument, isValidLanguage } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
 import { generateToken } from '../auth/auth'
@@ -20,6 +20,7 @@ router.get('/health', (req, res) => {
 router.get('/:identifier', (req, res) => {
   const { identifier } = req.params
   const accept = req.headers.accept || 'application/json'
+  const acceptLang = req.headers["accept-language"]
 
   // Validate the identifier
   if (!validator.isUUID(identifier)) {
@@ -32,6 +33,9 @@ router.get('/:identifier', (req, res) => {
     .then(({ data, type }) => {
       // Transform document to JSON-LD
       if (accept === 'application/ld+json') {
+        if (!isValidLanguage(data, acceptLang)) {
+          return res.status(406).send()
+        }
         return res.status(200).send(transformJsonLD(type, data))
       }
 

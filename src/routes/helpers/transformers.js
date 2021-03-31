@@ -29,6 +29,7 @@ const convertScalarToPerson = value => {
  * Transform document to a JSON-LD structured document
  * @param {string} type
  * @param {Object} data
+ * @param {string} required_language: the language that this data should be in
  * @returns {Object} JSON-LD structured document
  */
 export const transformJsonLD = (type, data) => {

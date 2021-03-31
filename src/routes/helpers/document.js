@@ -60,3 +60,26 @@ const getNodeProperties = (session, type, identifier, host) => {
       throw error
     })
 }
+
+export const isValidLanguage = (data, acceptLanguage) => {
+  /*
+  Checks if the Accept-Language header matches the language field of a document.
+  For a header like fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5
+  remove scores and reduce language codes down to 2 characters.
+  If Accept-Language contains *, or if it contains the value of data.language
+  then return true, otherwise return false;
+   */
+  if (!acceptLanguage) {
+    // If language header isn't set, it's valid
+    return true;
+  }
+  const langs = acceptLanguage.replaceAll(" ", "").split(",").map(
+      e => e.split(";")[0].slice(0,2)
+  );
+  if (langs.includes("*")) {
+    // * as an accepted language = all languages
+    return true;
+  }
+  // Otherwise only return true if the document language is an accepted language
+  return langs.includes(data.language);
+}
