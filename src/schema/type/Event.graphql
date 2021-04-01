@@ -85,7 +85,7 @@ type Event implements SearchableInterface & ThingInterface & ProvenanceEntityInt
   "http://www.w3.org/ns/prov#wasDerivedFrom"
   wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
   "http://www.w3.org/ns/prov#wasAttributedTo"
-  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
+  wasAttributedTo: [AgentInterface] @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: OUT)
 
