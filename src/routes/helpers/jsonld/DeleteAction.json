@@ -13,7 +13,7 @@
       "https://schema.org/additionalType"
     ],
     "additionalProperty": [
-      "https://schema.org/additionalProperty"
+      "https://vocab.trompamusic.eu/vocab#AdditionalProperty"
     ],
     "alternateName": [
       "https://schema.org/alternateName"
