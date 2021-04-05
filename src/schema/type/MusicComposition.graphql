@@ -233,4 +233,6 @@ type MusicComposition implements SearchableInterface & ThingInterface & Provenan
   musicalKey: String
   "https://schema.org/recordedAs"
   recordedAs: [MusicRecording] @relation(name: "RECORDED_AS", direction: OUT)
+  "A url to a skos:Concept representing the medium of performance of this MusicCompositation (e.g. instrumentation) "
+  mediumOfPerformance: [String]
 }
