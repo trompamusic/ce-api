@@ -42,7 +42,7 @@ type ItemList implements ThingInterface {
   ### ThingInterface properties ###
   "https://schema.org/additionalType"
   additionalType: [String]
-  "https://schema.org/additionalProperty"
+  "https://vocab.trompamusic.eu/vocab#AdditionalProperty"
   additionalProperty: [PropertyValue] @relation(name: "ADDITIONAL_PROPERTY", direction: OUT)
   "https://schema.org/alternateName"
   alternateName: String
