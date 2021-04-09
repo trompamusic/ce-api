@@ -12,6 +12,8 @@ const scopedContexts = {
   trompa: 'https://vocab.trompamusic.eu/vocab#'
 }
 
+const defaultContext = 'https://schema.org'
+
 /**
  * Convert the given value to a Person type with either an URL or callSign value
  * @param value
@@ -53,7 +55,7 @@ export const transformJsonLD = (type, data) => {
   // Base JSON-LD document
   const jsonLdData = {
     '@context': [
-      'https://schema.org/',
+      defaultContext,
       scopedContexts
     ],
     ...config.head
@@ -116,13 +118,16 @@ export const transformJsonLD = (type, data) => {
         return
       }
 
-      if (uri.indexOf('https://schema.org') !== 0) {
+      if (uri.indexOf(defaultContext) !== 0) {
         // We have found an unknown namespace, log it to the console
         warning('Found new URI without context: ' + uri)
         return
       }
       // For {https://schema.org} we don't have to define a namespace (this is the default context)
-      jsonLdData[key] = elementValue
+      // in @context, we show the default context without a trailing /, but need to remove it
+      //  to get the correct type name, hence the + 1
+      const jsonLDKey = uri.substring(defaultContext.length + 1)
+      jsonLdData[jsonLDKey] = elementValue
     })
   })
 
