@@ -30,6 +30,14 @@ const convertScalarToPerson = value => {
 }
 
 /**
+ * Check if a value is empty (null or empty array)
+ * @param value
+ */
+const isEmpty = value => {
+  return value === null || (Array.isArray(value) && value.length === 0)
+}
+
+/**
  * Transform document to a JSON-LD structured document
  * @param {string} type
  * @param {Object} data
@@ -114,7 +122,9 @@ export const transformJsonLD = (type, data) => {
       if (prefix) {
         const context = scopedContexts[prefix]
         const jsonLDKey = uri.substring(context.length)
-        jsonLdData[`${prefix}:${jsonLDKey}`] = elementValue
+        if (!isEmpty(elementValue)) {
+          jsonLdData[`${prefix}:${jsonLDKey}`] = elementValue
+        }
 
         return
       }
@@ -128,7 +138,9 @@ export const transformJsonLD = (type, data) => {
       // in @context, we show the default context without a trailing /, but need to remove it
       //  to get the correct type name, hence the + 1
       const jsonLDKey = uri.substring(defaultContext.length + 1)
-      jsonLdData[jsonLDKey] = elementValue
+      if (!isEmpty(elementValue)) {
+        jsonLdData[jsonLDKey] = elementValue
+      }
     })
   })
 
