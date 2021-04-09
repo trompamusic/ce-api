@@ -36,8 +36,15 @@ export const transformJsonLD = (type, data) => {
   const schemaHelper = new SchemaHelper()
   const prefixes = Object.keys(scopedContexts)
 
-  const config = require(`./jsonld/${type}.json`)
-
+  let config
+  try {
+    config = require(`./jsonld/${type}.json`)
+  } catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
+    }
+    config = null
+  }
   if (!config) {
     throw new Error(`JSON LD not supported for type "${type}"`)
   }
