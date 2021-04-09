@@ -1,7 +1,7 @@
 {
   "head": {
     "@type": [
-      "https://schema.org/DigitalDocument"
+      "https://schema.org/MediaObject"
     ]
   },
   "properties": {
