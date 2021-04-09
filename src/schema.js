@@ -6,7 +6,7 @@ import { resolvers } from './resolvers'
 import { authenticationFieldTransformer } from './transformers/authenticationFieldTransformer'
 import { subscriptionFieldTransformer } from './transformers/subscriptionFieldTransformer'
 import { createdUpdatedFieldTransformer } from './transformers/createdUpdatedFieldTransformer'
-import { additionalTypeFieldTransformer } from './transformers/additionalTypeFieldTransformer'
+import { validUrlFieldTransformer } from './transformers/validUrlFieldTransformer'
 import concatenate from './utils/concatenate'
 
 /*
@@ -51,6 +51,6 @@ export const schema = transformSchema(
     subscriptionFieldTransformer,
     authenticationFieldTransformer,
     createdUpdatedFieldTransformer,
-    additionalTypeFieldTransformer
+    validUrlFieldTransformer
   ]
 )
