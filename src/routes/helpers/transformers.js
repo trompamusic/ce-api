@@ -9,7 +9,8 @@ const scopedContexts = {
   skos: 'http://www.w3.org/2004/02/skos/core#',
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   bib: 'https://bib.schema.org/',
-  trompa: 'https://vocab.trompamusic.eu/vocab#'
+  trompa: 'https://vocab.trompamusic.eu/vocab#',
+  ldp: 'http://www.w3.org/ns/ldp#'
 }
 
 const defaultContext = 'https://schema.org'
