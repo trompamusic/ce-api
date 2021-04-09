@@ -1,3 +1,13 @@
+## 1.7.0 (2021-04-09)
+
+* fix(json-ld): Add correct types to json output definition files ([373a368](https://github.com/trompamusic/ce-api/commit/373a368))
+* feat(json-ld): Return error if document lang doesn't match accept-lang ([c354239](https://github.com/trompamusic/ce-api/commit/c354239))
+* feat(schema): Allow custom motivations to be created ([e3b03ae](https://github.com/trompamusic/ce-api/commit/e3b03ae))
+* feat(schema): allow wasAttributedTo to be a SoftwareApplication ([3866a07](https://github.com/trompamusic/ce-api/commit/3866a07))
+* feat(schema): Use custom trompa type for additionalProperty field ([e00caa9](https://github.com/trompamusic/ce-api/commit/e00caa9))
+
+
+
 ## <small>1.6.1 (2021-03-30)</small>
 
 * fix(project): fix wrong month for created/modified fields ([1a8ff72](https://github.com/trompamusic/ce-api/commit/1a8ff72))
