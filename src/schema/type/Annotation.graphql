@@ -41,8 +41,35 @@ type AnnotationTextualBody {
     modified: _Neo4jDateTime
 }
 
+"http://www.w3.org/ns/oa#Motivation"
+type AnnotationCEMotivation {
+    "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
+    identifier: ID @id
+    "http://purl.org/dc/terms/contributor,https://schema.org/contributor"
+    creator: String
+    "http://purl.org/dc/terms/description,https://schema.org/description"
+    description: String
+    "http://purl.org/dc/terms/title"
+    title: String
+    "http://purl.org/dc/terms/created"
+    created: _Neo4jDateTime
+    "http://purl.org/dc/terms/modified"
+    modified: _Neo4jDateTime
+
+    #######################
+    ### SKOS properties ###
+    # A motivation SHOULD list skos:broader, which defines the motivation of which
+    #  this term is a more specific version. If this Motivation has a standard motivation
+    # as its broader value, set an enum in broaderMotivation.
+    # If it's a third party URL, use broaderUrl.
+    "http://www.w3.org/2004/02/skos/core#broader"
+    broaderUrl: String
+    "http://www.w3.org/2004/02/skos/core#broader"
+    broaderMotivation: AnnotationMotivation
+}
+
 "http://www.w3.org/ns/oa#Annotation"
-type Annotation implements ThingInterface {
+type Annotation implements ThingInterface & ProvenanceEntityInterface {
     #############################
     ### Annotation properties ###
     "http://purl.org/dc/elements/1.1/identifier,https://schema.org/identifier"
@@ -59,11 +86,13 @@ type Annotation implements ThingInterface {
     motivationDefinedTerm: DefinedTerm @relation(name: "ANNOTATON_MOTIVATION_DEFINED_TERM", direction: OUT)
     "http://www.w3.org/ns/oa#Motivation"
     motivation: AnnotationMotivation!
+    motivationUrl: [String]
+    motivationNode: [AnnotationCEMotivation] @relation(name: "ANNOTATION_MOTIVATION_NODE", direction: OUT)
     # An annotation can have multiple bodies, or none
     "A textual body node"
     bodyText: [AnnotationTextualBody] @relation(name: "ANNOTATION_BODY_TEXT", direction: OUT)
     "A body which is a URL to an external resource"
-    bodyUrl: [String],
+    bodyUrl: [String]
     "A body which represents a node in the CE [will be rendered in the same way as bodyUrl]"
     bodyNode: [ThingInterface] @relation(name: "ANNOTATION_BODY_NODE", direction: OUT)
 
@@ -126,4 +155,15 @@ type Annotation implements ThingInterface {
     created: _Neo4jDateTime
     "http://purl.org/dc/terms/modified"
     modified: _Neo4jDateTime
+
+    ############################################
+    ### ProvenanceEntityInterface properties ###
+    "http://www.w3.org/ns/prov#wasGeneratedBy"
+    wasGeneratedBy: [ActionInterface] @relation(name: "WAS_GENERATED_BY", direction: OUT)
+    "http://www.w3.org/ns/prov#wasDerivedFrom"
+    wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
+    "http://www.w3.org/ns/prov#wasAttributedTo"
+    wasAttributedTo: [AgentInterface] @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
+    "http://www.w3.org/ns/prov#used"
+    used: [ThingInterface] @relation(name: "USED", direction: OUT)
 }
