@@ -1,5 +1,5 @@
 "https://schema.org/Person,http://purl.org/dc/terms/Agent,http://www.w3.org/ns/prov#Agent"
-type Person implements SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & LegalPersonInterface & PerformerInterface {
+type Person implements SearchableInterface & ThingInterface & ProvenanceEntityInterface & ProvenanceAgentInterface & LegalPersonInterface & AgentInterface & PerformerInterface {
   ### Metadata properties ###
   "http://purl.org/dc/terms/identifier,https://schema.org/identifier"
   identifier: ID @id
@@ -68,13 +68,13 @@ type Person implements SearchableInterface & ThingInterface & ProvenanceEntityIn
   #######################
   ### SKOS properties ###
   "http://www.w3.org/2004/02/skos/core#broadMatch"
-  broadMatch: [LegalPersonInterface]  @relation(name: "BROAD_MATCH", direction: OUT)
+  broadMatch: [LegalPersonInterface] @relation(name: "BROAD_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#closeMatch"
-  closeMatch: [LegalPersonInterface]  @relation(name: "CLOSE_MATCH", direction: OUT)
+  closeMatch: [LegalPersonInterface] @relation(name: "CLOSE_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#exactMatch"
-  exactMatch: [LegalPersonInterface]  @relation(name: "EXACT_MATCH", direction: OUT)
+  exactMatch: [LegalPersonInterface] @relation(name: "EXACT_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#narrowMatch"
-  narrowMatch: [LegalPersonInterface]  @relation(name: "NARROW_MATCH", direction: OUT)
+  narrowMatch: [LegalPersonInterface] @relation(name: "NARROW_MATCH", direction: OUT)
   "http://www.w3.org/2004/02/skos/core#relatedMatch"
   relatedMatch: [ThingInterface] @relation(name: "RELATED_MATCH", direction: OUT)
 
@@ -85,7 +85,7 @@ type Person implements SearchableInterface & ThingInterface & ProvenanceEntityIn
   "http://www.w3.org/ns/prov#wasDerivedFrom"
   wasDerivedFrom: [ThingInterface] @relation(name: "WAS_DERIVED_FROM", direction: OUT)
   "http://www.w3.org/ns/prov#wasAttributedTo"
-  wasAttributedTo: [LegalPersonInterface]  @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
+  wasAttributedTo: [AgentInterface] @relation(name: "WAS_ATTRIBUTED_TO", direction: OUT)
   "http://www.w3.org/ns/prov#used"
   used: [ThingInterface] @relation(name: "USED", direction: OUT)
 
