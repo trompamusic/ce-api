@@ -65,6 +65,8 @@ type ListItem implements ThingInterface {
   ### ListItem properties ###
   "https://schema.org/item"
   item: [ThingInterface] @relation(name: "ITEM", direction: OUT)
+  "If the item refers to an external URL, set it here"
+  itemUrl: [String]
   "https://schema.org/nextItem"
   nextItem: ListItem @relation(name: "NEXT_ITEM", direction: OUT)
   "https://schema.org/previousItem"

@@ -4,6 +4,7 @@
       "https://schema.org/ListItem"
     ]
   },
+  "relationalProperties": ["itemUrl"],
   "properties": {
     "identifier": [
       "http://purl.org/dc/terms/identifier",
@@ -94,6 +95,9 @@
       "https://schema.org/url"
     ],
     "item": [
+      "https://schema.org/item"
+    ],
+    "itemUrl": [
       "https://schema.org/item"
     ],
     "nextItem": [
