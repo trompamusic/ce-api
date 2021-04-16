@@ -1,12 +1,23 @@
+import { cypherMutation } from 'neo4j-graphql-js'
 import { info } from '../../utils/logger'
 import { driver } from '../../driver'
 import GetTypeQuery from '../../queries/GetTypeQuery'
 import GetFullNodeQuery from '../../queries/GetFullNodeQuery'
 import SchemaHelper from '../../helpers/SchemaHelper'
+import {data_for_musiccomposition} from "./musiccomposition";
+import {graphql} from "graphql";
 
 export const getDocument = (identifier, host) => {
   const session = driver.session()
   const schemaHelper = new SchemaHelper()
+
+  const q = `query {
+  MusicComposition(identifier:"479ee0b6-9c9d-4e0c-b8bd-9350b2825dc9") {
+    identifier } }`
+  graphql(schemaHelper.schema, q).then(result => {
+    console.debug('got a result from running grqphql')
+    console.debug(result)
+  })
 
   const getTypeQuery = new GetTypeQuery(identifier, schemaHelper.getTypeNames())
   const query = getTypeQuery.query
@@ -25,13 +36,19 @@ export const getDocument = (identifier, host) => {
     // determine type of node and query for all scalar properties and 1st order relations
     .then(typeResult => {
       const type = typeResult && typeResult._schemaType
+      console.debug(typeResult, type)
 
       if (!type) {
         return Promise.reject(new Error('Node not found'))
       }
+      switch (type) {
+        case 'MusicComposition':
 
-      return getNodeProperties(session, type, identifier, host)
-        .then(data => ({ data, type }))
+          return data_for_musiccomposition(session, identifier).then(data => ({data, type}))
+        default:
+          return getNodeProperties(session, type, identifier, host)
+              .then(data => ({ data, type }))
+      }
     }, reason => {
       throw reason
     })

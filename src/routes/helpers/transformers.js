@@ -29,7 +29,6 @@ const convertScalarToPerson = value => {
  * Transform document to a JSON-LD structured document
  * @param {string} type
  * @param {Object} data
- * @param {string} required_language: the language that this data should be in
  * @returns {Object} JSON-LD structured document
  */
 export const transformJsonLD = (type, data) => {
@@ -37,6 +36,12 @@ export const transformJsonLD = (type, data) => {
   const prefixes = Object.keys(scopedContexts)
 
   const config = require(`./jsonld/${type}.json`)
+
+  console.debug('in transformjsonld')
+
+  if (type === 'MusicCompositionx') {
+    return {specialcase: 'MusicComposition', data: data}
+  }
 
   if (!config) {
     throw new Error(`JSON LD not supported for type "${type}"`)
@@ -62,8 +67,12 @@ export const transformJsonLD = (type, data) => {
     // Get the property for the current key
     const property = schemaHelper.findPropertyType(type, key)
 
+    console.debug(`current key ${key}`)
+    //console.debug(`current key ${key}, property: ${JSON.stringify(property)}`)
+
     // Use the current value by default
     let elementValue = data[key]
+    console.debug(`   element value ${elementValue}`)
 
     // A DateTime object should be formatted as an iso8601 date
     // TODO: there is also a LocalDateTime, but we don't appear to use it
