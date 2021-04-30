@@ -4,6 +4,7 @@
       "https://schema.org/MediaObject"
     ]
   },
+  "relationalProperties": ["mediumOfPerformance"],
   "properties": {
     "identifier": [
       "http://purl.org/dc/terms/identifier",
@@ -287,6 +288,9 @@
     ],
     "width": [
       "https://schema.org/width"
+    ],
+    "mediumOfPerformance": [
+      "http://rdaregistry.info/Elements/u/P60537"
     ]
   }
 }

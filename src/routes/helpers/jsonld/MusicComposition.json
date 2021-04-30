@@ -4,6 +4,7 @@
       "https://schema.org/MusicComposition"
     ]
   },
+  "relationalProperties": ["mediumOfPerformance"],
   "properties": {
     "identifier": [
       "http://purl.org/dc/terms/identifier",
@@ -317,6 +318,9 @@
     ],
     "recordedAs": [
       "https://schema.org/recordedAs"
+    ],
+    "mediumOfPerformance": [
+      "http://rdaregistry.info/Elements/u/P60537"
     ]
   }
 }

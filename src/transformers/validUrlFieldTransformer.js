@@ -4,29 +4,31 @@ import isURL from 'validator/lib/isURL'
 import { parseFieldName } from '../utils/schema'
 
 /**
- * Test the given additionalType values for valid URLs
+ * Test the given field values for valid URLs
  * @param {null|[string]} values
  * @return {boolean}
  */
-export const additionalTypeIsValid = (values) => {
+export const fieldIsValid = (values) => {
   if (!Array.isArray(values)) {
     return true
   }
 
-  return !values.some(additionalType => !isURL(additionalType, {
+  return !values.some(value => !isURL(value, {
     require_protocol: true,
     require_valid_protocol: true,
     protocols: ['http', 'https']
   }))
 }
 
-export const additionalTypeFieldTransformer = new TransformRootFields((operation, fieldName, field) => {
+const validationFields = ['additionalType', 'mediumOfPerformance']
+
+export const validUrlFieldTransformer = new TransformRootFields((operation, fieldName, field) => {
   // Only needed for mutations
   if (operation !== 'Mutation') {
     return undefined
   }
 
-  const { action } = parseFieldName(fieldName)
+  const { action, type } = parseFieldName(fieldName)
 
   if (action !== 'Create' && action !== 'Update' && action !== 'Merge') {
     return undefined
@@ -35,10 +37,11 @@ export const additionalTypeFieldTransformer = new TransformRootFields((operation
   const next = field.resolve
 
   field.resolve = (object, params, context, info) => {
-    if (!additionalTypeIsValid(params.additionalType)) {
-      throw new UserInputError('additionalType list can only contain valid URLs with protocol')
-    }
-
+    validationFields.forEach(field => {
+      if (!fieldIsValid(params[field])) {
+        throw new UserInputError(`${field} list can only contain valid URLs with protocol`)
+      }
+    })
     return next(object, params, context, info)
   }
 })

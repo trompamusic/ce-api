@@ -10,7 +10,8 @@ const scopedContexts = {
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   bib: 'https://bib.schema.org/',
   trompa: 'https://vocab.trompamusic.eu/vocab#',
-  ldp: 'http://www.w3.org/ns/ldp#'
+  ldp: 'http://www.w3.org/ns/ldp#',
+  rdau: 'http://rdaregistry.info/Elements/u/'
 }
 
 const defaultContext = 'https://schema.org'
@@ -60,6 +61,7 @@ export const transformJsonLD = (type, data) => {
   if (!config) {
     throw new Error(`JSON LD not supported for type "${type}"`)
   }
+  const jsonldRelationalProperties = config.relationalProperties || []
 
   // Base JSON-LD document
   const jsonLdData = {
@@ -91,7 +93,7 @@ export const transformJsonLD = (type, data) => {
     }
 
     // Transform the value when it's a relational property
-    if (elementValue && schemaHelper.isRelationalProperty(property)) {
+    if (elementValue && (schemaHelper.isRelationalProperty(property) || jsonldRelationalProperties.includes(key))) {
       if (Array.isArray(elementValue)) {
         elementValue = elementValue.map(id => ({
           '@id': id
