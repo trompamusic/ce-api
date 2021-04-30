@@ -4,8 +4,30 @@ import { getDocument, isValidLanguage } from './helpers/document'
 import { transformJsonLD } from './helpers/transformers'
 import { info } from '../utils/logger'
 import { generateToken } from '../auth/auth'
+import cors from 'cors'
 
 const router = new Router()
+
+/**
+ * This middleware function validates the request method and sets the Allow and CORS headers based on the given
+ * allowedMethods. When the request uses a method that is not in the list, it will respond with an 405 response.
+ * @param allowedMethods
+ * @return {function(Request, Response, NextFunction): *}
+ */
+const allowedMethods = (allowedMethods) => (req, res, next) => {
+  res.setHeader('Allow', allowedMethods.join(', '))
+
+  if (!allowedMethods.includes(req.method)) {
+    return res.status(405).send()
+  }
+
+  cors({ methods: allowedMethods })(req, res, next)
+}
+
+router.all('/', allowedMethods(['OPTIONS', 'POST']))
+router.all('/jwt', allowedMethods(['OPTIONS', 'POST']))
+router.all('/health', allowedMethods(['OPTIONS', 'GET']))
+router.all('/:identifier', allowedMethods(['OPTIONS', 'GET']))
 
 /**
  * Health check endpoint
@@ -20,7 +42,7 @@ router.get('/health', (req, res) => {
 router.get('/:identifier', (req, res) => {
   const { identifier } = req.params
   const accept = req.headers.accept || 'application/json'
-  const acceptLang = req.headers["accept-language"]
+  const acceptLang = req.headers['accept-language']
 
   // Validate the identifier
   if (!validator.isUUID(identifier)) {
