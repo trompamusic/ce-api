@@ -1,7 +1,9 @@
 {
   "head": {
     "@type": [
-      "https://schema.org/ItemList"
+      "https://schema.org/ItemList",
+      "http://www.w3.org/ns/ldp#Container",
+      "http://www.w3.org/ns/ldp#BasicContainer"
     ]
   },
   "properties": {
@@ -94,7 +96,8 @@
       "https://schema.org/url"
     ],
     "itemListElement": [
-      "https://schema.org/itemListElement"
+      "https://schema.org/itemListElement",
+      "http://www.w3.org/ns/ldp#contains"
     ],
     "itemListOrder": [
       "https://schema.org/itemListOrder"

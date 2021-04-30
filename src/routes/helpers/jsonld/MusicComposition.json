@@ -244,12 +244,6 @@
     "workExample": [
       "https://schema.org/workExample"
     ],
-    "workExampleMediaObject": [
-      "https://schema.org/workExample"
-    ],
-    "workExampleAudioObject": [
-      "https://schema.org/workExample"
-    ],
     "workTranslation": [
       "https://bib.schema.org/workTranslation"
     ],

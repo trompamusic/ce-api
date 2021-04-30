@@ -31,11 +31,11 @@ class SchemaHelper {
    */
   findInterfaceImplementingTypes (interfaceName) {
     const implementations = this.findInterface(interfaceName)
-    if (!Array.isArray(implementations) || !implementations.length) {
+    if (!implementations.objects || !Array.isArray(implementations.objects) || !implementations.objects.length) {
       return null
     }
 
-    return implementations.map(implementation => { return implementation.toString() })
+    return implementations.objects.map(implementation => { return implementation.toString() })
   }
 
   /**
@@ -43,7 +43,7 @@ class SchemaHelper {
    * @returns {*|Array<GraphQLObjectType>}
    */
   findInterface (interfaceName) {
-    return this.schema.getImplementations(interfaceName)
+    return this.schema.getImplementations({name:interfaceName})
   }
 
   /**
