@@ -206,4 +206,6 @@ type MediaObject implements SearchableInterface & ThingInterface & ProvenanceEnt
   uploadDate: _Neo4jDate
   "https://schema.org/width"
   width: Int
+  "A url to a skos:Concept representing the medium of performance of this MusicCompositation (e.g. instrumentation) "
+  mediumOfPerformance: [String]
 }
