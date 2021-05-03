@@ -24,7 +24,7 @@ const allowedMethods = (allowedMethods) => (req, res, next) => {
   cors({ methods: allowedMethods })(req, res, next)
 }
 
-router.all('/', allowedMethods(['OPTIONS', 'POST']))
+router.all('/', allowedMethods(['OPTIONS', 'POST', 'GET']))
 
 /**
  * Health check endpoint
