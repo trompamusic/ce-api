@@ -88,7 +88,7 @@ export const transformJsonLD = (type, data) => {
 
     // A DateTime object should be formatted as an iso8601 date
     // TODO: there is also a LocalDateTime, but we don't appear to use it
-    if (isDateTime(elementValue)) {
+    if (elementValue && isDateTime(elementValue)) {
       elementValue = elementValue.toString()
     }
 
