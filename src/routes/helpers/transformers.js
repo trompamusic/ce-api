@@ -81,6 +81,7 @@ export const transformJsonLD = (type, data) => {
   // the values are valid URLs.
   if (Array.isArray(data.additionalType)) {
     jsonLdData['@type'] = [...jsonLdData['@type'], ...data.additionalType]
+    delete data.additionalType;
   }
 
   // Iterate all keys in the data document
