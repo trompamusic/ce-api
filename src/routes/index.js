@@ -36,7 +36,7 @@ router.get('/:identifier', (req, res) => {
         if (!isValidLanguage(data, acceptLang)) {
           return res.status(406).send()
         }
-        return res.status(200).send(transformJsonLD(type, data))
+        return res.status(200).send(transformJsonLD(type, data, baseURL))
       }
 
       res.status(200).send(data)

@@ -121,3 +121,36 @@ describe('definedTermTest', function () {
         expect(result["broaderMotivation"]).toEqual("oa:commenting");
     });
 });
+
+
+describe("ItemList test", function() {
+   it("Converts custom ItemList response to json-ld", function() {
+       const itemListResponse = require("./testdata/itemlist.json");
+       const itemListJsonLd = transformJsonLD("ItemList", itemListResponse, "http://localhost");
+
+       expect(itemListJsonLd["@type"]).toEqual(["https://schema.org/ItemList", "http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#BasicContainer", "https://vocab.trompamusic.eu/vocab#AnnotationSession"]);
+       // Created and modified are adjusted before export
+       expect(itemListJsonLd["dc:created"]).toEqual("2021-06-22T13:47:10.693Z");
+       expect(itemListJsonLd["dc:modified"]).toEqual("2021-06-22T13:47:10.693Z");
+       // First element, a ListItem whose `item` points to another thing in the CE
+       const expectedElementOne = {
+           "@id": "http://localhost/bb418c6b-7667-4559-96de-5716d9d52e2e",
+           "@type": ["https://schema.org/ListItem"],
+           "dc:identifier": "http://localhost/bb418c6b-7667-4559-96de-5716d9d52e2e",
+           "identifier": "http://localhost/bb418c6b-7667-4559-96de-5716d9d52e2e",
+           "item": {"@id": "http://localhost/e03dd66d-17ba-4d91-a409-d1eb2cb3d3bb"}
+       }
+       expect(itemListJsonLd.itemListElement[0]).toEqual(expectedElementOne);
+       // Second element, a ListItem whose `itemUrl` points to an external URL
+       const expectedElementType = {
+           "@id": "http://localhost/551877a6-c61b-4fc7-8174-17247d460823",
+           "@type":  ["https://schema.org/ListItem"],
+           "dc:identifier": "http://localhost/551877a6-c61b-4fc7-8174-17247d460823",
+           "identifier": "http://localhost/551877a6-c61b-4fc7-8174-17247d460823",
+           "item": {"@id": "https://example.com/externalItem"}
+       }
+       expect(itemListJsonLd.itemListElement[1]).toEqual(expectedElementType);
+       // Third element, a DigitalDocument in the CE with no ListItem
+       expect(itemListJsonLd.itemListElement[2]).toEqual({"@id": "http://localhost/f3ed1b21-cc30-43be-805a-ce2b56b78e09"});
+   });
+});

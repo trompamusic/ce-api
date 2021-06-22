@@ -42,10 +42,10 @@ const isEmpty = value => {
  * Transform document to a JSON-LD structured document
  * @param {string} type
  * @param {Object} data
- * @param {string} required_language: the language that this data should be in
+ * @param {string} baseUrl: the base URL of the server (used to prefix ids if needed)
  * @returns {Object} JSON-LD structured document
  */
-export const transformJsonLD = (type, data) => {
+export const transformJsonLD = (type, data, baseUrl) => {
   const schemaHelper = new SchemaHelper()
   const prefixes = Object.keys(scopedContexts)
 
@@ -66,7 +66,14 @@ export const transformJsonLD = (type, data) => {
     data = preprocessDefinedTerm(data);
   }
 
+  if (type === "ItemList") {
+    data = preprocessItemList(data, baseUrl);
+  }
+
+  // A property that we want to force to be relational (render as {"@id": value})
   const jsonldRelationalProperties = config.relationalProperties || []
+  // A property that we want to force as not being relational, even if GraphQL thinks it is
+  const jsonldNonRelationalProperties = config.nonRelationalProperties || []
 
   // Base JSON-LD document
   const jsonLdData = {
@@ -99,7 +106,11 @@ export const transformJsonLD = (type, data) => {
     }
 
     // Transform the value when it's a relational property
-    if (elementValue && (schemaHelper.isRelationalProperty(property) || jsonldRelationalProperties.includes(key))) {
+    // Sometimes GraphQL knows that this is a relational property but we have preprocessed the data in
+    // a way that we don't want this behaviour. In this case, use nonRelationalProperties
+    // in the relevant json specification file.
+    if (elementValue && !jsonldNonRelationalProperties.includes(key) &&
+        (schemaHelper.isRelationalProperty(property) || jsonldRelationalProperties.includes(key))) {
       if (Array.isArray(elementValue)) {
         elementValue = elementValue.map(id => ({
           '@id': id
@@ -107,6 +118,10 @@ export const transformJsonLD = (type, data) => {
       } else if (typeof elementValue === 'string') {
         elementValue = {
           '@id': elementValue
+        }
+      } else if (typeof elementValue === 'object' && elementValue.identifier) {
+        elementValue = {
+          '@id': elementValue.identifier
         }
       }
     }
@@ -153,6 +168,56 @@ export const transformJsonLD = (type, data) => {
   })
 
   return jsonLdData
+}
+
+/**
+ * Preprocess data for an ItemList before converting to JSON-LD.
+ *
+ * The ItemList.itemListElement field could be a reference to an external
+ * object, in which case it should be rendered as
+ *   {"@id": "external object identifier"}
+ * or it could be a ListItem object, in which case we should render the contents
+ * of the object inline:
+ *   {"@id": "CE ListItem identifier",
+ *    "name": Name of the item}
+ * or it could be a ListItem with its `item` field pointing to another element:
+ *   {"@id": "CE ListItem identifier",
+ *    "item": {"@id": "ID of the thing that this points to}
+ *   }
+ *
+ * @param data
+ * @param baseUrl
+ */
+export function preprocessItemList(data, baseUrl) {
+  if (data.itemListElement && Array.isArray(data.itemListElement)) {
+    data.itemListElement = data.itemListElement.map(element => {
+      if (element.FRAGMENT_TYPE === "ListItem") {
+        if (element.item && Array.isArray(element.item) && element.item.length) {
+          // We only expect to have one related item
+          element.item = element.item[0]
+          element.item.identifier = baseUrl + "/" + element.item.identifier;
+        }
+        delete element.FRAGMENT_TYPE;
+        element.identifier = baseUrl + "/" + element.identifier;
+        const listItemJson = transformJsonLD("ListItem", element, baseUrl)
+        listItemJson["@id"] = listItemJson.identifier
+        // We use transformJsonLD but we don't want the context, this is present in the
+        // surrounding object
+        delete listItemJson["@context"];
+        return listItemJson
+      } else {
+        // This is some other item in the CE which isn't a ListItem, just link to it
+        return {"@id": baseUrl + "/" + element.identifier}
+      }
+    });
+  }
+  if (data["created"] && data["created"].formatted) {
+    data["created"] = data["created"].formatted
+  }
+  if (data["modified"] && data["modified"].formatted) {
+    data["modified"] = data["modified"].formatted
+  }
+  return data;
 }
 
 
