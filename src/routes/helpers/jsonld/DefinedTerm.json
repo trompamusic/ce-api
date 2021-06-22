@@ -99,7 +99,10 @@
     "inDefinedTermSet": [
       "https://pending.schema.org/inDefinedTermSet"
     ],
-    "broader": [
+    "broaderUrl": [
+      "http://www.w3.org/2004/02/skos/core#broader"
+    ],
+    "broaderMotivation": [
       "http://www.w3.org/2004/02/skos/core#broader"
     ]
   }
