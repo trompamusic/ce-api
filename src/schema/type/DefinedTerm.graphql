@@ -69,16 +69,4 @@ type DefinedTerm implements ThingInterface {
     # TODO: This should only be a relation to one DefinedTermSet
     "https://pending.schema.org/inDefinedTermSet"
     inDefinedTermSet: [DefinedTermSet] @relation(name: "HAS_DEFINED_TERM", direction: IN)
-
-    #######################
-    ### SKOS properties ###
-    # When we use a DefinedTerm to refer to an annotation motivation, we have to add the motivation
-    # of which this term is a more specific version of to skos:broader. If you do this, you should
-    # also add http://www.w3.org/ns/oa#Motivation as an additionalType
-    # If this DefinedTerm has a standard motivations as its broader value, set an enum in
-    # broaderMotivation. If it's a third party URL, use broaderUrl.
-    "http://www.w3.org/2004/02/skos/core#broader"
-    broaderUrl: String
-    "http://www.w3.org/2004/02/skos/core#broader"
-    broaderMotivation: AnnotationMotivation
 }

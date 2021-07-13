@@ -1,0 +1,46 @@
+{
+  "identifier": "a1a839c0-4b6b-49e3-ac11-384568ce0caf",
+  "creator": "https://testuser.trompa-solid.upf.edu/profile/card#me",
+  "itemListElement": [
+    {
+      "identifier": "bb418c6b-7667-4559-96de-5716d9d52e2e",
+      "image": null,
+      "item": [
+        {
+          "FRAGMENT_TYPE": "Annotation",
+          "identifier": "e03dd66d-17ba-4d91-a409-d1eb2cb3d3bb"
+        }
+      ],
+      "name": null,
+      "description": null,
+      "FRAGMENT_TYPE": "ListItem",
+      "position": null,
+      "url": null,
+      "itemUrl": null
+    },
+    {
+      "identifier": "551877a6-c61b-4fc7-8174-17247d460823",
+      "image": null,
+      "item": null,
+      "name": null,
+      "description": null,
+      "FRAGMENT_TYPE": "ListItem",
+      "position": null,
+      "url": null,
+      "itemUrl": "https://example.com/externalItem"
+    },
+    {
+      "identifier": "f3ed1b21-cc30-43be-805a-ce2b56b78e09",
+      "name": null,
+      "description": null,
+      "FRAGMENT_TYPE": "DigitalDocument",
+      "image": null,
+      "url": null
+    }
+  ],
+  "additionalType": [ "https://vocab.trompamusic.eu/vocab#AnnotationSession" ],
+  "created": { "formatted": "2021-06-22T13:47:10.693Z" },
+  "name": "Some session",
+  "modified": { "formatted": "2021-06-22T13:47:10.693Z" },
+  "itemListOrder": "ItemListUnordered"
+}

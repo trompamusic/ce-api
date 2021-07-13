@@ -80,10 +80,10 @@ type Annotation implements ThingInterface & ProvenanceEntityInterface {
     "An external resource that this annotation is about"
     targetUrl:  [String]
     # An annotation should always have a motivation. If you want to use a more specific
-    # annotation from a toolkit (a DefinedTerm) then you can include it, but you should
+    # annotation from a toolkit (a DefinedTermSet) then you can include it, but you should
     # still add the base motivation.
     "http://www.w3.org/ns/oa#Motivation"
-    motivationDefinedTerm: DefinedTerm @relation(name: "ANNOTATON_MOTIVATION_DEFINED_TERM", direction: OUT)
+    motivationDefinedTermSet: DefinedTermSet @relation(name: "ANNOTATON_MOTIVATION_DEFINED_TERM_SET", direction: OUT)
     "http://www.w3.org/ns/oa#Motivation"
     motivation: AnnotationMotivation!
     motivationUrl: [String]
@@ -95,6 +95,9 @@ type Annotation implements ThingInterface & ProvenanceEntityInterface {
     bodyUrl: [String]
     "A body which represents a node in the CE [will be rendered in the same way as bodyUrl]"
     bodyNode: [ThingInterface] @relation(name: "ANNOTATION_BODY_NODE", direction: OUT)
+
+    canonical: String
+    via: String
 
     #################################
     ### ThingInterface properties ###

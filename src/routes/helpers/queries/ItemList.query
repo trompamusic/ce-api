@@ -1,0 +1,30 @@
+query {
+  ItemList(identifier:"a1a839c0-4b6b-49e3-ac11-384568ce0caf") {
+    identifier
+    name
+    creator
+    created {
+      formatted
+    }
+    modified {
+      formatted
+    }
+    itemListOrder
+    additionalType
+    itemListElement {
+      __typename
+      identifier
+      name
+      description
+      image
+      url
+      ... on ListItem {
+        itemUrl
+        item {
+          identifier
+        }
+        position
+      }
+    }
+  }
+}

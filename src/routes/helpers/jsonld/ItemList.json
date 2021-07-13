@@ -6,6 +6,7 @@
       "http://www.w3.org/ns/ldp#BasicContainer"
     ]
   },
+  "nonRelationalProperties": ["itemListElement"],
   "properties": {
     "identifier": [
       "http://purl.org/dc/terms/identifier",
