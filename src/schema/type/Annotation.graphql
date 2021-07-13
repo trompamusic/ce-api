@@ -96,6 +96,9 @@ type Annotation implements ThingInterface & ProvenanceEntityInterface {
     "A body which represents a node in the CE [will be rendered in the same way as bodyUrl]"
     bodyNode: [ThingInterface] @relation(name: "ANNOTATION_BODY_NODE", direction: OUT)
 
+    canonical: String
+    via: String
+
     #################################
     ### ThingInterface properties ###
     "https://schema.org/additionalType"
