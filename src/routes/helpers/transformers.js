@@ -62,8 +62,8 @@ export const transformJsonLD = (type, data, baseUrl) => {
     throw new Error(`JSON LD not supported for type "${type}"`)
   }
 
-  if (type === "DefinedTerm") {
-    data = preprocessDefinedTerm(data);
+  if (type === "DefinedTermSet") {
+    data = preprocessDefinedTermSet(data);
   }
 
   if (type === "ItemList") {
@@ -222,14 +222,14 @@ export function preprocessItemList(data, baseUrl) {
 
 
 /**
- * Preprocess data for a DefinedTerm before converting to JSON-LD.
- * If a DefinedTerm has a motivation set (either broaderMotivation or
+ * Preprocess data for a DefinedTermSet before converting to JSON-LD.
+ * If a DefinedTermSet has a motivation set (either broaderMotivation or
  * broaderUrl), then add oa:Motivation to additionalTypes.
  *
  * If broaderMotivation is set (graphql enum), prefix it with the oa: namespace.
  * @param data the result from document.getDocument
  */
-export function preprocessDefinedTerm(data) {
+export function preprocessDefinedTermSet(data) {
   const additionalType = data["additionalType"];
   const hasMotivationAdditionalType = additionalType && (additionalType.includes("http://www.w3.org/ns/oa#Motivation") ||
       additionalType.includes("https://www.w3.org/ns/oa#Motivation"))
