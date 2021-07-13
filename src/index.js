@@ -1,7 +1,6 @@
 import http from 'http'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import cors from 'cors'
 import bodyParser from 'body-parser'
 import { debug } from './utils/logger'
 import router from './routes/index'
@@ -17,7 +16,6 @@ const app = express()
 
 // Configure middlewares
 app.use(bodyParser.json())
-app.use(cors({ methods: ['GET', 'OPTIONS', 'POST'] }))
 
 // Configure routes
 app.use('/', router)
