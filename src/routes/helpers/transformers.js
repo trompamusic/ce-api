@@ -242,7 +242,7 @@ export function preprocessDefinedTermSet(data) {
   }
 
   if (data["broaderMotivation"]) {
-    data["broaderMotivation"] = "oa:" + data["broaderMotivation"];
+    data["broaderMotivation"] = "https://www.w3.org/ns/oa#" + data["broaderMotivation"];
   }
   return data
 }
