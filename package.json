@@ -24,7 +24,7 @@
     "graphql-tools": "^4.0.8",
     "js-green-licenses": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "micromatch": "^4.0.2",
+    "micromatch": "^4.0.4",
     "neo4j-driver": "4.2.3",
     "neo4j-graphql-js": "^2.19.2",
     "validator": "13.6.0",
