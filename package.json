@@ -18,7 +18,7 @@
     "chalk": "^3.0.0",
     "cors": "^2.8.5",
     "express": "4.17.1",
-    "graphql": "^15.5.0",
+    "graphql": "^15.6.1",
     "graphql-auth-directives": "^2.2.2",
     "graphql-tag": "^2.12.5",
     "graphql-tools": "^4.0.8",
