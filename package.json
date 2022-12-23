@@ -23,7 +23,7 @@
     "graphql-tag": "^2.12.5",
     "graphql-tools": "^4.0.8",
     "js-green-licenses": "^3.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "micromatch": "^4.0.2",
     "neo4j-driver": "4.2.3",
     "neo4j-graphql-js": "^2.19.2",
